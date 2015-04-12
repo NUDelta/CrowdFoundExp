@@ -209,16 +209,6 @@
         if(!error) {
             NSMutableArray *object = [[NSMutableArray alloc]init];
             object = [objects firstObject];
-//            NSMutableArray *array = [[NSMutableArray alloc]init];
-//            [array addObject:(NSNumber *)(object[@"first"])];
-//            NSLog(@"object at 3: %@", [object valueForKeyPath:@"fifth"]);
-//            NSMutableArray *array = [NSMutableArray arrayWithObjects: [object valueForKeyPath:@"first"], [object valueForKeyPath:@"second"], [object valueForKeyPath:@"third"], [object valueForKeyPath:@"fourth"], [object valueForKeyPath:@"fifth"], nil];
-//            NSMutableArray *array = [[NSMutableArray alloc]init];
-//            [array setValue:[object valueForKeyPath:@"first"] forKeyPath:@"first"];
-//            [array setValue:[object valueForKeyPath:@"second"] forKeyPath:@"second"];
-//            [array setValue:[object valueForKeyPath:@"third"] forKeyPath:@"third"];
-//            [array setValue:[object valueForKeyPath:@"fourth"] forKeyPath:@"fourth"];
-//            [array setValue:[object valueForKeyPath:@"fifth"] forKeyPath:@"fifth"];
             
             NSString * region      = @"region";
             NSString * count   = @"count";
@@ -341,29 +331,26 @@
     [self.locationManager startMonitoringForRegion: regionCenter];
     
     
-//    PFQuery *query = [PFQuery queryWithClassName: @"Request"];
-//    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-//        if(!error) {
-//            self.request = [objects firstObject];
-//            CLLocationCoordinate2D regionA; //Foster Walker
-//            regionA.latitude = [(NSString *)[self.request valueForKeyPath:@"lat"] floatValue];
-//            regionA.longitude = [(NSString *)[self.request valueForKeyPath:@"lng"] floatValue];
-//            
-//            CLCircularRegion *region = [[CLCircularRegion alloc] initWithCenter:regionA radius:50 identifier:@"RegionA"];
-//            [self.locationManager startMonitoringForRegion: region];
-//            
-//            CLLocationCoordinate2D regionB; //Foster Walker
-//            regionB.latitude = [(NSString *)[self.request valueForKeyPath:@"lat2"] floatValue];
-//            regionB.longitude = [(NSString *)[self.request valueForKeyPath:@"lng2"] floatValue];
-//            
-//            CLCircularRegion *region2 = [[CLCircularRegion alloc] initWithCenter:regionB radius:50 identifier:@"RegionB"];
-//            [self.locationManager startMonitoringForRegion: region2];
-//            [self fillDetails];
-//        }
-//    }];
-
-
-    
+    PFQuery *query = [PFQuery queryWithClassName: @"Request"];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if(!error) {
+            self.request = [objects firstObject];
+            CLLocationCoordinate2D regionA; //Foster Walker
+            regionA.latitude = [(NSString *)[self.request valueForKeyPath:@"lat"] floatValue];
+            regionA.longitude = [(NSString *)[self.request valueForKeyPath:@"lng"] floatValue];
+            
+            CLCircularRegion *region = [[CLCircularRegion alloc] initWithCenter:regionA radius:50 identifier:@"RegionA"];
+            [self.locationManager startMonitoringForRegion: region];
+            
+            CLLocationCoordinate2D regionB; //Foster Walker
+            regionB.latitude = [(NSString *)[self.request valueForKeyPath:@"lat2"] floatValue];
+            regionB.longitude = [(NSString *)[self.request valueForKeyPath:@"lng2"] floatValue];
+            
+            CLCircularRegion *region2 = [[CLCircularRegion alloc] initWithCenter:regionB radius:50 identifier:@"RegionB"];
+            [self.locationManager startMonitoringForRegion: region2];
+            [self fillDetails];
+        }
+    }];
     
 //    if([self.request valueForKeyPath:@"item"] == NULL) {
 //        NSLog(@"it is empty! ID is %@", self.objectId);
