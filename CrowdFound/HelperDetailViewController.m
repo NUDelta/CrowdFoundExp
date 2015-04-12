@@ -31,7 +31,8 @@
 @property (nonatomic, strong) NSString *enteredRegion;
 @property BOOL lastNotified;
 @property (nonatomic, strong) NSString *group;
-
+@property BOOL enteredNoyes;
+@property BOOL enteredTech;
 
 
 @property BOOL notified;
@@ -182,7 +183,7 @@
     //group a = baseline
     //group b = history
     //group c = pretracking + history
-    self.group = @"a";
+    self.group = @"b";
     PFQuery *query = [MyUser query];
     [query getObjectInBackgroundWithId:[MyUser currentUser].objectId block:^(PFObject *object, NSError *error) {
         if (!error) {
@@ -203,22 +204,67 @@
         }
     }];
     
-//    PFQuery *requestQuery = [PFQuery queryWithClassName: @"Request"];
-//    [requestQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-//        if(!error) {
-//            NSArray *object = [[NSArray alloc]init];
-//            object = [objects firstObject];
-////            NSMutableArray *array = [[NSMutableArray alloc]init];
-////            [array addObject:(NSNumber *)(object[@"first"])];
+    PFQuery *requestQuery = [PFQuery queryWithClassName: @"Request"];
+    [requestQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if(!error) {
+            NSMutableArray *object = [[NSMutableArray alloc]init];
+            object = [objects firstObject];
+//            NSMutableArray *array = [[NSMutableArray alloc]init];
+//            [array addObject:(NSNumber *)(object[@"first"])];
 //            NSLog(@"object at 3: %@", [object valueForKeyPath:@"fifth"]);
-//            NSMutableDictionary *dict = [[NSMutableDictionary alloc]init];
-//            [dict setValue:[object valueForKeyPath:@"first"] forKey:@"first"];
-//            [dict setValue:[object valueForKeyPath:@"second"] forKey:@"second"];
-//            [dict setValue:[object valueForKeyPath:@"third"] forKey:@"third"];
-//            [dict setValue:[object valueForKeyPath:@"fourth"] forKey:@"fourth"];
-//            [dict setValue:[object valueForKeyPath:@"fifth"] forKey:@"fifth"]
-//        }
-//    }];
+//            NSMutableArray *array = [NSMutableArray arrayWithObjects: [object valueForKeyPath:@"first"], [object valueForKeyPath:@"second"], [object valueForKeyPath:@"third"], [object valueForKeyPath:@"fourth"], [object valueForKeyPath:@"fifth"], nil];
+//            NSMutableArray *array = [[NSMutableArray alloc]init];
+//            [array setValue:[object valueForKeyPath:@"first"] forKeyPath:@"first"];
+//            [array setValue:[object valueForKeyPath:@"second"] forKeyPath:@"second"];
+//            [array setValue:[object valueForKeyPath:@"third"] forKeyPath:@"third"];
+//            [array setValue:[object valueForKeyPath:@"fourth"] forKeyPath:@"fourth"];
+//            [array setValue:[object valueForKeyPath:@"fifth"] forKeyPath:@"fifth"];
+            
+            NSString * region      = @"region";
+            NSString * count   = @"count";
+            
+            NSMutableArray * array = [NSMutableArray array];
+            
+            NSDictionary * dict;
+            dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                    @"first", region, [object valueForKeyPath:@"first"], count, nil];
+            [array addObject:dict];
+            
+            dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                    @"second", region, [object valueForKeyPath:@"second"], count, nil];
+            [array addObject:dict];
+
+            dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                    @"third", region, [object valueForKeyPath:@"third"], count, nil];
+            [array addObject:dict];
+
+            dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                    @"fourth", region, [object valueForKeyPath:@"fourth"], count, nil];
+            [array addObject:dict];
+
+            dict = [NSDictionary dictionaryWithObjectsAndKeys:
+                    @"fifth", region, [object valueForKeyPath:@"fifth"], count, nil];
+            [array addObject:dict];
+
+            
+            NSSortDescriptor * frequencyDescriptor = [[NSSortDescriptor alloc] initWithKey:count ascending:YES];
+            
+            id obj;
+            NSEnumerator * enumerator = [array objectEnumerator];
+//            while ((obj = [enumerator nextObject])) NSLog(@"%@", obj);
+            
+            NSArray * descriptors =
+            [NSArray arrayWithObjects:frequencyDescriptor, nil];
+            NSArray * sortedArray =
+            [array sortedArrayUsingDescriptors:descriptors];
+            
+            NSLog(@"\nSorted ...");
+            
+            enumerator = [sortedArray objectEnumerator];
+            while ((obj = [enumerator nextObject])) NSLog(@"%@", obj);
+
+        }
+    }];
 }
 
 
@@ -266,11 +312,11 @@
     region5.longitude =  -87.678396;
     
     CLLocationCoordinate2D region6; //region tech
-    region5.latitude = 42.058375;
-    region5.longitude =  -87.677574;
+    region6.latitude = 42.058375;
+    region6.longitude =  -87.677574;
     
     
-    CLCircularRegion *regionNoyes = [[CLCircularRegion alloc] initWithCenter:region6 radius:50 identifier:@"RegionNoyes"];
+    CLCircularRegion *regionNoyes = [[CLCircularRegion alloc] initWithCenter:region0 radius:50 identifier:@"RegionNoyes"];
     [self.locationManager startMonitoringForRegion: regionNoyes];
     
     CLCircularRegion *regionOne = [[CLCircularRegion alloc] initWithCenter:region1 radius:50 identifier:@"Region1"];
@@ -441,14 +487,88 @@
 {
     self.enteredRegion = region.identifier;
     NSLog(@"entered %@", region.identifier);
-    if ([region.identifier isEqualToString:@"Region1"] || [region.identifier isEqualToString:@"Region2"] || [region.identifier isEqualToString:@"Region3"] || [region.identifier isEqualToString:@"Region4"] || [region.identifier isEqualToString:@"Region5"]) {
-        if (!self.lastNotified && [self.group isEqualToString:@"a"]) {
-            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"DRR" message: [NSString stringWithFormat:@"Entered Region: %@", region.identifier] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
-            [alert show];
-            self.lastNotified = YES;
-        }
+    if ([region.identifier isEqualToString:@"RegionNoyes"]) {
+        self.enteredNoyes = YES;
+        self.enteredTech = NO;
     }
+    if ([region.identifier isEqualToString:@"RegionTech"]) {
+        self.enteredTech = YES;
+        self.enteredNoyes = NO;
+    }
+//    if ([region.identifier isEqualToString:@"Region1"] || [region.identifier isEqualToString:@"Region2"] || [region.identifier isEqualToString:@"Region3"] || [region.identifier isEqualToString:@"Region4"] || [region.identifier isEqualToString:@"Region5"]) {
+//        if (!self.lastNotified && [self.group isEqualToString:@"a"]) {
+//            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"DRR" message: [NSString stringWithFormat:@"Entered Region: %@", region.identifier] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
+//            [alert show];
+//            self.lastNotified = YES;
+//        }
+//    }
+    
+    PFQuery *requestQuery = [PFQuery queryWithClassName: @"Request"];
+    [requestQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if(!error) {
+            NSMutableArray *object = [[NSMutableArray alloc]init];
+            object = [objects firstObject];
 
+            int first = [[object valueForKeyPath:@"first"]intValue];
+            int second = [[object valueForKeyPath:@"second"]intValue];
+            int third = [[object valueForKeyPath:@"third"]intValue];
+            int fourth = [[object valueForKeyPath:@"fourth"]intValue];
+            int fifth = [[object valueForKeyPath:@"fifth"]intValue];
+            
+            NSLog(@"%d, %d, %d, %d, %d",first, second, third, fourth, fifth);
+    
+            if (self.enteredNoyes) {
+                if (!self.lastNotified) {
+                    if (first<=second && first<=third && first<=fourth &&first<=fifth && [region.identifier isEqualToString:@"Region1"] && !self.lastNotified) {
+                        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"DRR" message: [NSString stringWithFormat:@"Entered Region: %@", region.identifier] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
+                        [alert show];
+                        self.lastNotified = YES;
+                    } else if (second < first && second <= third && second <=fourth && second <= fifth && [region.identifier isEqualToString:@"Region2"] && !self.lastNotified) {
+                        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"DRR" message: [NSString stringWithFormat:@"Entered Region: %@", region.identifier] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
+                        [alert show];
+                        self.lastNotified = YES;
+                    } else if (third < first && third < second && third <= fourth && third <= fifth && [region.identifier isEqualToString:@"Region3"] && !self.lastNotified) {
+                        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"DRR" message: [NSString stringWithFormat:@"Entered Region: %@", region.identifier] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
+                        [alert show];
+                        self.lastNotified = YES;
+                    } else if (fourth < first && fourth < second && fourth < third && fourth <= fifth && [region.identifier isEqualToString:@"Region4"] && !self.lastNotified) {
+                        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"DRR" message: [NSString stringWithFormat:@"Entered Region: %@", region.identifier] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
+                        [alert show];
+                        self.lastNotified = YES;
+                    } else if (fifth < fourth && fifth < first && fifth < second && fifth < third && [region.identifier isEqualToString:@"Region5"] && !self.lastNotified){
+                        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"DRR" message: [NSString stringWithFormat:@"Entered Region: %@", region.identifier] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
+                        [alert show];
+                        self.lastNotified = YES;
+                    }
+                }
+            }
+            if (self.enteredTech) {
+                if (!self.lastNotified) {
+                    if (fifth<=second && fifth<=third && fifth<=fourth &&fifth<=first && [region.identifier isEqualToString:@"Region5"] && !self.lastNotified) {
+                        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"DRR" message: [NSString stringWithFormat:@"Entered Region: %@", region.identifier] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
+                        [alert show];
+                        self.lastNotified = YES;
+                    } else if (fourth < fifth && fourth <= third && fourth <=second && fourth <= first && [region.identifier isEqualToString:@"Region4"] && !self.lastNotified) {
+                        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"DRR" message: [NSString stringWithFormat:@"Entered Region: %@", region.identifier] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
+                        [alert show];
+                        self.lastNotified = YES;
+                    } else if (third < fifth && third < fourth && third <= second && third <= first && [region.identifier isEqualToString:@"Region3"] && !self.lastNotified) {
+                        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"DRR" message: [NSString stringWithFormat:@"Entered Region: %@", region.identifier] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
+                        [alert show];
+                        self.lastNotified = YES;
+                    } else if (second < fifth && second < fourth && second < third && second <= first && [region.identifier isEqualToString:@"Region2"] && !self.lastNotified) {
+                        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"DRR" message: [NSString stringWithFormat:@"Entered Region: %@", region.identifier] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
+                        [alert show];
+                        self.lastNotified = YES;
+                    } else if (first < fifth && first < fourth && fifth < third && fifth < second && [region.identifier isEqualToString:@"Region1"] && !self.lastNotified){
+                        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"DRR" message: [NSString stringWithFormat:@"Entered Region: %@", region.identifier] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
+                        [alert show];
+                        self.lastNotified = YES;
+                    }
+                }
+            }
+        }
+    }];
 
     PFQuery *query = [MyUser query];
     [query getObjectInBackgroundWithId:[MyUser currentUser].objectId block:^(PFObject *object, NSError *error) {
