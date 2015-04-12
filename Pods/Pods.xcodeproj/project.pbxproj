@@ -32,7 +32,6 @@
 		593A3F471AD468CD00799FC0 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 593A3F3C1AD468CD00799FC0 /* QuartzCore.framework */; };
 		593A3F481AD468CD00799FC0 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 593A3F3D1AD468CD00799FC0 /* CoreLocation.framework */; };
 		593A3F491AD468CD00799FC0 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 593A3F3E1AD468CD00799FC0 /* MapKit.framework */; };
-		593A3F4D1AD4696700799FC0 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 593A3F4C1AD4696700799FC0 /* libz.dylib */; };
 		6D36780F264348F1F5AC3D9C /* BFURL.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C8CA493C6B65E9E5BB897F4 /* BFURL.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		737A7D1A340FA85924BF0117 /* BFAppLinkNavigation.h in Headers */ = {isa = PBXBuildFile; fileRef = CD21F0BE37D086ABBFF2DD7E /* BFAppLinkNavigation.h */; };
 		7720CED2A0AE962DEAE1E493 /* BFAppLinkResolving.h in Headers */ = {isa = PBXBuildFile; fileRef = ADA7A751762A5CC0D3F5C668 /* BFAppLinkResolving.h */; };
@@ -106,7 +105,6 @@
 		593A3F3C1AD468CD00799FC0 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = QuartzCore.framework; sourceTree = "<group>"; };
 		593A3F3D1AD468CD00799FC0 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CoreLocation.framework; sourceTree = "<group>"; };
 		593A3F3E1AD468CD00799FC0 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MapKit.framework; sourceTree = "<group>"; };
-		593A3F4C1AD4696700799FC0 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.2.sdk/usr/lib/libz.dylib; sourceTree = DEVELOPER_DIR; };
 		5D430A8F5A1AE689C61CDBCF /* BFWebViewAppLinkResolver.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = BFWebViewAppLinkResolver.h; path = Bolts/iOS/BFWebViewAppLinkResolver.h; sourceTree = "<group>"; };
 		5E923A70BC86E4352ED92CFD /* libPods-Bolts.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Bolts.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		66469DFA69AF88A41654C4EC /* BFURL.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = BFURL.h; path = Bolts/iOS/BFURL.h; sourceTree = "<group>"; };
@@ -162,7 +160,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				593A3F4D1AD4696700799FC0 /* libz.dylib in Frameworks */,
 				593A3F471AD468CD00799FC0 /* QuartzCore.framework in Frameworks */,
 				593A3F481AD468CD00799FC0 /* CoreLocation.framework in Frameworks */,
 				593A3F431AD468CD00799FC0 /* CoreGraphics.framework in Frameworks */,
@@ -325,7 +322,6 @@
 		D380016B219C60AD4E2D8593 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				593A3F4C1AD4696700799FC0 /* libz.dylib */,
 				B0BCB4F3E7C450EC585BEEC6 /* iOS */,
 			);
 			name = Frameworks;
