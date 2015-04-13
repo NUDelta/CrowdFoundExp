@@ -191,7 +191,24 @@
 
 }
 
+- (void)appDidEnterForeground {
+//    [mySession setHdvc:self];
+    if (self.didGetNotif) {
+        self.greyOverlay.hidden = false;
+        self.blueOverlay.hidden = false;
+        self.foundLabel.hidden =false;
+        self.notFoundLabel.hidden = false;
+    }
+}
+
 - (void)viewDidAppear:(BOOL)animated {
+//    [mySession setHdvc:self];
+//    if (self.didGetNotif) {
+//        self.greyOverlay.hidden = false;
+//        self.blueOverlay.hidden = false;
+//        self.foundLabel.hidden =false;
+//        self.notFoundLabel.hidden = false;
+//    }
     //group a = baseline
     //group b = history
     //group c = pretracking + history
@@ -287,6 +304,10 @@
         self.foundLabel.hidden =false;
         self.notFoundLabel.hidden = false;
     }
+    
+    NSNotificationCenter *notifCenter = [NSNotificationCenter defaultCenter];
+    [notifCenter addObserver:self selector:@selector(appDidEnterForeground) name:@"appDidEnterForeground" object:nil];
+    
     self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.delegate =self;
     

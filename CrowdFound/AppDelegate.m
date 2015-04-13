@@ -61,8 +61,8 @@ BOOL gotNotified;
 //    HelperMapViewController *hmvc = (HelperMapViewController *)[mainstoryboard instantiateViewControllerWithIdentifier:@"HelperMapViewController"];
 //    [vc setViewControllers:@[hmvc, hdvc]];
 //    [[NSNotificationCenter defaultCenter] postNotificationName:localReceived object:self];
-    if (application.applicationState == UIApplicationStateInactive) {
-        [[UIApplication sharedApplication] cancelLocalNotification:notification];
+    if (application.applicationState == UIApplicationStateInactive || application.applicationState == UIApplicationStateBackground) {
+//        [[UIApplication sharedApplication] cancelLocalNotification:notification];
 
         //    [application presentLocalNotificationNow:notification];
         UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
@@ -70,10 +70,10 @@ BOOL gotNotified;
         //HelperDetailViewController *hdvc = (HelperDetailViewController *)[sb instantiateViewControllerWithIdentifier:@"HelperDetailViewController"];
         HelperDetailViewController *hdvc = [mySession hdvc];
         hdvc.didGetNotif = YES;
-        for(NSString *key in notification.userInfo){
-            NSLog(@"notification userInfo: %@", [notification.userInfo objectForKey:key]);
-            hdvc.objectId = [notification.userInfo objectForKey:key];
-        }
+//        for(NSString *key in notification.userInfo){
+//            NSLog(@"notification userInfo: %@", [notification.userInfo objectForKey:key]);
+//            hdvc.objectId = [notification.userInfo objectForKey:key];
+//        }
         UINavigationController *nav = (UINavigationController *)[[(UITabBarController *)self.window.rootViewController viewControllers] objectAtIndex:0];
         nav.viewControllers = [NSArray arrayWithObjects:hdvc, nil];
         [nav popToViewController:hdvc animated:YES];
@@ -92,6 +92,8 @@ BOOL gotNotified;
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    [center postNotification:[NSNotification notificationWithName:@"appDidEnterForeground" object:nil]];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
