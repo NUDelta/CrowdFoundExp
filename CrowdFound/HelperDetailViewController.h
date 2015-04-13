@@ -10,7 +10,12 @@
 #import <MapKit/MapKit.h>
 
 @interface HelperDetailViewController : UIViewController
+@property BOOL didGetNotif;
 @property (strong, nonatomic) NSArray *request;
 @property (strong, nonatomic) NSArray *requests;
+@property (weak, nonatomic) IBOutlet UILabel *greyOverlay;
 @property (strong, nonatomic) NSString *objectId;
+@property (weak, nonatomic) IBOutlet UIButton *notFoundLabel;
+@property (weak, nonatomic) IBOutlet UILabel *blueOverlay;
+@property (weak, nonatomic) IBOutlet UIButton *foundLabel;
 @end

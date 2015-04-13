@@ -31,6 +31,7 @@
 		59F2254B1A2BE48C00012572 /* ImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 59F2254A1A2BE48C00012572 /* ImageViewController.m */; };
 		59F7BC421ADAF9F300CE42B9 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 59F7BC411ADAF9F300CE42B9 /* libz.dylib */; };
 		BC4EE70EAFE803220E68B460 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EDA94C6D0F68DFEBA958AC0 /* libPods.a */; };
+		ED6FBD861ADB89D900B44BCF /* MySession.m in Sources */ = {isa = PBXBuildFile; fileRef = ED6FBD851ADB89D900B44BCF /* MySession.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -89,6 +90,8 @@
 		6EDA94C6D0F68DFEBA958AC0 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		88EBDA3AE285DE4AC20062F4 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		98F4DA191E76F8AD28C9527E /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		ED6FBD841ADB89D900B44BCF /* MySession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MySession.h; sourceTree = "<group>"; };
+		ED6FBD851ADB89D900B44BCF /* MySession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MySession.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -164,6 +167,8 @@
 				598D445C1A10B1120016484E /* Images.xcassets */,
 				598D445E1A10B1120016484E /* LaunchScreen.xib */,
 				598D444F1A10B1120016484E /* Supporting Files */,
+				ED6FBD841ADB89D900B44BCF /* MySession.h */,
+				ED6FBD851ADB89D900B44BCF /* MySession.m */,
 			);
 			path = CrowdFound;
 			sourceTree = "<group>";
@@ -381,6 +386,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ED6FBD861ADB89D900B44BCF /* MySession.m in Sources */,
 				59F225421A2BD39400012572 /* SignInViewController.m in Sources */,
 				59E589861A1556A00007E551 /* AddLocationViewController.m in Sources */,
 				59F2254B1A2BE48C00012572 /* ImageViewController.m in Sources */,

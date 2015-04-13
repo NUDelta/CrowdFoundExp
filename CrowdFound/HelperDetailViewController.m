@@ -11,6 +11,8 @@
 #import <Parse/Parse.h>
 #import "RouteViewController.h"
 #import "MyUser.h"
+#import "MySession.h"
+#define mySession [MySession sharedManager]
 
 @interface HelperDetailViewController () <CLLocationManagerDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *item;
@@ -40,10 +42,11 @@
 @end
 
 @implementation HelperDetailViewController
-
+@synthesize didGetNotif;
 
 - (IBAction)helpButton:(UIButton *)sender
 {
+    
     UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"CrowdFound" message:@"Thanks for finding the item!" delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
     [alert show];
     PFQuery *query = [PFQuery queryWithClassName:@"Request"];
@@ -68,6 +71,10 @@
         }
         
     }];
+    self.greyOverlay.hidden = false;
+    self.blueOverlay.hidden = false;
+    self.foundLabel.hidden =false;
+    self.notFoundLabel.hidden = false;
 }
 //Help fail count
 - (IBAction)noButton:(UIButton *)sender {
@@ -98,9 +105,14 @@
                 NSLog(@"ERROR!");
             }
         }];
+        
     } else {
         NSLog(@"already clicked!");
     }
+    self.greyOverlay.hidden = false;
+    self.blueOverlay.hidden = false;
+    self.foundLabel.hidden =false;
+    self.notFoundLabel.hidden = false;
 }
 
 - (void)fillDetails
@@ -268,7 +280,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    [mySession setHdvc:self];
+    if (self.didGetNotif) {
+        self.greyOverlay.hidden = false;
+        self.blueOverlay.hidden = false;
+        self.foundLabel.hidden =false;
+        self.notFoundLabel.hidden = false;
+    }
     self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.delegate =self;
     

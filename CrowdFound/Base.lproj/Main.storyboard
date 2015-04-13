@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1514" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="P4X-TR-hsw">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="P4X-TR-hsw">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -418,9 +418,26 @@
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IeC-jG-tKN">
                                         <rect key="frame" x="178" y="29" width="128" height="86"/>
                                     </imageView>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="W2c-88-dYC">
-                                        <rect key="frame" x="20" y="342" width="114" height="55"/>
+                                    <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8q6-L4-tEP">
+                                        <rect key="frame" x="2" y="8" width="326" height="447"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.51000000000000001" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <color key="highlightedColor" white="0.0" alpha="0.90000000000000002" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                    </label>
+                                    <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ABo-I9-zuW">
+                                        <rect key="frame" x="5" y="167" width="320" height="245"/>
+                                        <color key="backgroundColor" red="0.018773362718782188" green="0.043808046528388538" blue="0.31968118686868685" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="W2c-88-dYC">
+                                        <rect key="frame" x="67" y="190" width="196" height="90"/>
+                                        <color key="backgroundColor" red="0.44705882349999998" green="0.42745098040000001" blue="0.49019607840000001" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                         <state key="normal" title="I found the item">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
@@ -428,9 +445,12 @@
                                             <action selector="helpButton:" destination="wu9-Dl-ZdV" eventType="touchUpInside" id="Q9s-jW-xjv"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RQe-Aj-uHJ">
-                                        <rect key="frame" x="190" y="344" width="118" height="51"/>
+                                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RQe-Aj-uHJ">
+                                        <rect key="frame" x="67" y="294" width="196" height="92"/>
+                                        <color key="backgroundColor" red="0.44705882349999998" green="0.42745098040000001" blue="0.49019607840000001" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                         <state key="normal" title="I couldn't find it">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
@@ -453,11 +473,15 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="blueOverlay" destination="ABo-I9-zuW" id="QgB-LD-H8A"/>
+                        <outlet property="foundLabel" destination="W2c-88-dYC" id="Hd9-es-7tP"/>
+                        <outlet property="greyOverlay" destination="8q6-L4-tEP" id="740-Qm-XpK"/>
                         <outlet property="imageView" destination="IeC-jG-tKN" id="AED-4G-lvy"/>
                         <outlet property="item" destination="Ekh-Fs-zgC" id="dGf-VU-eih"/>
                         <outlet property="itemDescription" destination="YAo-M7-vLq" id="diJ-N3-s1f"/>
                         <outlet property="location" destination="OSP-5K-6FQ" id="zPc-j5-fNK"/>
                         <outlet property="locationDetail" destination="yZ6-5Y-Wnk" id="6VJ-wI-uQp"/>
+                        <outlet property="notFoundLabel" destination="RQe-Aj-uHJ" id="qwG-GU-8BK"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7Sa-dr-Vwm" userLabel="First Responder" sceneMemberID="firstResponder"/>

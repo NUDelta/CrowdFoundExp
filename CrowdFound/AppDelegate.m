@@ -11,6 +11,9 @@
 #import "MyUser.h"
 #import "HelperDetailViewController.h"
 #import "HelperMapViewController.h"
+#import "MySession.h"
+#define mySession [MySession sharedManager]
+
 NSString *localReceived = @"localReceived";
 BOOL gotNotified;
 
@@ -63,8 +66,10 @@ BOOL gotNotified;
 
         //    [application presentLocalNotificationNow:notification];
         UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-        HelperMapViewController *hmvc = (HelperMapViewController *)[sb instantiateViewControllerWithIdentifier:@"HelperMapViewController"];
-        HelperDetailViewController *hdvc = (HelperDetailViewController *)[sb instantiateViewControllerWithIdentifier:@"HelperDetailViewController"];
+       // HelperMapViewController *hmvc = (HelperMapViewController *)[sb instantiateViewControllerWithIdentifier:@"HelperMapViewController"];
+        //HelperDetailViewController *hdvc = (HelperDetailViewController *)[sb instantiateViewControllerWithIdentifier:@"HelperDetailViewController"];
+        HelperDetailViewController *hdvc = [mySession hdvc];
+        hdvc.didGetNotif = YES;
         for(NSString *key in notification.userInfo){
             NSLog(@"notification userInfo: %@", [notification.userInfo objectForKey:key]);
             hdvc.objectId = [notification.userInfo objectForKey:key];
