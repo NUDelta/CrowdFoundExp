@@ -69,7 +69,8 @@ BOOL gotNotified;
        // HelperMapViewController *hmvc = (HelperMapViewController *)[sb instantiateViewControllerWithIdentifier:@"HelperMapViewController"];
         //HelperDetailViewController *hdvc = (HelperDetailViewController *)[sb instantiateViewControllerWithIdentifier:@"HelperDetailViewController"];
         HelperDetailViewController *hdvc = [mySession hdvc];
-        hdvc.didGetNotif = YES;
+        [mySession setDidGetNotif:YES];
+        //hdvc.didGetNotif = YES;
 //        for(NSString *key in notification.userInfo){
 //            NSLog(@"notification userInfo: %@", [notification.userInfo objectForKey:key]);
 //            hdvc.objectId = [notification.userInfo objectForKey:key];

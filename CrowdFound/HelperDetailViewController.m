@@ -75,6 +75,7 @@
     self.blueOverlay.hidden = false;
     self.foundLabel.hidden =false;
     self.notFoundLabel.hidden = false;
+    [mySession setDidGetNotif:NO];
 }
 //Help fail count
 - (IBAction)noButton:(UIButton *)sender {
@@ -113,6 +114,7 @@
     self.blueOverlay.hidden = false;
     self.foundLabel.hidden =false;
     self.notFoundLabel.hidden = false;
+    [mySession setDidGetNotif:NO];
 }
 
 - (void)fillDetails
@@ -202,7 +204,7 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-//    [mySession setHdvc:self];
+    [mySession setHdvc:self];
 //    if (self.didGetNotif) {
 //        self.greyOverlay.hidden = false;
 //        self.blueOverlay.hidden = false;
@@ -298,7 +300,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [mySession setHdvc:self];
-    if (self.didGetNotif) {
+    if ([mySession didGetNotif]) {
         self.greyOverlay.hidden = false;
         self.blueOverlay.hidden = false;
         self.foundLabel.hidden =false;

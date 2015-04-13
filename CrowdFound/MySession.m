@@ -10,7 +10,7 @@
 
 @implementation MySession
 @synthesize hdvc;
-
+@synthesize didGetNotif;
 
 + (id)sharedManager {
     static MySession *sharedMyManager = nil;

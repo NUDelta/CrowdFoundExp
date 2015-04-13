@@ -11,7 +11,9 @@
 
 @interface MySession : NSObject {
     HelperDetailViewController *hdvc;
+    BOOL didGetNotif;
 }
 @property (nonatomic, strong) HelperDetailViewController *hdvc;
+@property BOOL didGetNotif;
 + (id)sharedManager;
 @end
