@@ -183,13 +183,20 @@
     //group a = baseline
     //group b = history
     //group c = pretracking + history
-    self.group = @"b";
+//    self.group = @"b";
     PFQuery *query = [MyUser query];
     [query getObjectInBackgroundWithId:[MyUser currentUser].objectId block:^(PFObject *object, NSError *error) {
         if (!error) {
             //            int notifCount = [object[@"notifNum"] intValue];
             //            NSLog(@"%d", notifCount);
             //            NSNumber *value = [NSNumber numberWithInt:notifCount+1];
+            if (!object[@"notification"]) {
+                self.group = @"a";
+                object[@"group"] = self.group;
+            }
+            else
+                self.group = object[@"group"];
+
             NSDate *lastNotifiedDate = object[@"lastNotified"];
             NSLog(@"%@", lastNotifiedDate);
             NSDate *currentDate = [NSDate date];
@@ -199,6 +206,7 @@
                                                          toDate:currentDate
                                                         options:0];
             NSLog(@"Difference in date components: %i/%i/%i", components.minute, components.hour, components.day);
+            [object saveInBackground];
         } else {
             NSLog(@"ERROR!");
         }
@@ -402,73 +410,164 @@
         
         //    NSLog(@"%f", newLocation.coordinate.longitude);
         CLLocationDistance distance = [newLocation distanceFromLocation: self.oldLocation];
-        int middlePoint = [[self.request valueForKeyPath:@"middlePoint"] intValue];
+//        int middlePoint = [[self.request valueForKeyPath:@"middlePoint"] intValue];
+//        
+//        int firstQuarterPoint = [[self.request valueForKeyPath:@"firstQuarterPoint"] intValue];
+//        
+//        int thirdQuarterPoint = [[self.request valueForKeyPath:@"thirdQuarterPoint"] intValue];
+//        
+//        NSLog(@"distance: %f", distance);
+//        NSLog(@"first quarter: %d", firstQuarterPoint);
+//        NSLog(@"middle quarter: %d", middlePoint);
+//        NSLog(@"third quarter: %d", thirdQuarterPoint);
+//        
+//        int first = [[self.request valueForKeyPath:@"first"]intValue];
+//        int second = [[self.request valueForKeyPath:@"second"]intValue];
+//        int third = [[self.request valueForKeyPath:@"third"]intValue];
+//        
+//        
+//        if ([self.enteredRegion isEqualToString:@"RegionA"] && !self.notified) {
+//            //if # is the same, Middle, First, Third order
+//            if (second <=first || second <= third) {
+//                if (distance >= middlePoint && distance < thirdQuarterPoint) {
+//                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Middle Point!" message:[NSString stringWithFormat:@"%f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
+//                    [alert show];
+//                    self.region = @"middle";
+//                    self.notified = YES;
+//                }
+//            }
+//            else if (first < second && first <= third) {
+//                if (distance>= firstQuarterPoint && distance < middlePoint) {
+//                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"first Quarter" message:[NSString stringWithFormat:@"%f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
+//                    [alert show];
+//                    self.region = @"first";
+//                    self.notified = YES;
+//                }
+//            }
+//            else if (third < second && third < first) {
+//                if (distance >= thirdQuarterPoint) {
+//                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"third Quarter" message:[NSString stringWithFormat:@"%f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
+//                    [alert show];
+//                    self.region = @"third";
+//                    self.notified = YES;
+//                }
+//            }
+//        } else if ([self.enteredRegion isEqualToString:@"RegionB"] && !self.notified){
+//            if (second <=first || second <= third) {
+//                if (distance >= middlePoint && distance < thirdQuarterPoint) {
+//                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Middle Point!" message:[NSString stringWithFormat:@"%f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
+//                    [alert show];
+//                    self.region = @"middle";
+//                    self.notified = YES;
+//                }
+//            }
+//            else if (third < second && third < first) {
+//                if (distance>= firstQuarterPoint && distance < middlePoint) {
+//                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"third Quarter" message:[NSString stringWithFormat:@"%f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
+//                    [alert show];
+//                    self.region = @"third";
+//                    self.notified = YES;
+//                }
+//            }
+//            else if (first < second && first < third) {
+//                if (distance >= thirdQuarterPoint) {
+//                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"first Quarter" message:[NSString stringWithFormat:@"%f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
+//                    [alert show];
+//                    self.region = @"first";
+//                    self.notified = YES;
+//                }
+//            }
+//        }
+
         
-        int firstQuarterPoint = [[self.request valueForKeyPath:@"firstQuarterPoint"] intValue];
-        
-        int thirdQuarterPoint = [[self.request valueForKeyPath:@"thirdQuarterPoint"] intValue];
-        
-        NSLog(@"distance: %f", distance);
-        NSLog(@"first quarter: %d", firstQuarterPoint);
-        NSLog(@"middle quarter: %d", middlePoint);
-        NSLog(@"third quarter: %d", thirdQuarterPoint);
-        
-        int first = [[self.request valueForKeyPath:@"first"]intValue];
-        int second = [[self.request valueForKeyPath:@"second"]intValue];
-        int third = [[self.request valueForKeyPath:@"third"]intValue];
-        
-        if ([self.enteredRegion isEqualToString:@"RegionA"] && !self.notified) {
-            //if # is the same, Middle, First, Third order
-            if (second <=first || second <= third) {
-                if (distance >= middlePoint && distance < thirdQuarterPoint) {
-                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Middle Point!" message:[NSString stringWithFormat:@"%f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
-                    [alert show];
-                    self.region = @"middle";
-                    self.notified = YES;
+        PFQuery *requestQuery = [PFQuery queryWithClassName: @"Request"];
+        [requestQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+            if(!error) {
+                NSMutableArray *object = [[NSMutableArray alloc]init];
+                object = [objects firstObject];
+                
+                int first = [[object valueForKeyPath:@"first"]intValue];
+                int second = [[object valueForKeyPath:@"second"]intValue];
+                int third = [[object valueForKeyPath:@"third"]intValue];
+                int fourth = [[object valueForKeyPath:@"fourth"]intValue];
+                int fifth = [[object valueForKeyPath:@"fifth"]intValue];
+                
+                NSLog(@"%d, %d, %d, %d, %d",first, second, third, fourth, fifth);
+                
+                if (self.enteredNoyes) {
+                    if (!self.notified) {
+                        if (first<=second && first<=third && first<=fourth &&first<=fifth && !self.notified) {
+                            if (distance<=20) {
+                                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"first" message: [NSString stringWithFormat:@"distance: %f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
+                                [alert show];
+                                self.notified = YES;
+                            }
+                        } else if (second < first && second <= third && second <=fourth && second <= fifth ) {
+                            if (distance>=90) {
+                                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"second" message: [NSString stringWithFormat:@"distance: %f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
+                                [alert show];
+                                self.notified = YES;
+                            }
+                        } else if (third < first && third < second && third <= fourth && third <= fifth ) {
+                            if (distance>=150) {
+                                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"third" message: [NSString stringWithFormat:@"distance: %f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
+                                [alert show];
+                                self.notified = YES;
+                            }
+                        } else if (fourth < first && fourth < second && fourth < third && fourth <= fifth ) {
+                            if (distance>=260){
+                                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"fourth" message: [NSString stringWithFormat:@"distance: %f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
+                                [alert show];
+                                self.notified = YES;
+                            }
+
+                        } else if (fifth < fourth && fifth < first && fifth < second && fifth < third ){
+                            if (distance>=300) {
+                                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"fifth" message: [NSString stringWithFormat:@"distance: %f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
+                                [alert show];
+                                self.notified = YES;
+                            }
+                        }
+                    }
+                }
+                if (self.enteredTech) {
+                    if (!self.notified) {
+                        if (fifth<=second && fifth<=third && fifth<=fourth &&fifth<=first) {
+                            if (distance>=20) {
+                                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"fifth" message: [NSString stringWithFormat:@"distance: %f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
+                                [alert show];
+                                self.notified = YES;
+                            }
+                        } else if (fourth < fifth && fourth <= third && fourth <=second && fourth <= first) {
+                            if (distance>=90) {
+                                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"DRR" message: [NSString stringWithFormat:@"distance: %f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
+                                [alert show];
+                                self.notified = YES;
+                            }
+                        } else if (third < fifth && third < fourth && third <= second && third <= first) {
+                            if (distance>=150) {
+                                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"DRR" message: [NSString stringWithFormat:@"distance: %f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
+                                [alert show];
+                                self.notified = YES;
+                            }
+
+                        } else if (second < fifth && second < fourth && second < third && second <= first) {
+                            if (distance>=220) {
+                                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"DRR" message: [NSString stringWithFormat:@"distance: %f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
+                                [alert show];
+                                self.notified = YES;
+                            }
+                        } else if (first < fifth && first < fourth && fifth < third && fifth < second){
+                            if (distance >=300) {
+                                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"DRR" message: [NSString stringWithFormat:@"distance: %f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
+                                [alert show];
+                                self.notified = YES;
+                            }
+                        }
+                    }
                 }
             }
-            else if (first < second && first <= third) {
-                if (distance>= firstQuarterPoint && distance < middlePoint) {
-                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"first Quarter" message:[NSString stringWithFormat:@"%f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
-                    [alert show];
-                    self.region = @"first";
-                    self.notified = YES;
-                }
-            }
-            else if (third < second && third < first) {
-                if (distance >= thirdQuarterPoint) {
-                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"third Quarter" message:[NSString stringWithFormat:@"%f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
-                    [alert show];
-                    self.region = @"third";
-                    self.notified = YES;
-                }
-            }
-        } else if ([self.enteredRegion isEqualToString:@"RegionB"] && !self.notified){
-            if (second <=first || second <= third) {
-                if (distance >= middlePoint && distance < thirdQuarterPoint) {
-                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Middle Point!" message:[NSString stringWithFormat:@"%f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
-                    [alert show];
-                    self.region = @"middle";
-                    self.notified = YES;
-                }
-            }
-            else if (third < second && third < first) {
-                if (distance>= firstQuarterPoint && distance < middlePoint) {
-                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"third Quarter" message:[NSString stringWithFormat:@"%f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
-                    [alert show];
-                    self.region = @"third";
-                    self.notified = YES;
-                }
-            }
-            else if (first < second && first < third) {
-                if (distance >= thirdQuarterPoint) {
-                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"first Quarter" message:[NSString stringWithFormat:@"%f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
-                    [alert show];
-                    self.region = @"first";
-                    self.notified = YES;
-                }
-            }
-        }
+        }];
     }
 }
 
