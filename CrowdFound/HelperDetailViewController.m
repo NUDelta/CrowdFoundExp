@@ -380,91 +380,93 @@
 
 #pragma mark - Location
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
-//    NSLog(@"here!!!!!!!");
-    CLLocation* newLocation = [locations lastObject];
-
-    NSTimeInterval age = -[newLocation.timestamp timeIntervalSinceNow];
-
-    if (age > 120) return;    // ignore old (cached) updates
-
-    //    NSTimeInterval age = -[newLocation.timestamp timeIntervalSinceNow];
-    //
-    //    if (age > 120) return;    // ignore old (cached) updates
-
-    if (newLocation.horizontalAccuracy < 0) return;   // ignore invalid udpates
-
-//    // EDIT: need a valid oldLocation to be able to compute distance
-//    if (self.oldLocation == nil || self.oldLocation.horizontalAccuracy < 0) {
-//        self.oldLocation = newLocation;
-//        return;
-//    }
-
-//    NSLog(@"%f", newLocation.coordinate.longitude);
-    CLLocationDistance distance = [newLocation distanceFromLocation: self.oldLocation];
-    int middlePoint = [[self.request valueForKeyPath:@"middlePoint"] intValue];
-    
-    int firstQuarterPoint = [[self.request valueForKeyPath:@"firstQuarterPoint"] intValue];
-    
-    int thirdQuarterPoint = [[self.request valueForKeyPath:@"thirdQuarterPoint"] intValue];
-
-    NSLog(@"distance: %f", distance);
-    NSLog(@"first quarter: %d", firstQuarterPoint);
-    NSLog(@"middle quarter: %d", middlePoint);
-    NSLog(@"third quarter: %d", thirdQuarterPoint);
-    
-    int first = [[self.request valueForKeyPath:@"first"]intValue];
-    int second = [[self.request valueForKeyPath:@"second"]intValue];
-    int third = [[self.request valueForKeyPath:@"third"]intValue];
-    
-    if ([self.enteredRegion isEqualToString:@"RegionA"] && !self.notified) {
-//if # is the same, Middle, First, Third order
-        if (second <=first || second <= third) {
-            if (distance >= middlePoint && distance < thirdQuarterPoint) {
-                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Middle Point!" message:[NSString stringWithFormat:@"%f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
-                [alert show];
-                self.region = @"middle";
-                self.notified = YES;
+    if ([self.group isEqualToString:@"c"]) {
+        //    NSLog(@"here!!!!!!!");
+        CLLocation* newLocation = [locations lastObject];
+        
+        NSTimeInterval age = -[newLocation.timestamp timeIntervalSinceNow];
+        
+        if (age > 120) return;    // ignore old (cached) updates
+        
+        //    NSTimeInterval age = -[newLocation.timestamp timeIntervalSinceNow];
+        //
+        //    if (age > 120) return;    // ignore old (cached) updates
+        
+        if (newLocation.horizontalAccuracy < 0) return;   // ignore invalid udpates
+        
+        //    // EDIT: need a valid oldLocation to be able to compute distance
+        //    if (self.oldLocation == nil || self.oldLocation.horizontalAccuracy < 0) {
+        //        self.oldLocation = newLocation;
+        //        return;
+        //    }
+        
+        //    NSLog(@"%f", newLocation.coordinate.longitude);
+        CLLocationDistance distance = [newLocation distanceFromLocation: self.oldLocation];
+        int middlePoint = [[self.request valueForKeyPath:@"middlePoint"] intValue];
+        
+        int firstQuarterPoint = [[self.request valueForKeyPath:@"firstQuarterPoint"] intValue];
+        
+        int thirdQuarterPoint = [[self.request valueForKeyPath:@"thirdQuarterPoint"] intValue];
+        
+        NSLog(@"distance: %f", distance);
+        NSLog(@"first quarter: %d", firstQuarterPoint);
+        NSLog(@"middle quarter: %d", middlePoint);
+        NSLog(@"third quarter: %d", thirdQuarterPoint);
+        
+        int first = [[self.request valueForKeyPath:@"first"]intValue];
+        int second = [[self.request valueForKeyPath:@"second"]intValue];
+        int third = [[self.request valueForKeyPath:@"third"]intValue];
+        
+        if ([self.enteredRegion isEqualToString:@"RegionA"] && !self.notified) {
+            //if # is the same, Middle, First, Third order
+            if (second <=first || second <= third) {
+                if (distance >= middlePoint && distance < thirdQuarterPoint) {
+                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Middle Point!" message:[NSString stringWithFormat:@"%f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
+                    [alert show];
+                    self.region = @"middle";
+                    self.notified = YES;
+                }
             }
-        }
-        else if (first < second && first <= third) {
-            if (distance>= firstQuarterPoint && distance < middlePoint) {
-                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"first Quarter" message:[NSString stringWithFormat:@"%f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
-                [alert show];
-                self.region = @"first";
-                self.notified = YES;
+            else if (first < second && first <= third) {
+                if (distance>= firstQuarterPoint && distance < middlePoint) {
+                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"first Quarter" message:[NSString stringWithFormat:@"%f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
+                    [alert show];
+                    self.region = @"first";
+                    self.notified = YES;
+                }
             }
-        }
-        else if (third < second && third < first) {
-            if (distance >= thirdQuarterPoint) {
-                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"third Quarter" message:[NSString stringWithFormat:@"%f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
-                [alert show];
-                self.region = @"third";
-                self.notified = YES;
+            else if (third < second && third < first) {
+                if (distance >= thirdQuarterPoint) {
+                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"third Quarter" message:[NSString stringWithFormat:@"%f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
+                    [alert show];
+                    self.region = @"third";
+                    self.notified = YES;
+                }
             }
-        }
-    } else if ([self.enteredRegion isEqualToString:@"RegionB"] && !self.notified){
-        if (second <=first || second <= third) {
-            if (distance >= middlePoint && distance < thirdQuarterPoint) {
-                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Middle Point!" message:[NSString stringWithFormat:@"%f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
-                [alert show];
-                self.region = @"middle";
-                self.notified = YES;
+        } else if ([self.enteredRegion isEqualToString:@"RegionB"] && !self.notified){
+            if (second <=first || second <= third) {
+                if (distance >= middlePoint && distance < thirdQuarterPoint) {
+                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Middle Point!" message:[NSString stringWithFormat:@"%f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
+                    [alert show];
+                    self.region = @"middle";
+                    self.notified = YES;
+                }
             }
-        }
-        else if (third < second && third < first) {
-            if (distance>= firstQuarterPoint && distance < middlePoint) {
-                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"third Quarter" message:[NSString stringWithFormat:@"%f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
-                [alert show];
-                self.region = @"third";
-                self.notified = YES;
+            else if (third < second && third < first) {
+                if (distance>= firstQuarterPoint && distance < middlePoint) {
+                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"third Quarter" message:[NSString stringWithFormat:@"%f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
+                    [alert show];
+                    self.region = @"third";
+                    self.notified = YES;
+                }
             }
-        }
-        else if (first < second && first < third) {
-            if (distance >= thirdQuarterPoint) {
-                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"first Quarter" message:[NSString stringWithFormat:@"%f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
-                [alert show];
-                self.region = @"first";
-                self.notified = YES;
+            else if (first < second && first < third) {
+                if (distance >= thirdQuarterPoint) {
+                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"first Quarter" message:[NSString stringWithFormat:@"%f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
+                    [alert show];
+                    self.region = @"first";
+                    self.notified = YES;
+                }
             }
         }
     }
@@ -477,10 +479,30 @@
     if ([region.identifier isEqualToString:@"RegionNoyes"]) {
         self.enteredNoyes = YES;
         self.enteredTech = NO;
+        //for old location
+        [PFGeoPoint geoPointForCurrentLocationInBackground:^(PFGeoPoint *geoPoint, NSError *error) {
+            if (!error) {
+                self.oldLocation = [[CLLocation alloc]initWithLatitude:geoPoint.latitude longitude:geoPoint.longitude];
+                NSLog(@"latitude is : %f",self.oldLocation.coordinate.latitude);
+                //            self.lat = geoPoint.latitude;
+                //            self.lng = geoPoint.longitude;
+                //            [self getHeadingForDirectionFromCoordinate:oldLoc toCoordinate:plex];
+            }
+        }];
     }
     if ([region.identifier isEqualToString:@"RegionTech"]) {
         self.enteredTech = YES;
         self.enteredNoyes = NO;
+        //for old location
+        [PFGeoPoint geoPointForCurrentLocationInBackground:^(PFGeoPoint *geoPoint, NSError *error) {
+            if (!error) {
+                self.oldLocation = [[CLLocation alloc]initWithLatitude:geoPoint.latitude longitude:geoPoint.longitude];
+                NSLog(@"latitude is : %f",self.oldLocation.coordinate.latitude);
+                //            self.lat = geoPoint.latitude;
+                //            self.lng = geoPoint.longitude;
+                //            [self getHeadingForDirectionFromCoordinate:oldLoc toCoordinate:plex];
+            }
+        }];
     }
 //    if ([region.identifier isEqualToString:@"Region1"] || [region.identifier isEqualToString:@"Region2"] || [region.identifier isEqualToString:@"Region3"] || [region.identifier isEqualToString:@"Region4"] || [region.identifier isEqualToString:@"Region5"]) {
 //        if (!self.lastNotified && [self.group isEqualToString:@"a"]) {
@@ -489,7 +511,7 @@
 //            self.lastNotified = YES;
 //        }
 //    }
-    
+
     PFQuery *requestQuery = [PFQuery queryWithClassName: @"Request"];
     [requestQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if(!error) {
@@ -570,17 +592,6 @@
             NSLog(@"ERROR!");
         }
     }];
-//    [PFGeoPoint geoPointForCurrentLocationInBackground:^(PFGeoPoint *geoPoint, NSError *error) {
-//        if (!error) {
-//            self.oldLocation = [[CLLocation alloc]initWithLatitude:geoPoint.latitude longitude:geoPoint.longitude];
-//            NSLog(@"latitude is : %f",self.oldLocation.coordinate.latitude);
-////            self.lat = geoPoint.latitude;
-////            self.lng = geoPoint.longitude;
-////            [self getHeadingForDirectionFromCoordinate:oldLoc toCoordinate:plex];
-//            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"DRR" message: [NSString stringWithFormat:@"Entered Region: %@", region.identifier] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
-//            [alert show];
-//        }
-//    }];
 }
 
 - (void)locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region
