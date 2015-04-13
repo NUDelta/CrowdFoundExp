@@ -20,7 +20,6 @@
 		598D44961A11095C0016484E /* RequestDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 598D44951A11095C0016484E /* RequestDetailViewController.m */; };
 		598D44991A1114390016484E /* HelperMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 598D44981A1114390016484E /* HelperMapViewController.m */; };
 		59C92C951A226F0800B60983 /* TabBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 59C92C941A226F0800B60983 /* TabBarViewController.m */; };
-		59CD59D01A1E7D36001A2530 /* delta.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 59CD59CF1A1E7D36001A2530 /* delta.gpx */; };
 		59E589861A1556A00007E551 /* AddLocationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 59E589851A1556A00007E551 /* AddLocationViewController.m */; };
 		59E5898B1A1569C90007E551 /* HelperDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 59E5898A1A1569C90007E551 /* HelperDetailViewController.m */; };
 		59E589991A15DA8B0007E551 /* HelperAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 59E589981A15DA8B0007E551 /* HelperAnnotation.m */; };
@@ -69,7 +68,6 @@
 		598D44981A1114390016484E /* HelperMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelperMapViewController.m; sourceTree = "<group>"; };
 		59C92C931A226F0800B60983 /* TabBarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TabBarViewController.h; sourceTree = "<group>"; };
 		59C92C941A226F0800B60983 /* TabBarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TabBarViewController.m; sourceTree = "<group>"; };
-		59CD59CF1A1E7D36001A2530 /* delta.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = delta.gpx; path = ../LocationNotifier/delta.gpx; sourceTree = "<group>"; };
 		59E589841A1556A00007E551 /* AddLocationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddLocationViewController.h; sourceTree = "<group>"; };
 		59E589851A1556A00007E551 /* AddLocationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddLocationViewController.m; sourceTree = "<group>"; };
 		59E589891A1569C90007E551 /* HelperDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelperDetailViewController.h; sourceTree = "<group>"; };
@@ -125,7 +123,6 @@
 		598D44431A10B1120016484E = {
 			isa = PBXGroup;
 			children = (
-				59CD59CF1A1E7D36001A2530 /* delta.gpx */,
 				598D44761A10B1660016484E /* Delta.mobileprovision */,
 				598D444E1A10B1120016484E /* CrowdFound */,
 				598D44681A10B1130016484E /* CrowdFoundTests */,
@@ -331,7 +328,6 @@
 				598D445B1A10B1120016484E /* Main.storyboard in Resources */,
 				59E5899B1A15DFE80007E551 /* helper.png in Resources */,
 				598D44601A10B1120016484E /* LaunchScreen.xib in Resources */,
-				59CD59D01A1E7D36001A2530 /* delta.gpx in Resources */,
 				598D445D1A10B1120016484E /* Images.xcassets in Resources */,
 				59288DFD1A3796770027216B /* Icon.png in Resources */,
 				59288DFB1A378F1F0027216B /* Icon-60@2x.png in Resources */,
