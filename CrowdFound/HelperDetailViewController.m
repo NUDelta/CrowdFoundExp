@@ -71,11 +71,12 @@
         }
         
     }];
-    self.greyOverlay.hidden = false;
-    self.blueOverlay.hidden = false;
-    self.foundLabel.hidden =false;
-    self.notFoundLabel.hidden = false;
+    self.greyOverlay.hidden = true;
+    self.blueOverlay.hidden = true;
+    self.foundLabel.hidden =true;
+    self.notFoundLabel.hidden = true;
     [mySession setDidGetNotif:NO];
+    self.didGetNotif = NO;
 }
 //Help fail count
 - (IBAction)noButton:(UIButton *)sender {
@@ -110,11 +111,13 @@
     } else {
         NSLog(@"already clicked!");
     }
-    self.greyOverlay.hidden = false;
-    self.blueOverlay.hidden = false;
-    self.foundLabel.hidden =false;
-    self.notFoundLabel.hidden = false;
-    [mySession setDidGetNotif:NO];
+    self.greyOverlay.hidden = true;
+    self.blueOverlay.hidden = true;
+    self.foundLabel.hidden = true;
+    self.notFoundLabel.hidden = true;
+//    [mySession setDidGetNotif:NO];
+    self.didGetNotif = NO;
+
 }
 
 - (void)fillDetails
