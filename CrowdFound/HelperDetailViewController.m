@@ -591,6 +591,7 @@
 
 - (void)locationManager:(CLLocationManager *)manager didEnterRegion:(CLRegion *)region
 {
+    [self testNotif];
     self.enteredRegion = region.identifier;
     NSLog(@"entered %@", region.identifier);
     if ([region.identifier isEqualToString:@"RegionNoyes"]) {
@@ -718,6 +719,20 @@
 //    NSLog(@"exited %@", region.identifier);
     if ([region.identifier isEqualToString:@"RegionCenter"] || [region.identifier isEqualToString:@"RegionTech"] || [region.identifier isEqualToString:@"RegionNoyes"]) {
         self.lastNotified = NO;
+    }
+}
+
+- (void)testNotif
+{
+    UILocalNotification *localNotif = [[UILocalNotification alloc] init];
+    //    NSDictionary *dictionary = [NSDictionary dictionaryWithObject:objId forKey:objId];
+    //    localNotif.userInfo = dictionary;
+    localNotif.alertBody = [NSString stringWithFormat:@"I lost item. Would you like to help?"];
+    localNotif.alertAction = @"Testing notification based on regions";
+    localNotif.soundName = UILocalNotificationDefaultSoundName;
+    if (localNotif) {
+        localNotif.applicationIconBadgeNumber = 1;
+        [[UIApplication sharedApplication] presentLocalNotificationNow:localNotif];
     }
 }
 
