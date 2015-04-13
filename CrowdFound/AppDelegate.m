@@ -70,7 +70,7 @@ BOOL gotNotified;
             hdvc.objectId = [notification.userInfo objectForKey:key];
         }
         UINavigationController *nav = (UINavigationController *)[[(UITabBarController *)self.window.rootViewController viewControllers] objectAtIndex:0];
-        nav.viewControllers = [NSArray arrayWithObjects:hmvc,hdvc, nil];
+        nav.viewControllers = [NSArray arrayWithObjects:hdvc, nil];
         [nav popToViewController:hdvc animated:YES];
     }
     application.applicationIconBadgeNumber = notification.applicationIconBadgeNumber - 1;
