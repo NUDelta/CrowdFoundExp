@@ -69,8 +69,8 @@ BOOL gotNotified;
        // HelperMapViewController *hmvc = (HelperMapViewController *)[sb instantiateViewControllerWithIdentifier:@"HelperMapViewController"];
         //HelperDetailViewController *hdvc = (HelperDetailViewController *)[sb instantiateViewControllerWithIdentifier:@"HelperDetailViewController"];
         HelperDetailViewController *hdvc = [mySession hdvc];
-        [mySession setDidGetNotif:YES];
-        //hdvc.didGetNotif = YES;
+//        [mySession setDidGetNotif:YES];
+        hdvc.didGetNotif = YES;
 //        for(NSString *key in notification.userInfo){
 //            NSLog(@"notification userInfo: %@", [notification.userInfo objectForKey:key]);
 //            hdvc.objectId = [notification.userInfo objectForKey:key];
@@ -93,13 +93,13 @@ BOOL gotNotified;
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-    [center postNotification:[NSNotification notificationWithName:@"appDidEnterForeground" object:nil]];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     application.applicationIconBadgeNumber = 0;
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    [center postNotification:[NSNotification notificationWithName:@"appDidEnterForeground" object:nil]];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
