@@ -165,9 +165,9 @@
                         region5.latitude = 42.058381;
                         region5.longitude =  -87.678396;
                         
-                        CLLocationCoordinate2D region6; //region tech
-                        region6.latitude = 42.058375;
-                        region6.longitude =  -87.677574;
+//                        CLLocationCoordinate2D region6; //region tech
+//                        region6.latitude = 42.058375;
+//                        region6.longitude =  -87.677574;
                         
                         CLCircularRegion *regionOne = [[CLCircularRegion alloc] initWithCenter:region1 radius:20 identifier:@"Region1"];
 //                        [self.locationManager startMonitoringForRegion: regionOne];
@@ -353,9 +353,9 @@
                         region5.latitude = 42.058381;
                         region5.longitude =  -87.678396;
                         
-                        CLLocationCoordinate2D region6; //region tech
-                        region6.latitude = 42.058375;
-                        region6.longitude =  -87.677574;
+//                        CLLocationCoordinate2D region6; //region tech
+//                        region6.latitude = 42.058375;
+//                        region6.longitude =  -87.677574;
                         
                         CLCircularRegion *regionOne = [[CLCircularRegion alloc] initWithCenter:region1 radius:20 identifier:@"Region1"];
                         //                        [self.locationManager startMonitoringForRegion: regionOne];
@@ -573,7 +573,7 @@
             //            int notifCount = [object[@"notifNum"] intValue];
             //            NSLog(@"%d", notifCount);
             //            NSNumber *value = [NSNumber numberWithInt:notifCount+1];
-            if (!object[@"notification"]) {
+            if (!object[@"group"]) {
                 self.group = @"a";
                 object[@"group"] = self.group;
             }
@@ -679,8 +679,8 @@
     [self.locationManager startUpdatingLocation];
     
     CLLocationCoordinate2D region0; //region noyes
-    region0.latitude = 42.058444;
-    region0.longitude = -87.683134;
+    region0.latitude = 42.058425;
+    region0.longitude = -87.682604;
     
     CLLocationCoordinate2D region1; //region 1
     region1.latitude = 42.058430;
@@ -703,9 +703,8 @@
     region5.longitude =  -87.678396;
     
     CLLocationCoordinate2D region6; //region tech
-    region6.latitude = 42.058375;
-    region6.longitude =  -87.677574;
-    
+    region6.latitude = 42.058367;
+    region6.longitude =  -87.677950;
     
     CLCircularRegion *regionNoyes = [[CLCircularRegion alloc] initWithCenter:region0 radius:50 identifier:@"RegionNoyes"];
     [self.locationManager startMonitoringForRegion: regionNoyes];
