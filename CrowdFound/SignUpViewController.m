@@ -91,7 +91,7 @@
     MyUser *newUser = (MyUser *)[MyUser object];
     newUser.username = self.usernameField.text;
     newUser.email = self.emailField.text;
-    [newUser setAdditional: self.phoneNumberField.text];
+//    [newUser setAdditional: self.phoneNumberField.text];
     newUser.password = self.passwordField.text;
     [newUser signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (!error) {
@@ -100,7 +100,7 @@
             self.emailField.text = @"";
             self.passwordField.text = @"";
             self.reEnterPasswordField.text = @"";
-            self.phoneNumberField.text = @"";
+//            self.phoneNumberField.text = @"";
             AppDelegate *appDelegateTemp = [[UIApplication sharedApplication]delegate];
             PFInstallation *installation = [PFInstallation currentInstallation];
             installation[@"user"] = [PFUser currentUser];
