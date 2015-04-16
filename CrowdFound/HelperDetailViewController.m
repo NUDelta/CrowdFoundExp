@@ -1253,6 +1253,16 @@
                         [self testNotif];
 //                        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"DRR" message: [NSString stringWithFormat:@"Entered Region: %@", region.identifier] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
 //                        [alert show];
+                        [PFGeoPoint geoPointForCurrentLocationInBackground:^(PFGeoPoint *geoPoint, NSError *error) {
+                            if (!error) {
+                                NSLog(@"latitude is : %f",self.oldLocation.coordinate.latitude);
+                                [self appUsageLogging:[NSString stringWithFormat:@"notification at %f, %f", geoPoint.latitude, geoPoint.longitude]];
+                                
+                                //            self.lat = geoPoint.latitude;
+                                //            self.lng = geoPoint.longitude;
+                                //            [self getHeadingForDirectionFromCoordinate:oldLoc toCoordinate:plex];
+                            }
+                        }];
                         [self appUsageLogging:[NSString stringWithFormat:@"notification at %@", region.identifier]];
                         self.lastNotified = YES;
                     }
@@ -1267,12 +1277,31 @@
                             
 //                            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"DRR" message: [NSString stringWithFormat:@"Entered Region: %@", region.identifier] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
 //                            [alert show];
+                            [PFGeoPoint geoPointForCurrentLocationInBackground:^(PFGeoPoint *geoPoint, NSError *error) {
+                                if (!error) {
+                                    NSLog(@"latitude is : %f",self.oldLocation.coordinate.latitude);
+                                    [self appUsageLogging:[NSString stringWithFormat:@"notification at %f, %f", geoPoint.latitude, geoPoint.longitude]];
+                                    
+                                    //            self.lat = geoPoint.latitude;
+                                    //            self.lng = geoPoint.longitude;
+                                    //            [self getHeadingForDirectionFromCoordinate:oldLoc toCoordinate:plex];
+                                }
+                            }];
                             [self appUsageLogging:[NSString stringWithFormat:@"notification at%@", region.identifier]];
 
                             self.lastNotified = YES;
                         } else if (second < first && second <= third && second <=fourth && second <= fifth && [region.identifier isEqualToString:@"Region2"] && !self.lastNotified) {
                             [self testNotif];
-                            
+                            [PFGeoPoint geoPointForCurrentLocationInBackground:^(PFGeoPoint *geoPoint, NSError *error) {
+                                if (!error) {
+                                    NSLog(@"latitude is : %f",self.oldLocation.coordinate.latitude);
+                                    [self appUsageLogging:[NSString stringWithFormat:@"notification at %f, %f", geoPoint.latitude, geoPoint.longitude]];
+                                    
+                                    //            self.lat = geoPoint.latitude;
+                                    //            self.lng = geoPoint.longitude;
+                                    //            [self getHeadingForDirectionFromCoordinate:oldLoc toCoordinate:plex];
+                                }
+                            }];
 //                            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"DRR" message: [NSString stringWithFormat:@"Entered Region: %@", region.identifier] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
 //                            [alert show];
                             [self appUsageLogging:[NSString stringWithFormat:@"notification at%@", region.identifier]];
@@ -1280,7 +1309,16 @@
                             self.lastNotified = YES;
                         } else if (third < first && third < second && third <= fourth && third <= fifth && [region.identifier isEqualToString:@"Region3"] && !self.lastNotified) {
                             [self testNotif];
-                            
+                            [PFGeoPoint geoPointForCurrentLocationInBackground:^(PFGeoPoint *geoPoint, NSError *error) {
+                                if (!error) {
+                                    NSLog(@"latitude is : %f",self.oldLocation.coordinate.latitude);
+                                    [self appUsageLogging:[NSString stringWithFormat:@"notification at %f, %f", geoPoint.latitude, geoPoint.longitude]];
+                                    
+                                    //            self.lat = geoPoint.latitude;
+                                    //            self.lng = geoPoint.longitude;
+                                    //            [self getHeadingForDirectionFromCoordinate:oldLoc toCoordinate:plex];
+                                }
+                            }];
 //                            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"DRR" message: [NSString stringWithFormat:@"Entered Region: %@", region.identifier] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
 //                            [alert show];
                             [self appUsageLogging:[NSString stringWithFormat:@"notification at %@", region.identifier]];
@@ -1288,7 +1326,16 @@
                             self.lastNotified = YES;
                         } else if (fourth < first && fourth < second && fourth < third && fourth <= fifth && [region.identifier isEqualToString:@"Region4"] && !self.lastNotified) {
                             [self testNotif];
-                            
+                            [PFGeoPoint geoPointForCurrentLocationInBackground:^(PFGeoPoint *geoPoint, NSError *error) {
+                                if (!error) {
+                                    NSLog(@"latitude is : %f",self.oldLocation.coordinate.latitude);
+                                    [self appUsageLogging:[NSString stringWithFormat:@"notification at %f, %f", geoPoint.latitude, geoPoint.longitude]];
+                                    
+                                    //            self.lat = geoPoint.latitude;
+                                    //            self.lng = geoPoint.longitude;
+                                    //            [self getHeadingForDirectionFromCoordinate:oldLoc toCoordinate:plex];
+                                }
+                            }];
 //                            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"DRR" message: [NSString stringWithFormat:@"Entered Region: %@", region.identifier] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
 //                            [alert show];
                             [self appUsageLogging:[NSString stringWithFormat:@"notification at %@", region.identifier]];
@@ -1296,7 +1343,16 @@
                             self.lastNotified = YES;
                         } else if (fifth < fourth && fifth < first && fifth < second && fifth < third && [region.identifier isEqualToString:@"Region5"] && !self.lastNotified){
                             [self testNotif];
-                            
+                            [PFGeoPoint geoPointForCurrentLocationInBackground:^(PFGeoPoint *geoPoint, NSError *error) {
+                                if (!error) {
+                                    NSLog(@"latitude is : %f",self.oldLocation.coordinate.latitude);
+                                    [self appUsageLogging:[NSString stringWithFormat:@"notification at %f, %f", geoPoint.latitude, geoPoint.longitude]];
+                                    
+                                    //            self.lat = geoPoint.latitude;
+                                    //            self.lng = geoPoint.longitude;
+                                    //            [self getHeadingForDirectionFromCoordinate:oldLoc toCoordinate:plex];
+                                }
+                            }];
 //                            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"DRR" message: [NSString stringWithFormat:@"Entered Region: %@", region.identifier] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
 //                            [alert show];
                             [self appUsageLogging:[NSString stringWithFormat:@"notification at %@", region.identifier]];
@@ -1311,28 +1367,78 @@
                             [self testNotif];
 //                            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"DRR" message: [NSString stringWithFormat:@"Entered Region: %@", region.identifier] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
 //                            [alert show];
+                            [PFGeoPoint geoPointForCurrentLocationInBackground:^(PFGeoPoint *geoPoint, NSError *error) {
+                                if (!error) {
+                                    NSLog(@"latitude is : %f",self.oldLocation.coordinate.latitude);
+                                    [self appUsageLogging:[NSString stringWithFormat:@"notification at %f, %f", geoPoint.latitude, geoPoint.longitude]];
+                                    
+                                    //            self.lat = geoPoint.latitude;
+                                    //            self.lng = geoPoint.longitude;
+                                    //            [self getHeadingForDirectionFromCoordinate:oldLoc toCoordinate:plex];
+                                }
+                            }];
                             self.lastNotified = YES;
                             [self appUsageLogging:[NSString stringWithFormat:@"notification at %@", region.identifier]];
                         } else if (fourth < fifth && fourth <= third && fourth <=second && fourth <= first && [region.identifier isEqualToString:@"Region4"] && !self.lastNotified) {
                             [self testNotif];
 //                            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"DRR" message: [NSString stringWithFormat:@"Entered Region: %@", region.identifier] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
 //                            [alert show];
+                            [PFGeoPoint geoPointForCurrentLocationInBackground:^(PFGeoPoint *geoPoint, NSError *error) {
+                                if (!error) {
+                                    NSLog(@"latitude is : %f",self.oldLocation.coordinate.latitude);
+                                    [self appUsageLogging:[NSString stringWithFormat:@"notification at %f, %f", geoPoint.latitude, geoPoint.longitude]];
+                                    
+                                    //            self.lat = geoPoint.latitude;
+                                    //            self.lng = geoPoint.longitude;
+                                    //            [self getHeadingForDirectionFromCoordinate:oldLoc toCoordinate:plex];
+                                }
+                            }];
                             [self appUsageLogging:[NSString stringWithFormat:@"notification at %@", region.identifier]];
                             self.lastNotified = YES;
                         } else if (third < fifth && third < fourth && third <= second && third <= first && [region.identifier isEqualToString:@"Region3"] && !self.lastNotified) {
                             [self testNotif];
 //                            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"DRR" message: [NSString stringWithFormat:@"Entered Region: %@", region.identifier] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
 //                            [alert show];
+                            [PFGeoPoint geoPointForCurrentLocationInBackground:^(PFGeoPoint *geoPoint, NSError *error) {
+                                if (!error) {
+                                    NSLog(@"latitude is : %f",self.oldLocation.coordinate.latitude);
+                                    [self appUsageLogging:[NSString stringWithFormat:@"notification at %f, %f", geoPoint.latitude, geoPoint.longitude]];
+                                    
+                                    //            self.lat = geoPoint.latitude;
+                                    //            self.lng = geoPoint.longitude;
+                                    //            [self getHeadingForDirectionFromCoordinate:oldLoc toCoordinate:plex];
+                                }
+                            }];
                             [self appUsageLogging:[NSString stringWithFormat:@"notification at %@", region.identifier]];
                             self.lastNotified = YES;
                         } else if (second < fifth && second < fourth && second < third && second <= first && [region.identifier isEqualToString:@"Region2"] && !self.lastNotified) {
                             [self testNotif];
+                            [PFGeoPoint geoPointForCurrentLocationInBackground:^(PFGeoPoint *geoPoint, NSError *error) {
+                                if (!error) {
+                                    NSLog(@"latitude is : %f",self.oldLocation.coordinate.latitude);
+                                    [self appUsageLogging:[NSString stringWithFormat:@"notification at %f, %f", geoPoint.latitude, geoPoint.longitude]];
+                                    
+                                    //            self.lat = geoPoint.latitude;
+                                    //            self.lng = geoPoint.longitude;
+                                    //            [self getHeadingForDirectionFromCoordinate:oldLoc toCoordinate:plex];
+                                }
+                            }];
 //                            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"DRR" message: [NSString stringWithFormat:@"Entered Region: %@", region.identifier] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
 //                            [alert show];
                             [self appUsageLogging:[NSString stringWithFormat:@"notification at %@", region.identifier]];
                             self.lastNotified = YES;
                         } else if (first < fifth && first < fourth && fifth < third && fifth < second && [region.identifier isEqualToString:@"Region1"] && !self.lastNotified){
                             [self testNotif];
+                            [PFGeoPoint geoPointForCurrentLocationInBackground:^(PFGeoPoint *geoPoint, NSError *error) {
+                                if (!error) {
+                                    NSLog(@"latitude is : %f",self.oldLocation.coordinate.latitude);
+                                    [self appUsageLogging:[NSString stringWithFormat:@"notification at %f, %f", geoPoint.latitude, geoPoint.longitude]];
+                                    
+                                    //            self.lat = geoPoint.latitude;
+                                    //            self.lng = geoPoint.longitude;
+                                    //            [self getHeadingForDirectionFromCoordinate:oldLoc toCoordinate:plex];
+                                }
+                            }];
 //                            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"DRR" message: [NSString stringWithFormat:@"Entered Region: %@", region.identifier] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
 //                            [alert show];
                             [self appUsageLogging:[NSString stringWithFormat:@"notification at %@", region.identifier]];
@@ -1370,7 +1476,16 @@
         self.enteredNoyes = NO;
         self.enteredTech = NO;
     }
-    [self appUsageLogging:[NSString stringWithFormat:@"Exited region: %@", region.identifier]];
+    [PFGeoPoint geoPointForCurrentLocationInBackground:^(PFGeoPoint *geoPoint, NSError *error) {
+        if (!error) {
+            NSLog(@"latitude is : %f",self.oldLocation.coordinate.latitude);
+            [self appUsageLogging:[NSString stringWithFormat:@"Exited at %f, %f; %@", geoPoint.latitude, geoPoint.longitude, region.identifier]];
+            
+            //            self.lat = geoPoint.latitude;
+            //            self.lng = geoPoint.longitude;
+            //            [self getHeadingForDirectionFromCoordinate:oldLoc toCoordinate:plex];
+        }
+    }];
 }
 
 - (void)appUsageLogging: (NSString *)activity {
