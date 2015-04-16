@@ -1061,7 +1061,7 @@
                         [self appUsageLogging: [NSString stringWithFormat:@"%d, %d, %d, %d, %d",first, second, third, fourth, fifth]];
 
                         if (first<=second && first<=third && first<=fourth &&first<=fifth && !self.notified) {
-                            if (distance>=60) {
+                            if (distance>=20) {
                                 [self testNotif];
 
 //                                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"first" message: [NSString stringWithFormat:@"distance: %f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
@@ -1081,7 +1081,7 @@
 
                             }
                         } else if (third < first && third < second && third <= fourth && third <= fifth) {
-                            if (distance>=190) {
+                            if (distance>=230) {
                                 [self testNotif];
 
 //                                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"third" message: [NSString stringWithFormat:@"distance: %f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
@@ -1102,7 +1102,7 @@
                             }
 
                         } else if (fifth < fourth && fifth < first && fifth < second && fifth < third){
-                            if (distance>=340) {
+                            if (distance>=350) {
                                 [self testNotif];
 
 //                                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"fifth" message: [NSString stringWithFormat:@"distance: %f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
@@ -1140,7 +1140,7 @@
 
                             }
                         } else if (third < fifth && third < fourth && third <= second && third <= first) {
-                            if (distance>=100) {
+                            if (distance>=110) {
                                 [self testNotif];
 
 //                                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"DRR" message: [NSString stringWithFormat:@"distance: %f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
@@ -1151,7 +1151,7 @@
                             }
 
                         } else if (second < fifth && second < fourth && second < third && second <= first) {
-                            if (distance>=170) {
+                            if (distance>=190) {
                                 [self testNotif];
 
 //                                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"DRR" message: [NSString stringWithFormat:@"distance: %f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
@@ -1161,7 +1161,7 @@
 
                             }
                         } else if (first < fifth && first < fourth && fifth < third && fifth < second ){
-                            if (distance >=240) {
+                            if (distance >=250) {
                                 
                                 [self testNotif];
 
