@@ -1130,7 +1130,7 @@
 
                             }
                         } else if (fourth < fifth && fourth <= third && fourth <=second && fourth <= first) {
-                            if (distance>=210) {
+                            if (distance>=200) {
                                 [self testNotif];
 
 //                                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"DRR" message: [NSString stringWithFormat:@"distance: %f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
@@ -1140,7 +1140,7 @@
 
                             }
                         } else if (third < fifth && third < fourth && third <= second && third <= first) {
-                            if (distance>=300) {
+                            if (distance>=270) {
                                 [self testNotif];
 
 //                                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"DRR" message: [NSString stringWithFormat:@"distance: %f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
