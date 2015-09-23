@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "AEB4D642D643599334448185"
-               BuildableName = "libPods-EstimoteSDK.a"
-               BlueprintName = "Pods-EstimoteSDK"
-               ReferencedContainer = "container:Pods.xcodeproj">
+               BlueprintIdentifier = "55E14B5A24569DA6BBF39E51"
+               BuildableName = "libPods-Parse.a"
+               BlueprintName = "Pods-Parse"
+               ReferencedContainer = "container:Pods/Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -39,6 +39,15 @@
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       allowLocationSimulation = "YES">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "55E14B5A24569DA6BBF39E51"
+            BuildableName = "libPods-Parse.a"
+            BlueprintName = "Pods-Parse"
+            ReferencedContainer = "container:Pods/Pods.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>

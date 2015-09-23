@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "136A4857BC87034F3E630D06"
-               BuildableName = "libPods.a"
-               BlueprintName = "Pods"
-               ReferencedContainer = "container:Pods.xcodeproj">
+               BlueprintIdentifier = "F7A496503C25170128F00DB9"
+               BuildableName = "libPods-EstimoteIndoorSDK.a"
+               BlueprintName = "Pods-EstimoteIndoorSDK"
+               ReferencedContainer = "container:Pods/Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -39,6 +39,15 @@
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       allowLocationSimulation = "YES">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "F7A496503C25170128F00DB9"
+            BuildableName = "libPods-EstimoteIndoorSDK.a"
+            BlueprintName = "Pods-EstimoteIndoorSDK"
+            ReferencedContainer = "container:Pods/Pods.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
