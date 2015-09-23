@@ -4,4 +4,4 @@ workspace 'CrowdFound'
 
 pod 'Parse'
 pod 'Bolts'
-
+pod 'EstimoteIndoorSDK'

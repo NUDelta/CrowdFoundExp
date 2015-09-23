@@ -27,6 +27,16 @@ WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWIS
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
+## EstimoteIndoorSDK
+
+Copyright 2015 Estimote, Inc. All rights reserved.
+
+
+## EstimoteSDK
+
+Copyright 2014 Estimote, Inc. All rights reserved.
+
+
 ## Parse
 
 See https://www.parse.com/about/terms

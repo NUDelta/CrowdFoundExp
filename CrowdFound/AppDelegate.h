@@ -7,11 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "LocationManager.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 extern NSString *localReceived;
+
+@property LocationManager *locationManager;
+@property (nonatomic) NSTimer* locationUpdateTimer;
 
 @end
 

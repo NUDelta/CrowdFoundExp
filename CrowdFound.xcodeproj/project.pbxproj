@@ -7,9 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5903B7AF1B9E98E50077B763 /* noun_18.png in Resources */ = {isa = PBXBuildFile; fileRef = 5903B7AE1B9E98E50077B763 /* noun_18.png */; };
+		5903B7B31B9E999A0077B763 /* found.png in Resources */ = {isa = PBXBuildFile; fileRef = 5903B7B21B9E999A0077B763 /* found.png */; };
+		5904DB301B9FD36200EC2A78 /* LocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5904DB2F1B9FD36200EC2A78 /* LocationManager.m */; };
+		5904DB331B9FEB6400EC2A78 /* BackgroundTaskManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5904DB321B9FEB6400EC2A78 /* BackgroundTaskManager.m */; };
+		5904DB361B9FECB600EC2A78 /* LocationShareModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 5904DB351B9FECB600EC2A78 /* LocationShareModel.m */; };
 		59288DFB1A378F1F0027216B /* Icon-60@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 59288DFA1A378F1F0027216B /* Icon-60@2x.png */; };
 		59288DFD1A3796770027216B /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 59288DFC1A3796770027216B /* Icon.png */; };
 		594860CD1AAD474B0078137E /* AddLocationBViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 594860CC1AAD474B0078137E /* AddLocationBViewController.m */; };
+		5957E8AA1B152CBF00A7B44F /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5957E8A91B152CBF00A7B44F /* CoreLocation.framework */; };
+		5957E8AC1B152CC400A7B44F /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5957E8AB1B152CC400A7B44F /* CoreBluetooth.framework */; };
 		598D44521A10B1120016484E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 598D44511A10B1120016484E /* main.m */; };
 		598D44551A10B1120016484E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 598D44541A10B1120016484E /* AppDelegate.m */; };
 		598D445B1A10B1120016484E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 598D44591A10B1120016484E /* Main.storyboard */; };
@@ -19,6 +26,7 @@
 		598D44791A10B1960016484E /* RequestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 598D44781A10B1960016484E /* RequestViewController.m */; };
 		598D44961A11095C0016484E /* RequestDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 598D44951A11095C0016484E /* RequestDetailViewController.m */; };
 		598D44991A1114390016484E /* HelperMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 598D44981A1114390016484E /* HelperMapViewController.m */; };
+		59A33D201B695F3100AA10C9 /* lost.png in Resources */ = {isa = PBXBuildFile; fileRef = 59A33D1F1B695F3100AA10C9 /* lost.png */; };
 		59C92C951A226F0800B60983 /* TabBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 59C92C941A226F0800B60983 /* TabBarViewController.m */; };
 		59E589861A1556A00007E551 /* AddLocationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 59E589851A1556A00007E551 /* AddLocationViewController.m */; };
 		59E5898B1A1569C90007E551 /* HelperDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 59E5898A1A1569C90007E551 /* HelperDetailViewController.m */; };
@@ -45,10 +53,20 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5903B7AE1B9E98E50077B763 /* noun_18.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = noun_18.png; sourceTree = "<group>"; };
+		5903B7B21B9E999A0077B763 /* found.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = found.png; sourceTree = "<group>"; };
+		5904DB2E1B9FD36200EC2A78 /* LocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LocationManager.h; path = ../LocationManager.h; sourceTree = "<group>"; };
+		5904DB2F1B9FD36200EC2A78 /* LocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LocationManager.m; path = ../LocationManager.m; sourceTree = "<group>"; };
+		5904DB311B9FEB6400EC2A78 /* BackgroundTaskManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BackgroundTaskManager.h; sourceTree = "<group>"; };
+		5904DB321B9FEB6400EC2A78 /* BackgroundTaskManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BackgroundTaskManager.m; sourceTree = "<group>"; };
+		5904DB341B9FECB600EC2A78 /* LocationShareModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationShareModel.h; sourceTree = "<group>"; };
+		5904DB351B9FECB600EC2A78 /* LocationShareModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationShareModel.m; sourceTree = "<group>"; };
 		59288DFA1A378F1F0027216B /* Icon-60@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-60@2x.png"; sourceTree = "<group>"; };
 		59288DFC1A3796770027216B /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		594860CB1AAD474B0078137E /* AddLocationBViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddLocationBViewController.h; sourceTree = "<group>"; };
 		594860CC1AAD474B0078137E /* AddLocationBViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddLocationBViewController.m; sourceTree = "<group>"; };
+		5957E8A91B152CBF00A7B44F /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		5957E8AB1B152CC400A7B44F /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 		598D444C1A10B1120016484E /* CrowdFound.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CrowdFound.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		598D44501A10B1120016484E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		598D44511A10B1120016484E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -67,6 +85,7 @@
 		598D44951A11095C0016484E /* RequestDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RequestDetailViewController.m; sourceTree = "<group>"; };
 		598D44971A1114390016484E /* HelperMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelperMapViewController.h; sourceTree = "<group>"; };
 		598D44981A1114390016484E /* HelperMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelperMapViewController.m; sourceTree = "<group>"; };
+		59A33D1F1B695F3100AA10C9 /* lost.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lost.png; sourceTree = "<group>"; };
 		59C92C931A226F0800B60983 /* TabBarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TabBarViewController.h; sourceTree = "<group>"; };
 		59C92C941A226F0800B60983 /* TabBarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TabBarViewController.m; sourceTree = "<group>"; };
 		59E589841A1556A00007E551 /* AddLocationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddLocationViewController.h; sourceTree = "<group>"; };
@@ -99,6 +118,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5957E8AC1B152CC400A7B44F /* CoreBluetooth.framework in Frameworks */,
+				5957E8AA1B152CBF00A7B44F /* CoreLocation.framework in Frameworks */,
 				59F7BC421ADAF9F300CE42B9 /* libz.dylib in Frameworks */,
 				BC4EE70EAFE803220E68B460 /* libPods.a in Frameworks */,
 			);
@@ -117,6 +138,8 @@
 		3CC46AA88FBDD26CA531864E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5957E8AB1B152CC400A7B44F /* CoreBluetooth.framework */,
+				5957E8A91B152CBF00A7B44F /* CoreLocation.framework */,
 				59F7BC411ADAF9F300CE42B9 /* libz.dylib */,
 				6EDA94C6D0F68DFEBA958AC0 /* libPods.a */,
 			);
@@ -147,9 +170,12 @@
 		598D444E1A10B1120016484E /* CrowdFound */ = {
 			isa = PBXGroup;
 			children = (
-				59288DFC1A3796770027216B /* Icon.png */,
-				59288DFA1A378F1F0027216B /* Icon-60@2x.png */,
-				59E5899A1A15DFE80007E551 /* helper.png */,
+				5904DB2E1B9FD36200EC2A78 /* LocationManager.h */,
+				5904DB2F1B9FD36200EC2A78 /* LocationManager.m */,
+				5904DB311B9FEB6400EC2A78 /* BackgroundTaskManager.h */,
+				5904DB321B9FEB6400EC2A78 /* BackgroundTaskManager.m */,
+				5904DB341B9FECB600EC2A78 /* LocationShareModel.h */,
+				5904DB351B9FECB600EC2A78 /* LocationShareModel.m */,
 				59E589971A15DA8B0007E551 /* HelperAnnotation.h */,
 				59E589981A15DA8B0007E551 /* HelperAnnotation.m */,
 				59E5899C1A15FBF10007E551 /* MyUser.h */,
@@ -176,6 +202,12 @@
 		598D444F1A10B1120016484E /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				59A33D1F1B695F3100AA10C9 /* lost.png */,
+				59288DFC1A3796770027216B /* Icon.png */,
+				59288DFA1A378F1F0027216B /* Icon-60@2x.png */,
+				5903B7AE1B9E98E50077B763 /* noun_18.png */,
+				5903B7B21B9E999A0077B763 /* found.png */,
+				59E5899A1A15DFE80007E551 /* helper.png */,
 				598D44771A10B1960016484E /* RequestViewController.h */,
 				598D44781A10B1960016484E /* RequestViewController.m */,
 				598D44501A10B1120016484E /* Info.plist */,
@@ -299,6 +331,11 @@
 					598D444B1A10B1120016484E = {
 						CreatedOnToolsVersion = 6.1;
 						DevelopmentTeam = W4E2C6X642;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 					598D44641A10B1130016484E = {
 						CreatedOnToolsVersion = 6.1;
@@ -333,8 +370,11 @@
 				598D445B1A10B1120016484E /* Main.storyboard in Resources */,
 				59E5899B1A15DFE80007E551 /* helper.png in Resources */,
 				598D44601A10B1120016484E /* LaunchScreen.xib in Resources */,
+				5903B7B31B9E999A0077B763 /* found.png in Resources */,
 				598D445D1A10B1120016484E /* Images.xcassets in Resources */,
 				59288DFD1A3796770027216B /* Icon.png in Resources */,
+				59A33D201B695F3100AA10C9 /* lost.png in Resources */,
+				5903B7AF1B9E98E50077B763 /* noun_18.png in Resources */,
 				59288DFB1A378F1F0027216B /* Icon-60@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -394,13 +434,16 @@
 				59C92C951A226F0800B60983 /* TabBarViewController.m in Sources */,
 				59E5898B1A1569C90007E551 /* HelperDetailViewController.m in Sources */,
 				59E5899E1A15FBF10007E551 /* MyUser.m in Sources */,
+				5904DB301B9FD36200EC2A78 /* LocationManager.m in Sources */,
 				598D44551A10B1120016484E /* AppDelegate.m in Sources */,
 				594860CD1AAD474B0078137E /* AddLocationBViewController.m in Sources */,
 				598D44961A11095C0016484E /* RequestDetailViewController.m in Sources */,
 				59E589991A15DA8B0007E551 /* HelperAnnotation.m in Sources */,
 				598D44791A10B1960016484E /* RequestViewController.m in Sources */,
+				5904DB361B9FECB600EC2A78 /* LocationShareModel.m in Sources */,
 				59F225481A2BD3CF00012572 /* SignUpViewController.m in Sources */,
 				598D44521A10B1120016484E /* main.m in Sources */,
+				5904DB331B9FEB6400EC2A78 /* BackgroundTaskManager.m in Sources */,
 				59F2253C1A2A967200012572 /* RouteViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -525,8 +568,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Northwestern University";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Northwestern University";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -535,7 +578,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "BB876719-D88E-4350-8B56-5FE61CE257B2";
+				PROVISIONING_PROFILE = "75c2641f-ddb7-4286-ab63-208315f76943";
 			};
 			name = Debug;
 		};
@@ -545,8 +588,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Northwestern University";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -555,7 +598,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "BB876719-D88E-4350-8B56-5FE61CE257B2";
+				PROVISIONING_PROFILE = "75c2641f-ddb7-4286-ab63-208315f76943";
 			};
 			name = Release;
 		};

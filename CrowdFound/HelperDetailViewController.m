@@ -12,9 +12,13 @@
 #import "RouteViewController.h"
 #import "MyUser.h"
 #import "MySession.h"
+#import "ESTIndoorLocationManager.h"
+#import "ESTConfig.h"
+#import "ESTLocation.h"
+#import "ESTLocationBuilder.h"
 #define mySession [MySession sharedManager]
 
-@interface HelperDetailViewController () <CLLocationManagerDelegate>
+@interface HelperDetailViewController () <CLLocationManagerDelegate, ESTIndoorLocationManagerDelegate, UIAlertViewDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *item;
 @property (weak, nonatomic) IBOutlet UILabel *locationDetail;
 @property (weak, nonatomic) IBOutlet UILabel *itemDescription;
@@ -40,7 +44,15 @@
 @property int third;
 @property int fourth;
 @property int fifth;
+@property int secondsLeftForSearch;
+@property int minutes, seconds;
+@property BOOL shouldNotify;
+@property CLCircularRegion *regionFord;
+@property BOOL enteredROI;
 
+@property (nonatomic, strong) ESTIndoorLocationManager *indoorManager;
+@property (nonatomic, strong) ESTLocation *indoorLocation;
+@property (nonatomic, strong) ESTLocationBuilder *locationBuilder;
 
 @property BOOL notified;
 
@@ -49,612 +61,154 @@
 @implementation HelperDetailViewController
 @synthesize didGetNotif;
 
-- (void)dropOffEmail
+
+- (void)sendItemFoundEmailToRequester
 {
-    NSError *error;
-    NSURLSessionConfiguration *defaultConfigObject = [NSURLSessionConfiguration defaultSessionConfiguration];
-    NSURLSession *defaultSession = [NSURLSession sessionWithConfiguration: defaultConfigObject delegate: self delegateQueue: nil ];
-    
-    NSURL * url = [NSURL URLWithString:@"http://crowdfound.parseapp.com/dropoff_email"];
-    NSMutableURLRequest * urlRequest = [NSMutableURLRequest requestWithURL:url];
-    NSString * params = [NSString stringWithFormat:@"name=%@&phone=%@&reqName=%@&email=%@",[MyUser currentUser].username, [MyUser currentUser].email, [self.request valueForKeyPath:@"username"], [self.request valueForKeyPath:@"email"]];
-    NSLog(@"==============email===============, %@", [self.request valueForKeyPath:@"email"]);
-    //TODO change email address and username
-    
-    //    NSString * params = [NSString stringWithFormat:@"name=%@&phone=yk@u.northwestern.edu&reqName=%@&email=%@",[PFUser currentUser].username, [self.request valueForKeyPath:@"username"], [self.request valueForKeyPath:@"email"]];
-    
-    [urlRequest setHTTPMethod:@"POST"];
-    [urlRequest setHTTPBody:[params dataUsingEncoding:NSUTF8StringEncoding]];
-    
-    //    NSDictionary *mapData = [[NSDictionary alloc] initWithObjectsAndKeys: @"tester", @"name", nil];
-    //    NSData *postData = [NSJSONSerialization dataWithJSONObject:mapData options:0 error:&error];
-    //    [urlRequest setHTTPBody:postData];
-    
-    //    [urlRequest setHTTPBody:[params dataUsingEncoding:NSUTF8StringEncoding]];
-    
-    NSURLSessionDataTask * dataTask = [defaultSession dataTaskWithRequest:urlRequest completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        NSLog(error.description);
-    }];
-    [dataTask resume];
-    NSLog(@"completed");
-}
-- (IBAction)helpButton:(UIButton *)sender
-{
-    [self dropOffEmail];
-    
-    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"CrowdFound" message:@"Thanks for finding the item!" delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
-    [alert show];
-    //testing!!!!!!!!!!!
-    [PFGeoPoint geoPointForCurrentLocationInBackground:^(PFGeoPoint *geoPoint, NSError *error) {
-        if (!error) {
-            CLLocation *newLocation =[[CLLocation alloc]initWithLatitude:geoPoint.latitude longitude:geoPoint.longitude];
-            CLLocationDistance distance = [newLocation distanceFromLocation: self.oldLocation];
-            NSString *locationCoordinate = [NSString stringWithFormat:@"found at %f, %f", geoPoint.latitude, geoPoint.longitude];
-
-            PFQuery *query = [PFQuery queryWithClassName:@"Request"];
-            NSLog(@"Request ID: %@", [self.request valueForKeyPath:@"objectId"]);
-            
-            [query getObjectInBackgroundWithId:[self.request valueForKeyPath:@"objectId"] block:^(PFObject *object, NSError *error) {
-                
-                if (!error) {
-                    int first = [[object valueForKeyPath:@"first"]intValue];
-                    int second = [[object valueForKeyPath:@"second"]intValue];
-                    int third = [[object valueForKeyPath:@"third"]intValue];
-                    int fourth = [[object valueForKeyPath:@"fourth"]intValue];
-                    int fifth = [[object valueForKeyPath:@"fifth"]intValue];
-                    
-                    NSLog(@"%d, %d, %d, %d, %d",first, second, third, fourth, fifth);
-                    
-                    CLLocationCoordinate2D region1; //region 1
-                    region1.latitude = 42.058430;
-                    region1.longitude = -87.682089;
-                    
-                    CLLocationCoordinate2D region2; //region 2
-                    region2.latitude = 42.058405;
-                    region2.longitude =  -87.680936;
-                    
-                    CLLocationCoordinate2D region3; //region 3
-                    region3.latitude = 42.058389;
-                    region3.longitude =  -87.680139;
-                    
-                    CLLocationCoordinate2D region4; //region 4
-                    region4.latitude = 42.058385;
-                    region4.longitude =  -87.679187;
-                    
-                    CLLocationCoordinate2D region5; //region 5
-                    region5.latitude = 42.058381;
-                    region5.longitude =  -87.678396;
-                    
-                    //                        CLLocationCoordinate2D region6; //region tech
-                    //                        region6.latitude = 42.058375;
-                    //                        region6.longitude =  -87.677574;
-                    
-                    CLCircularRegion *regionOne = [[CLCircularRegion alloc] initWithCenter:region1 radius:50 identifier:@"Region1"];
-                    //                        [self.locationManager startMonitoringForRegion: regionOne];
-                    
-                    CLCircularRegion *regionTwo = [[CLCircularRegion alloc] initWithCenter:region2 radius:50 identifier:@"Region2"];
-                    //                        [self.locationManager startMonitoringForRegion: regionTwo];
-                    
-                    CLCircularRegion *regionThree = [[CLCircularRegion alloc] initWithCenter:region3 radius:50 identifier:@"Region3"];
-                    //                        [self.locationManager startMonitoringForRegion: regionThree];
-                    
-                    CLCircularRegion *regionFour = [[CLCircularRegion alloc] initWithCenter:region4 radius:50 identifier:@"Region4"];
-                    //                        [self.locationManager startMonitoringForRegion: regionFour];
-                    
-                    CLCircularRegion *regionFive = [[CLCircularRegion alloc] initWithCenter:region5 radius:50 identifier:@"Region5"];
-                    //                        [self.locationManager startMonitoringForRegion: regionFive];
-                    CLLocationCoordinate2D coordinate;
-                    coordinate.latitude = geoPoint.latitude;
-                    coordinate.longitude = geoPoint.longitude;
-                    
-                    if ([self.group isEqualToString:@"c"]){
-                        if (self.enteredNoyes) {
-                            if ([regionOne containsCoordinate:coordinate]) {
-                                int value = [object[@"first"] intValue];
-                                NSNumber *count = [NSNumber numberWithInt:value+1];
-                                object[@"first"] = count;
-                                [self appUsageLogging: [NSString stringWithFormat:@"%@; Region first", locationCoordinate]];
-
-                            } else if ([regionTwo containsCoordinate:coordinate]) {
-                                int value = [object[@"second"] intValue];
-                                NSNumber *count = [NSNumber numberWithInt:value+1];
-                                object[@"second"] = count;
-                                [self appUsageLogging: [NSString stringWithFormat:@"%@; Region second", locationCoordinate]];
-
-                            } else if ([regionThree containsCoordinate:coordinate]) {
-                                int value = [object[@"third"] intValue];
-                                NSNumber *count = [NSNumber numberWithInt:value+1];
-                                object[@"third"] = count;
-                                [self appUsageLogging: [NSString stringWithFormat:@"%@; Region third", locationCoordinate]];
-
-                            } else if ([regionFour containsCoordinate:coordinate]){
-                                int value = [object[@"fourth"] intValue];
-                                NSNumber *count = [NSNumber numberWithInt:value+1];
-                                object[@"fourth"] = count;
-                                [self appUsageLogging: [NSString stringWithFormat:@"%@; Region fourth", locationCoordinate]];
-
-                            } else if ([regionFive containsCoordinate:coordinate]) {
-                                int value = [object[@"fifth"] intValue];
-                                NSNumber *count = [NSNumber numberWithInt:value+1];
-                                object[@"fifth"] = count;
-                                [self appUsageLogging: [NSString stringWithFormat:@"%@; Region fifth", locationCoordinate]];
-                            } else {
-                                [self appUsageLogging: [NSString stringWithFormat:@"%@; Outbound", locationCoordinate]];
-
-                            }
-                        }
-                        
-                        if (self.enteredTech) {
-                            if ([regionFive containsCoordinate:coordinate]){
-                                int value = [object[@"fifth"] intValue];
-                                NSNumber *count = [NSNumber numberWithInt:value+1];
-                                object[@"fifth"] = count;
-                                [self appUsageLogging: [NSString stringWithFormat:@"%@; Region fifth", locationCoordinate]];
-
-                                
-                            } else if ([regionFour containsCoordinate:coordinate]) {
-                                int value = [object[@"fourth"] intValue];
-                                NSNumber *count = [NSNumber numberWithInt:value+1];
-                                object[@"fourth"] = count;
-                                [self appUsageLogging: [NSString stringWithFormat:@"%@; Region fourth", locationCoordinate]];
-
-                            } else if ([regionThree containsCoordinate:coordinate]) {
-                                int value = [object[@"third"] intValue];
-                                NSNumber *count = [NSNumber numberWithInt:value+1];
-                                object[@"third"] = count;
-                                [self appUsageLogging: [NSString stringWithFormat:@"%@; Region third", locationCoordinate]];
-
-                                
-                            } else if ([regionTwo containsCoordinate:coordinate]) {
-                                int value = [object[@"second"] intValue];
-                                NSNumber *count = [NSNumber numberWithInt:value+1];
-                                object[@"second"] = count;
-                                [self appUsageLogging: [NSString stringWithFormat:@"%@; Region second", locationCoordinate]];
-
-                            } else if ([regionOne containsCoordinate:coordinate]) {
-                                int value = [object[@"first"] intValue];
-                                NSNumber *count = [NSNumber numberWithInt:value+1];
-                                object[@"first"] = count;
-                                [self appUsageLogging: [NSString stringWithFormat:@"%@; Region first", locationCoordinate]];
-
-                            } else {
-                                [self appUsageLogging: [NSString stringWithFormat:@"%@; Outbound", locationCoordinate]];
-
-                            }
-                        }
-                    } else if ([self.group isEqualToString:@"b"] || [self.group isEqualToString:@"a"]) {
-                        CLLocationCoordinate2D region1; //region 1
-                        region1.latitude = 42.058430;
-                        region1.longitude = -87.682089;
-                        
-                        CLLocationCoordinate2D region2; //region 2
-                        region2.latitude = 42.058405;
-                        region2.longitude =  -87.680936;
-                        
-                        CLLocationCoordinate2D region3; //region 3
-                        region3.latitude = 42.058389;
-                        region3.longitude =  -87.680139;
-                        
-                        CLLocationCoordinate2D region4; //region 4
-                        region4.latitude = 42.058385;
-                        region4.longitude =  -87.679187;
-                        
-                        CLLocationCoordinate2D region5; //region 5
-                        region5.latitude = 42.058381;
-                        region5.longitude =  -87.678396;
-                        
-//                        CLLocationCoordinate2D region6; //region tech
-//                        region6.latitude = 42.058375;
-//                        region6.longitude =  -87.677574;
-                        
-                        CLCircularRegion *regionOne = [[CLCircularRegion alloc] initWithCenter:region1 radius:50 identifier:@"Region1"];
-//                        [self.locationManager startMonitoringForRegion: regionOne];
-                        
-                        CLCircularRegion *regionTwo = [[CLCircularRegion alloc] initWithCenter:region2 radius:50 identifier:@"Region2"];
-//                        [self.locationManager startMonitoringForRegion: regionTwo];
-                        
-                        CLCircularRegion *regionThree = [[CLCircularRegion alloc] initWithCenter:region3 radius:50 identifier:@"Region3"];
-//                        [self.locationManager startMonitoringForRegion: regionThree];
-                        
-                        CLCircularRegion *regionFour = [[CLCircularRegion alloc] initWithCenter:region4 radius:50 identifier:@"Region4"];
-//                        [self.locationManager startMonitoringForRegion: regionFour];
-                        
-                        CLCircularRegion *regionFive = [[CLCircularRegion alloc] initWithCenter:region5 radius:50 identifier:@"Region5"];
-//                        [self.locationManager startMonitoringForRegion: regionFive];
-                        CLLocationCoordinate2D coordinate;
-                        coordinate.latitude = geoPoint.latitude;
-                        coordinate.longitude = geoPoint.longitude;
-                        if ([regionOne containsCoordinate:coordinate]) {
-                            int value = [object[@"first"] intValue];
-                            NSNumber *count = [NSNumber numberWithInt:value+1];
-                            object[@"first"] = count;
-                            [self appUsageLogging: [NSString stringWithFormat:@"Found at %@; Region first", locationCoordinate]];
-
-                        } else if ([regionTwo containsCoordinate:coordinate]) {
-                            int value = [object[@"second"] intValue];
-                            NSNumber *count = [NSNumber numberWithInt:value+1];
-                            object[@"second"] = count;
-                            [self appUsageLogging: [NSString stringWithFormat:@"Found at %@; Region second", locationCoordinate]];
-
-                        } else if ([regionThree containsCoordinate:coordinate]) {
-                            int value = [object[@"third"] intValue];
-                            NSNumber *count = [NSNumber numberWithInt:value+1];
-                            object[@"third"] = count;
-                            [self appUsageLogging: [NSString stringWithFormat:@"Found at %@; Region third", locationCoordinate]];
-
-                        } else if ([regionFour containsCoordinate:coordinate]) {
-                            int value = [object[@"fourth"] intValue];
-                            NSNumber *count = [NSNumber numberWithInt:value+1];
-                            object[@"fourth"] = count;
-                            [self appUsageLogging: [NSString stringWithFormat:@"Found at %@; Region fourth", locationCoordinate]];
-
-                        } else if ([regionFive containsCoordinate:coordinate]) {
-                            int value = [object[@"fifth"] intValue];
-                            NSNumber *count = [NSNumber numberWithInt:value+1];
-                            object[@"fifth"] = count;
-                            [self appUsageLogging: [NSString stringWithFormat:@"Found at %@; Region fifth", locationCoordinate]];
-
-                        } else {
-                            [self appUsageLogging: [NSString stringWithFormat:@"Found at %@; Outbound", locationCoordinate]];
-
-                        }
-                    } else {
-                    }
-                    object[@"helper"] = [PFUser currentUser].username;
-                    object[@"helperId"] = [PFUser currentUser].objectId;
-                    NSMutableArray *array = [[NSMutableArray alloc] init];
-                    array = object[@"helpers"];
-                    [array addObject:[PFUser currentUser].objectId];
-                    object[@"helpers"] = array;
-                    if(!self.helped){
-                        int value = [object[@"helpCount"] intValue];
-                        NSNumber *helpCount = [NSNumber numberWithInt:value+1];
-                        object[@"helpCount"] = helpCount;
-                    }
-                    [object saveInBackground];
-                    self.helped = YES;
-                } else {
-                    NSLog(@"ERROR!");
-                }
-            }];
-            self.greyOverlay.hidden = true;
-            self.blueOverlay.hidden = true;
-            self.foundLabel.hidden =true;
-            self.notFoundLabel.hidden = true;
-            [mySession setDidGetNotif:NO];
-            self.didGetNotif = NO;
+//    NSURLSessionConfiguration *defaultConfigObject = [NSURLSessionConfiguration defaultSessionConfiguration];
+//    NSURLSession *defaultSession = [NSURLSession sessionWithConfiguration: defaultConfigObject delegate: self delegateQueue: nil ];
+//    
+//    NSURL * url = [NSURL URLWithString:@"http://crowdfound.parseapp.com/foundEmail"];
+//    NSMutableURLRequest * urlRequest = [NSMutableURLRequest requestWithURL:url];
+//    NSString * params = [NSString stringWithFormat:@"name=%@&helperEmail=%@&reqName=%@&email=%@",[MyUser currentUser].username, [MyUser currentUser].email, [self.request valueForKeyPath:@"username"], [self.request valueForKeyPath:@"email"]];
+//    NSLog(@"==============email===============, %@", [self.request valueForKeyPath:@"email"]);
+//    //TODO change email address and username
+//    
+//    //    NSString * params = [NSString stringWithFormat:@"name=%@&phone=yk@u.northwestern.edu&reqName=%@&email=%@",[PFUser currentUser].username, [self.request valueForKeyPath:@"username"], [self.request valueForKeyPath:@"email"]];
+//    
+//    [urlRequest setHTTPMethod:@"POST"];
+//    [urlRequest setHTTPBody:[params dataUsingEncoding:NSUTF8StringEncoding]];
+//    
+//    //    NSDictionary *mapData = [[NSDictionary alloc] initWithObjectsAndKeys: @"tester", @"name", nil];
+//    //    NSData *postData = [NSJSONSerialization dataWithJSONObject:mapData options:0 error:&error];
+//    //    [urlRequest setHTTPBody:postData];
+//    
+//    //    [urlRequest setHTTPBody:[params dataUsingEncoding:NSUTF8StringEncoding]];
+//    
+//    NSURLSessionDataTask * dataTask = [defaultSession dataTaskWithRequest:urlRequest completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+//    }];
+//    [dataTask resume];
+//    NSLog(@"completed");
+    NSDictionary *params = @{
+         @"helper":[MyUser currentUser].username,
+         @"helperEmail":[MyUser currentUser].email,
+         @"requester": @"YK",
+         @"requesterEmail":@"yongsung7@gmail.com"
+         };
+    [PFCloud callFunctionInBackground:@"foundEmail" withParameters:params block:^(NSString *result, NSError *error) {
+        if (error){
+            NSLog(@"email sent error");
+        } else {
+            NSLog(@"result :%@", result);
         }
     }];
-
 }
 
-//Help fail count
-- (IBAction)noButton:(UIButton *)sender {
-    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"CrowdFound" message:@"Thanks for your time!" delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
-    [alert show];
-    
-    [PFGeoPoint geoPointForCurrentLocationInBackground:^(PFGeoPoint *geoPoint, NSError *error) {
-        if (!error) {
-            CLLocation *newLocation =[[CLLocation alloc]initWithLatitude:geoPoint.latitude longitude:geoPoint.longitude];
-            CLLocationDistance distance = [newLocation distanceFromLocation: self.oldLocation];
-            
-            PFQuery *query = [PFQuery queryWithClassName:@"Request"];
-            NSLog(@"Request ID: %@", [self.request valueForKeyPath:@"objectId"]);
-            NSString *locationCoordinate = [NSString stringWithFormat:@"failed at %f, %f", geoPoint.latitude, geoPoint.longitude];
-            [query getObjectInBackgroundWithId:[self.request valueForKeyPath:@"objectId"] block:^(PFObject *object, NSError *error) {
-                
-                if (!error) {
-                    int first = [[object valueForKeyPath:@"first"]intValue];
-                    int second = [[object valueForKeyPath:@"second"]intValue];
-                    int third = [[object valueForKeyPath:@"third"]intValue];
-                    int fourth = [[object valueForKeyPath:@"fourth"]intValue];
-                    int fifth = [[object valueForKeyPath:@"fifth"]intValue];
-                    
-                    NSLog(@"%d, %d, %d, %d, %d",first, second, third, fourth, fifth);
-                    
-                    CLLocationCoordinate2D region1; //region 1
-                    region1.latitude = 42.058430;
-                    region1.longitude = -87.682089;
-                    
-                    CLLocationCoordinate2D region2; //region 2
-                    region2.latitude = 42.058405;
-                    region2.longitude =  -87.680936;
-                    
-                    CLLocationCoordinate2D region3; //region 3
-                    region3.latitude = 42.058389;
-                    region3.longitude =  -87.680139;
-                    
-                    CLLocationCoordinate2D region4; //region 4
-                    region4.latitude = 42.058385;
-                    region4.longitude =  -87.679187;
-                    
-                    CLLocationCoordinate2D region5; //region 5
-                    region5.latitude = 42.058381;
-                    region5.longitude =  -87.678396;
-                    
-                    //                        CLLocationCoordinate2D region6; //region tech
-                    //                        region6.latitude = 42.058375;
-                    //                        region6.longitude =  -87.677574;
-                    
-                    CLCircularRegion *regionOne = [[CLCircularRegion alloc] initWithCenter:region1 radius:50 identifier:@"Region1"];
-                    //                        [self.locationManager startMonitoringForRegion: regionOne];
-                    
-                    CLCircularRegion *regionTwo = [[CLCircularRegion alloc] initWithCenter:region2 radius:50 identifier:@"Region2"];
-                    //                        [self.locationManager startMonitoringForRegion: regionTwo];
-                    
-                    CLCircularRegion *regionThree = [[CLCircularRegion alloc] initWithCenter:region3 radius:50 identifier:@"Region3"];
-                    //                        [self.locationManager startMonitoringForRegion: regionThree];
-                    
-                    CLCircularRegion *regionFour = [[CLCircularRegion alloc] initWithCenter:region4 radius:50 identifier:@"Region4"];
-                    //                        [self.locationManager startMonitoringForRegion: regionFour];
-                    
-                    CLCircularRegion *regionFive = [[CLCircularRegion alloc] initWithCenter:region5 radius:50 identifier:@"Region5"];
-                    //                        [self.locationManager startMonitoringForRegion: regionFive];
-                    CLLocationCoordinate2D coordinate;
-                    coordinate.latitude = geoPoint.latitude;
-                    coordinate.longitude = geoPoint.longitude;
-                    
-                    if ([self.group isEqualToString:@"c"]){
-                        if (self.enteredNoyes) {
-                            if ([regionOne containsCoordinate:coordinate] && first<=second && first<=third && first<=fourth &&first<=fifth) {
-                                int value = [object[@"first"] intValue];
-                                NSNumber *count = [NSNumber numberWithInt:value+1];
-                                object[@"first"] = count;
-                                [self appUsageLogging: [NSString stringWithFormat:@"%@; Region first", locationCoordinate]];
-                            } else if ([regionTwo containsCoordinate:coordinate] && second < first && second <= third && second <=fourth && second <= fifth) {
-                                int value = [object[@"second"] intValue];
-                                NSNumber *count = [NSNumber numberWithInt:value+1];
-                                object[@"second"] = count;
-                                [self appUsageLogging: [NSString stringWithFormat:@"%@; Region second", locationCoordinate]];
-                            } else if ([regionThree containsCoordinate:coordinate] && third < first && third < second && third <= fourth && third <= fifth) {
-                                int value = [object[@"third"] intValue];
-                                NSNumber *count = [NSNumber numberWithInt:value+1];
-                                object[@"third"] = count;
-                                [self appUsageLogging: [NSString stringWithFormat:@"%@; Region third", locationCoordinate]];
-                            } else if ([regionFour containsCoordinate:coordinate] && fourth < first && fourth < second && fourth < third && fourth <= fifth){
-                                int value = [object[@"fourth"] intValue];
-                                NSNumber *count = [NSNumber numberWithInt:value+1];
-                                object[@"fourth"] = count;
-                                [self appUsageLogging: [NSString stringWithFormat:@"%@; Region fourth", locationCoordinate]];
-                            } else if ([regionFive containsCoordinate:coordinate] && fifth < fourth && fifth < first && fifth < second && fifth < third) {
-                                int value = [object[@"fifth"] intValue];
-                                NSNumber *count = [NSNumber numberWithInt:value+1];
-                                object[@"fifth"] = count;
-                                [self appUsageLogging: [NSString stringWithFormat:@"%@; Region fifth", locationCoordinate]];
-                            } else {
-                                [self appUsageLogging: [NSString stringWithFormat:@"%@; Outbound", locationCoordinate]];
-                            }
-                        }
-                        
-                        if (self.enteredTech) {
-                            if ([regionFive containsCoordinate:coordinate] && fifth<=second && fifth<=third && fifth<=fourth &&fifth<=first){
-                                int value = [object[@"fifth"] intValue];
-                                NSNumber *count = [NSNumber numberWithInt:value+1];
-                                object[@"fifth"] = count;
-                                [self appUsageLogging: [NSString stringWithFormat:@"%@; Region fifth", locationCoordinate]];
-                            } else if ([regionFour containsCoordinate:coordinate] && fourth < fifth && fourth <= third && fourth <=second && fourth <= first) {
-                                int value = [object[@"fourth"] intValue];
-                                NSNumber *count = [NSNumber numberWithInt:value+1];
-                                object[@"fourth"] = count;
-                                [self appUsageLogging: [NSString stringWithFormat:@"%@; Region fourth", locationCoordinate]];
-                            } else if ([regionThree containsCoordinate:coordinate] && third < fifth && third < fourth && third <= second && third <= first) {
-                                int value = [object[@"third"] intValue];
-                                NSNumber *count = [NSNumber numberWithInt:value+1];
-                                object[@"third"] = count;
-                                [self appUsageLogging: [NSString stringWithFormat:@"%@; Region third", locationCoordinate]];
-
-                            } else if ([regionTwo containsCoordinate:coordinate] && second < fifth && second < fourth && second < third && second <= first) {
-                                int value = [object[@"second"] intValue];
-                                NSNumber *count = [NSNumber numberWithInt:value+1];
-                                object[@"second"] = count;
-                                [self appUsageLogging: [NSString stringWithFormat:@"%@; Region second", locationCoordinate]];
-
-                            } else if ([regionOne containsCoordinate:coordinate] && first < fifth && first < fourth && fifth < third && fifth < second) {
-                                int value = [object[@"first"] intValue];
-                                NSNumber *count = [NSNumber numberWithInt:value+1];
-                                object[@"first"] = count;
-                                [self appUsageLogging: [NSString stringWithFormat:@"%@; Region first", locationCoordinate]];
-
-                            } else {
-                                [self appUsageLogging: [NSString stringWithFormat:@"%@; Outbound", locationCoordinate]];
-                            }
-                        }
-                    } else if ([self.group isEqualToString:@"b"] || [self.group isEqualToString:@"a"]) {
-                        CLLocationCoordinate2D region1; //region 1
-                        region1.latitude = 42.058430;
-                        region1.longitude = -87.682089;
-                        
-                        CLLocationCoordinate2D region2; //region 2
-                        region2.latitude = 42.058405;
-                        region2.longitude =  -87.680936;
-                        
-                        CLLocationCoordinate2D region3; //region 3
-                        region3.latitude = 42.058389;
-                        region3.longitude =  -87.680139;
-                        
-                        CLLocationCoordinate2D region4; //region 4
-                        region4.latitude = 42.058385;
-                        region4.longitude =  -87.679187;
-                        
-                        CLLocationCoordinate2D region5; //region 5
-                        region5.latitude = 42.058381;
-                        region5.longitude =  -87.678396;
-                        
-//                        CLLocationCoordinate2D region6; //region tech
-//                        region6.latitude = 42.058375;
-//                        region6.longitude =  -87.677574;
-                    
-                        CLCircularRegion *regionOne = [[CLCircularRegion alloc] initWithCenter:region1 radius:50 identifier:@"Region1"];
-                        //                        [self.locationManager startMonitoringForRegion: regionOne];
-                        
-                        CLCircularRegion *regionTwo = [[CLCircularRegion alloc] initWithCenter:region2 radius:50 identifier:@"Region2"];
-                        //                        [self.locationManager startMonitoringForRegion: regionTwo];
-                        
-                        CLCircularRegion *regionThree = [[CLCircularRegion alloc] initWithCenter:region3 radius:50 identifier:@"Region3"];
-                        //                        [self.locationManager startMonitoringForRegion: regionThree];
-                        
-                        CLCircularRegion *regionFour = [[CLCircularRegion alloc] initWithCenter:region4 radius:50 identifier:@"Region4"];
-                        //                        [self.locationManager startMonitoringForRegion: regionFour];
-                        
-                        CLCircularRegion *regionFive = [[CLCircularRegion alloc] initWithCenter:region5 radius:50 identifier:@"Region5"];
-                        //                        [self.locationManager startMonitoringForRegion: regionFive];
-                        CLLocationCoordinate2D coordinate;
-                        coordinate.latitude = geoPoint.latitude;
-                        coordinate.longitude = geoPoint.longitude;
-                        if ([regionOne containsCoordinate:coordinate]) {
-                            int value = [object[@"first"] intValue];
-                            NSNumber *count = [NSNumber numberWithInt:value+1];
-                            object[@"first"] = count;
-                            [self appUsageLogging: [NSString stringWithFormat:@"%@; Region first", locationCoordinate]];
-
-                        } else if ([regionTwo containsCoordinate:coordinate]) {
-                            int value = [object[@"second"] intValue];
-                            NSNumber *count = [NSNumber numberWithInt:value+1];
-                            object[@"second"] = count;
-                            [self appUsageLogging: [NSString stringWithFormat:@"%@; Region second", locationCoordinate]];
-
-                        } else if ([regionThree containsCoordinate:coordinate]) {
-                            int value = [object[@"third"] intValue];
-                            NSNumber *count = [NSNumber numberWithInt:value+1];
-                            object[@"third"] = count;
-                            [self appUsageLogging: [NSString stringWithFormat:@"%@; Region third", locationCoordinate]];
-
-                        } else if ([regionFour containsCoordinate:coordinate]) {
-                            int value = [object[@"fourth"] intValue];
-                            NSNumber *count = [NSNumber numberWithInt:value+1];
-                            object[@"fourth"] = count;
-                            [self appUsageLogging: [NSString stringWithFormat:@"%@; Region fourth", locationCoordinate]];
-
-                        } else if ([regionFive containsCoordinate:coordinate]) {
-                            int value = [object[@"fifth"] intValue];
-                            NSNumber *count = [NSNumber numberWithInt:value+1];
-                            object[@"fifth"] = count;
-                            [self appUsageLogging: [NSString stringWithFormat:@"%@; Region fifth", locationCoordinate]];
-
-                        } else {
-                            [self appUsageLogging: [NSString stringWithFormat:@"%@; Outbound", locationCoordinate]];
-                        }
-                    } else {
-                    }
-                    object[@"helper"] = [PFUser currentUser].username;
-                    object[@"helperId"] = [PFUser currentUser].objectId;
-                    NSMutableArray *array = [[NSMutableArray alloc] init];
-                    array = object[@"helpers"];
-                    [array addObject:[PFUser currentUser].objectId];
-                    object[@"helpers"] = array;
-                    if(!self.helped){
-                        int value = [object[@"helpCount"] intValue];
-                        NSNumber *helpCount = [NSNumber numberWithInt:value+1];
-                        object[@"helpCount"] = helpCount;
-                    }
-                    [object saveInBackground];
-                    self.helped = YES;
-                } else {
-                    NSLog(@"ERROR!");
-                }
-            }];
-            self.greyOverlay.hidden = true;
-            self.blueOverlay.hidden = true;
-            self.foundLabel.hidden =true;
-            self.notFoundLabel.hidden = true;
-            [mySession setDidGetNotif:NO];
-            self.didGetNotif = NO;
+- (void)sendThankEmailToFounder{
+    NSDictionary *params = @{
+                             @"helper":[MyUser currentUser].username,
+                             @"helperEmail":[MyUser currentUser].email
+                             };
+    [PFCloud callFunctionInBackground:@"thankEmail_Found" withParameters:params block:^(NSString *result, NSError *error) {
+        if (error){
+            NSLog(@"email sent error");
+        } else {
+            NSLog(@"result :%@", result);
         }
     }];
+}
 
-    self.greyOverlay.hidden = true;
-    self.blueOverlay.hidden = true;
-    self.foundLabel.hidden = true;
-    self.notFoundLabel.hidden = true;
-//    [mySession setDidGetNotif:NO];
-    self.didGetNotif = NO;
+- (void)sendThankEmailToHelper {
+    NSDictionary *params = @{
+                             @"helper":[MyUser currentUser].username,
+                             @"helperEmail":[MyUser currentUser].email
+                             };
+    [PFCloud callFunctionInBackground:@"thankEmail_NotFound" withParameters:params block:^(NSString *result, NSError *error) {
+        if (error){
+            NSLog(@"email sent error");
+        } else {
+            NSLog(@"result :%@", result);
+        }
+    }];
+}
 
+- (IBAction)giongtoHelpButton:(UIButton *)sender {
+    NSLog(@"clicked");
+    
+    //TODO: uncomment
+//    [self appUsageLogging: [NSString stringWithFormat:@"help looking for %@, request ID: %@", [self.request valueForKeyPath:@"item"], [self.request valueForKeyPath:@"objectId"]]];
+    self.TimerLabel.hidden = NO;
+    [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(timerTick:) userInfo:nil repeats:YES];
+    
+    //FIXME: change time to 60 seconds
+    [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(showThanksAlertview:) userInfo:nil repeats:NO];
+}
+
+- (void)timerTick: (NSTimer *)timer {
+    if (self.secondsLeftForSearch > 0) {
+        self.secondsLeftForSearch--;
+        self.minutes = (self.secondsLeftForSearch%3600)/60;
+        self.seconds = (self.secondsLeftForSearch%3600)%60;
+        self.TimerLabel.text = [NSString stringWithFormat:@"%02d:%02d", self.minutes, self.seconds];
+    } else {
+        [timer invalidate];
+        self.secondsLeftForSearch = 60;
+        self.TimerLabel.hidden = YES;
+    }
+}
+
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex==0) {
+        NSLog(@"clicked YES");
+        [self appUsageLogging: [NSString stringWithFormat:@"found %@, request ID: %@", [self.request valueForKeyPath:@"item"], [self.request valueForKeyPath:@"objectId"]]];
+        [self sendItemFoundEmailToRequester];
+        [self sendThankEmailToFounder];
+    } else if (buttonIndex==1) {
+        NSLog(@"clicked NO");
+        [self appUsageLogging: [NSString stringWithFormat:@"couldn't find %@, request ID: %@", [self.request valueForKeyPath:@"item"], [self.request valueForKeyPath:@"objectId"]]];
+        [self sendThankEmailToHelper];
+    }
 }
 
 - (void)fillDetails
 {
-    self.item.text = [NSString stringWithFormat:@"%@", [self.request valueForKeyPath:@"item"]];
-    [self.item sizeToFit];
-    self.locationDetail.numberOfLines = 3;
-//    CLGeocoder *geocoder = [[CLGeocoder alloc]init];
-//    CLLocation *loc = [[CLLocation alloc]initWithLatitude: [[self.request valueForKeyPath:@"lat"] floatValue]
-//                                                longitude: [[self.request valueForKeyPath:@"lng"] floatValue]];
-//    
-//    [geocoder reverseGeocodeLocation:loc completionHandler:^(NSArray *placemarks, NSError *error) {
-//        NSLog(@"reverseGeocodeLocation:completionHandler: Completion Handler called!");
-//        
-//        if (error){
-//            NSLog(@"Geocode failed with error: %@", error);
-//            self.location.text = [NSString stringWithFormat:@"%f, %f", [[self.request valueForKeyPath:@"lat"] floatValue], [[self.request valueForKeyPath:@"lng"] floatValue]];
-//            return;
-//            
-//        }
-//        if(placemarks && placemarks.count > 0)
-//        {
-//            CLPlacemark *topResult = [placemarks objectAtIndex:0];
-//            NSString *addressTxt = [NSString stringWithFormat:@"%@ %@,%@ %@",
-//                                    [topResult subThoroughfare],[topResult thoroughfare],
-//                                    [topResult locality], [topResult administrativeArea]];
-//            NSLog(@"%@",addressTxt);
-//            self.location.text = [NSString stringWithFormat:@"%@", addressTxt];
-//            [self.location sizeToFit];
-//        }
-//    }];
-    //    self.location.text = [NSString stringWithFormat:@"%f, %f", [[self.request valueForKeyPath:@"lat"] floatValue], [[self.request valueForKeyPath:@"lng"] floatValue]];
-    self.locationDetail.text = [NSString stringWithFormat:@"%@", [self.request valueForKeyPath:@"locationDetail"]];
-    [self.locationDetail sizeToFit];
-    NSArray *arr = [[self.request valueForKeyPath:@"detail"] componentsSeparatedByString:@" "];
-    NSMutableArray *muarr = [[NSMutableArray alloc]init];
-    for(int i = 1; i <= [arr count]; i++) {
-        if(i%6!=0)
-        {
-            [muarr addObject:arr[i-1]];
-            [muarr addObject:@" "];
-        }else{
-            [muarr addObject:arr[i-1]];
-            [muarr addObject:@" \n"];
-        }
-    }
-    NSString *detailstring = [muarr componentsJoinedByString:@""];
-    
-    self.itemDescription.text = [NSString stringWithFormat:@"%@", [self.request valueForKeyPath:@"detail"]];
-    self.itemDescription.text = [NSString stringWithFormat:@"%@", detailstring];
-    [self.itemDescription sizeToFit];
-    self.helperNumber.text = [NSString stringWithFormat:@"Helper number: %d", [[self.request valueForKeyPath:@"helpCount"] intValue]];
-    self.helperFailNumber.text = [NSString stringWithFormat:@"Number of Helper couldn't find: %d", [[self.request valueForKeyPath:@"helpFailCount"] intValue]];
-    // Do any additional setup after loading the view.
-    
-//    PFQuery *query = [PFQuery queryWithClassName: @"Request"];
-//    [query whereKey:@"objectId" equalTo:[self.request valueForKeyPath:@"objectId"]];
-//    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-//        if(!error){
-//            if([objects count]>0){
-//                self.request = objects[0];
-//                PFFile *imageFile = objects[0][@"image"];
-//                [imageFile getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
-//                    if(!error) {
-//                        UIImage *image = [UIImage imageWithData: data];
-//                        self.imageView.image = image;
-//                        NSLog(@"image!");
-//                        self.imageView.contentMode = UIViewContentModeScaleAspectFit;
-//                        
-//                    }
-//                }];
-//            }
-//            
-//        }
-//    }];
+    NSString *itemDetailString = [NSString stringWithFormat:@"%@\n%@", [self.request valueForKeyPath:@"item"], [self.request valueForKeyPath:@"detail"]];
+    self.item.text = itemDetailString;
+    self.item.numberOfLines = 4;
+    // sizeToFit gives weird size when label text changes.
+    //    [self.item sizeToFit];
 
+    self.locationDetail.numberOfLines = 3;
+
+    self.locationDetail.text = [NSString stringWithFormat:@"%@", [self.request valueForKeyPath:@"locationDetail"]];
+//    [self.locationDetail sizeToFit];
+//    NSArray *arr = [[self.request valueForKeyPath:@"detail"] componentsSeparatedByString:@" "];
+//    NSMutableArray *muarr = [[NSMutableArray alloc]init];
+//    for(int i = 1; i <= [arr count]; i++) {
+//        if(i%6!=0)
+//        {
+//            [muarr addObject:arr[i-1]];
+//            [muarr addObject:@" "];
+//        }else{
+//            [muarr addObject:arr[i-1]];
+//            [muarr addObject:@" \n"];
+//        }
+//    }
 }
 
 - (void)appDidEnterForeground {
-//    [mySession setHdvc:self];
-    PFQuery *query = [MyUser query];
+//  [mySession setHdvc:self];
+    NSLog(@"view did enter foreground");
+    
+    PFQuery *requestQuery = [PFQuery queryWithClassName: @"Request"];
+    [requestQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if(!error) {
+            self.request = [objects lastObject];
+            [self fillDetails];
+        }
+    }];    PFQuery *query = [MyUser query];
     [query getObjectInBackgroundWithId:[MyUser currentUser].objectId block:^(PFObject *object, NSError *error) {
         if (!error) {
-            //            int notifCount = [object[@"notifNum"] intValue];
-            //            NSLog(@"%d", notifCount);
-            //            NSNumber *value = [NSNumber numberWithInt:notifCount+1];
             if (!object[@"group"]) {
                 self.group = @"a";
                 object[@"group"] = self.group;
@@ -662,136 +216,90 @@
             else
                 self.group = object[@"group"];
             NSLog(@"%@",self.group);
-            [self appUsageLogging:self.group];
+            NSDate *lastNotifiedDate = object[@"lastNotified"];
+            NSLog(@"%@", lastNotifiedDate);
+            if (lastNotifiedDate==NULL) {
+                self.shouldNotify = YES;
+            } else {
+                NSDate *currentDate = [NSDate date];
+                NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+                NSDateComponents *components = [calendar components:NSMonthCalendarUnit|NSDayCalendarUnit|NSHourCalendarUnit|NSMinuteCalendarUnit
+                                                           fromDate:lastNotifiedDate
+                                                             toDate:currentDate
+                                                            options:0];
+                NSLog(@"current date: %@", currentDate);
+                NSLog(@"Difference in date components: %li/%li/%li", (long)components.minute, (long)components.hour, (long)components.day);
+                if (components.day > 1) {
+                    self.shouldNotify = YES;
+                    NSLog(@"more than a day, so notify");
+                } else if (components.day < 1 && components.hour >= 4 ) {
+                    NSLog(@"more than 4 hours, notify too");
+                    self.shouldNotify = YES;
+                } else {
+                    NSLog(@"do not notify");
+                    //TODO: uncomment this
+                    //                    self.shouldNotify = NO;
+                }
+            }
+            [self appUsageLogging:@"entered foreground"];
         }
     }];
-    
-    if (self.didGetNotif) {
-        [PFGeoPoint geoPointForCurrentLocationInBackground:^(PFGeoPoint *geoPoint, NSError *error) {
-            if (!error) {
-                self.oldLocation = [[CLLocation alloc]initWithLatitude:geoPoint.latitude longitude:geoPoint.longitude];
-                [self appUsageLogging: [NSString stringWithFormat:@"App open %f, %f", geoPoint.latitude, geoPoint.longitude]];
-                //            self.lat = geoPoint.latitude;
-                //            self.lng = geoPoint.longitude;
-                //            [self getHeadingForDirectionFromCoordinate:oldLoc toCoordinate:plex];
-            }
-        }];
-        self.greyOverlay.hidden = false;
-        self.blueOverlay.hidden = false;
-        self.foundLabel.hidden =false;
-        self.notFoundLabel.hidden = false;
-    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-    [mySession setHdvc:self];
-//    if (self.didGetNotif) {
-//        self.greyOverlay.hidden = false;
-//        self.blueOverlay.hidden = false;
-//        self.foundLabel.hidden =false;
-//        self.notFoundLabel.hidden = false;
-//    }
-    //group a = baseline
-    //group b = history
-    //group c = pretracking + history
-//    self.group = @"b";
-    PFQuery *query = [MyUser query];
-    [query getObjectInBackgroundWithId:[MyUser currentUser].objectId block:^(PFObject *object, NSError *error) {
-        if (!error) {
-            //            int notifCount = [object[@"notifNum"] intValue];
-            //            NSLog(@"%d", notifCount);
-            //            NSNumber *value = [NSNumber numberWithInt:notifCount+1];
-            if (!object[@"group"]) {
-                self.group = @"a";
-                object[@"group"] = self.group;
-            }
-            else
-                self.group = object[@"group"];
-//            [self appUsageLogging:self.group];
-//            NSDate *lastNotifiedDate = object[@"lastNotified"];
-//            NSLog(@"%@", lastNotifiedDate);
-//            NSDate *currentDate = [NSDate date];
-//            NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
-//            NSDateComponents *components = [calendar components:NSMonthCalendarUnit|NSDayCalendarUnit|NSHourCalendarUnit|NSMinuteCalendarUnit
-//                                                       fromDate:lastNotifiedDate
-//                                                         toDate:currentDate
-//                                                        options:0];
-//            NSLog(@"Difference in date components: %i/%i/%i", components.minute, components.hour, components.day);
-            [object saveInBackground];
-        } else {
-            NSLog(@"ERROR!");
+    NSLog(@"view did appear");
+//    [mySession setHdvc:self];
+    PFQuery *requestQuery = [PFQuery queryWithClassName: @"Request"];
+    [requestQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if(!error) {
+            self.request = [objects lastObject];
+            [self fillDetails];
         }
     }];
-//
-//    PFQuery *requestQuery = [PFQuery queryWithClassName: @"Request"];
-//    [requestQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-//        if(!error) {
-//            NSMutableArray *object = [[NSMutableArray alloc]init];
-//            object = [objects firstObject];
-//            
-//            NSString * region      = @"region";
-//            NSString * count   = @"count";
-//            
-//            NSMutableArray * array = [NSMutableArray array];
-//            
-//            NSDictionary * dict;
-//            dict = [NSDictionary dictionaryWithObjectsAndKeys:
-//                    @"first", region, [object valueForKeyPath:@"first"], count, nil];
-//            [array addObject:dict];
-//            
-//            dict = [NSDictionary dictionaryWithObjectsAndKeys:
-//                    @"second", region, [object valueForKeyPath:@"second"], count, nil];
-//            [array addObject:dict];
-//
-//            dict = [NSDictionary dictionaryWithObjectsAndKeys:
-//                    @"third", region, [object valueForKeyPath:@"third"], count, nil];
-//            [array addObject:dict];
-//
-//            dict = [NSDictionary dictionaryWithObjectsAndKeys:
-//                    @"fourth", region, [object valueForKeyPath:@"fourth"], count, nil];
-//            [array addObject:dict];
-//
-//            dict = [NSDictionary dictionaryWithObjectsAndKeys:
-//                    @"fifth", region, [object valueForKeyPath:@"fifth"], count, nil];
-//            [array addObject:dict];
-//
-//            
-//            NSSortDescriptor * frequencyDescriptor = [[NSSortDescriptor alloc] initWithKey:count ascending:YES];
-//            
-//            id obj;
-//            NSEnumerator * enumerator = [array objectEnumerator];
-////            while ((obj = [enumerator nextObject])) NSLog(@"%@", obj);
-//            
-//            NSArray * descriptors =
-//            [NSArray arrayWithObjects:frequencyDescriptor, nil];
-//            NSArray * sortedArray =
-//            [array sortedArrayUsingDescriptors:descriptors];
-//            
-//            NSLog(@"\nSorted ...");
-//            
-//            enumerator = [sortedArray objectEnumerator];
-//            while ((obj = [enumerator nextObject])) NSLog(@"%@", obj);
-//
-//        }
-//    }];
+//    [self.indoorManager startIndoorLocation:self.location];
 }
-
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [mySession setHdvc:self];
-    if ([mySession didGetNotif]) {
-        self.greyOverlay.hidden = false;
-        self.blueOverlay.hidden = false;
-        self.foundLabel.hidden =false;
-        self.notFoundLabel.hidden = false;
-    }
+    
+    self.secondsLeftForSearch = 60;
+    self.shouldNotify = YES;
+    
+    [ESTConfig setupAppID:@"CrowdFound" andAppToken:@"2c138ec1f40d00cbaebd2aaac6cf09a8"];
+    if([ESTConfig isAuthorized])
+        NSLog(@"estimote beacon authorized.");
+    
+    self.locationBuilder = [ESTLocationBuilder new];
+    
+//TODO: should change the beacon configuration
+    [self.locationBuilder setLocationBoundaryPoints:@[
+                                                       [ESTPoint pointWithX:0 y:0],
+                                                       [ESTPoint pointWithX:0 y:4],
+                                                       [ESTPoint pointWithX:6 y:4],
+                                                       [ESTPoint pointWithX:6 y:0]]];
+    [self.locationBuilder setLocationOrientation:0];
+
+    
+    [self.locationBuilder addBeaconIdentifiedByMac:@"d716de514672" atBoundarySegmentIndex:0 inDistance:2 fromSide:ESTLocationBuilderLeftSide];
+    [self.locationBuilder addBeaconIdentifiedByMac:@"fb0ebaacd25c" atBoundarySegmentIndex:1 inDistance:3 fromSide:ESTLocationBuilderLeftSide];
+    [self.locationBuilder addBeaconIdentifiedByMac:@"d4e4f58e3f25" atBoundarySegmentIndex:2 inDistance:2 fromSide:ESTLocationBuilderLeftSide];
+    [self.locationBuilder addBeaconIdentifiedByMac:@"f3b61bf06f84" atBoundarySegmentIndex:3 inDistance:3 fromSide:ESTLocationBuilderLeftSide];
+
+    self.indoorLocation = [self.locationBuilder build];
+    
+    self.indoorManager = [[ESTIndoorLocationManager alloc]init];
+    self.indoorManager.delegate = self;
+    [self.indoorManager startIndoorLocation:self.indoorLocation];
+    
     
     NSNotificationCenter *notifCenter = [NSNotificationCenter defaultCenter];
     [notifCenter addObserver:self selector:@selector(appDidEnterForeground) name:@"appDidEnterForeground" object:nil];
     
     self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.delegate =self;
+    self.locationManager.distanceFilter = 1;
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation;
+    [self.locationManager startMonitoringSignificantLocationChanges];
     
     if([self.locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]){
         [self.locationManager requestAlwaysAuthorization];
@@ -799,107 +307,27 @@
     if([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]){
         [self.locationManager requestWhenInUseAuthorization];
     }
-    //    [self.locationManager requestAlwaysAuthorization];
-    //    [self.locationManager requestWhenInUseAuthorization];
-    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-    self.locationManager.distanceFilter = 10;
     
-    [self.locationManager startUpdatingLocation];
+    [self.locationManager startMonitoringSignificantLocationChanges];
+//    [self.locationManager startUpdatingHeading];
     
-    CLLocationCoordinate2D region0; //region noyes
-    region0.latitude = 42.058425;
-    region0.longitude = -87.682604;
+    CLLocationCoordinate2D regionTech; //region tech
+    regionTech.latitude = 42.058367;
+    regionTech.longitude =  -87.677950;
     
-    CLLocationCoordinate2D region1; //region 1
-    region1.latitude = 42.058430;
-    region1.longitude = -87.682089;
+    CLLocationCoordinate2D fordCoordinate; //region ford
+    fordCoordinate.latitude = 42.057002;
+    fordCoordinate.longitude =  -87.676985;
     
-    CLLocationCoordinate2D region2; //region 2
-    region2.latitude = 42.058405;
-    region2.longitude =  -87.680936;
+    self.regionFord = [[CLCircularRegion alloc] initWithCenter:fordCoordinate radius:10 identifier:@"regionFord"];
+    [self.locationManager startMonitoringForRegion: self.regionFord];
     
-    CLLocationCoordinate2D region3; //region 3
-    region3.latitude = 42.058389;
-    region3.longitude =  -87.680139;
-    
-    CLLocationCoordinate2D region4; //region 4
-    region4.latitude = 42.058385;
-    region4.longitude =  -87.679187;
-    
-    CLLocationCoordinate2D region5; //region 5
-    region5.latitude = 42.058381;
-    region5.longitude =  -87.678396;
-    
-    CLLocationCoordinate2D region6; //region tech
-    region6.latitude = 42.058367;
-    region6.longitude =  -87.677950;
-    
-    CLCircularRegion *regionNoyes = [[CLCircularRegion alloc] initWithCenter:region0 radius:50 identifier:@"RegionNoyes"];
-    [self.locationManager startMonitoringForRegion: regionNoyes];
-    
-    CLCircularRegion *regionOne = [[CLCircularRegion alloc] initWithCenter:region1 radius:50 identifier:@"Region1"];
-    [self.locationManager startMonitoringForRegion: regionOne];
-    
-    CLCircularRegion *regionTwo = [[CLCircularRegion alloc] initWithCenter:region2 radius:50 identifier:@"Region2"];
-    [self.locationManager startMonitoringForRegion: regionTwo];
-    
-    CLCircularRegion *regionThree = [[CLCircularRegion alloc] initWithCenter:region3 radius:50 identifier:@"Region3"];
-    [self.locationManager startMonitoringForRegion: regionThree];
-    
-    CLCircularRegion *regionFour = [[CLCircularRegion alloc] initWithCenter:region4 radius:50 identifier:@"Region4"];
-    [self.locationManager startMonitoringForRegion: regionFour];
-    
-    CLCircularRegion *regionFive = [[CLCircularRegion alloc] initWithCenter:region5 radius:50 identifier:@"Region5"];
-    [self.locationManager startMonitoringForRegion: regionFive];
-    
-    CLCircularRegion *regionTech = [[CLCircularRegion alloc] initWithCenter:region6 radius:50 identifier:@"RegionTech"];
-    [self.locationManager startMonitoringForRegion: regionTech];
-    
-    CLCircularRegion *regionCenter = [[CLCircularRegion alloc] initWithCenter:region3 radius:170 identifier:@"RegionCenter"];
-    [self.locationManager startMonitoringForRegion: regionCenter];
-    
-    
-    PFQuery *query = [PFQuery queryWithClassName: @"Request"];
-    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if(!error) {
-            self.request = [objects lastObject];
-//            CLLocationCoordinate2D regionA; //Foster Walker
-//            regionA.latitude = [(NSString *)[self.request valueForKeyPath:@"lat"] floatValue];
-//            regionA.longitude = [(NSString *)[self.request valueForKeyPath:@"lng"] floatValue];
-//            
-//            CLCircularRegion *region = [[CLCircularRegion alloc] initWithCenter:regionA radius:50 identifier:@"RegionA"];
-//            [self.locationManager startMonitoringForRegion: region];
-//            
-//            CLLocationCoordinate2D regionB; //Foster Walker
-//            regionB.latitude = [(NSString *)[self.request valueForKeyPath:@"lat2"] floatValue];
-//            regionB.longitude = [(NSString *)[self.request valueForKeyPath:@"lng2"] floatValue];
-//            
-//            CLCircularRegion *region2 = [[CLCircularRegion alloc] initWithCenter:regionB radius:50 identifier:@"RegionB"];
-//            [self.locationManager startMonitoringForRegion: region2];
-            [self fillDetails];
-        }
-    }];
-    
-//    if([self.request valueForKeyPath:@"item"] == NULL) {
-//        NSLog(@"it is empty! ID is %@", self.objectId);
-//        PFQuery *query = [PFQuery queryWithClassName: @"Request"];
-//        [query whereKey:@"objectId" equalTo:self.objectId];
-//        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-//            if(!error){
-//                if([objects count]>0){
-//                    self.request = objects[0];
-//                    NSLog(@"%@", [self.request valueForKeyPath:@"item"]);
-//                    [self fillDetails];
-//                }
-//                
-//            }
-//        }];
-//    } else {
-//        NSLog(@"not empty!");
-//        [self fillDetails];
-//    }
 }
 
+- (void)showThanksAlertview: (NSTimer *)timer{
+    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"CrowdFound" message:@"Thanks for looking the item. Have you found the item?" delegate:self cancelButtonTitle:@"YES" otherButtonTitles: @"NO", nil];
+    [alert show];
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -908,586 +336,134 @@
 
 #pragma mark - Location
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
-    if ([self.group isEqualToString:@"c"]) {
-        //    NSLog(@"here!!!!!!!");
-        CLLocation* newLocation = [locations lastObject];
-        
-        NSTimeInterval age = -[newLocation.timestamp timeIntervalSinceNow];
-        
-        if (age > 120) return;    // ignore old (cached) updates
-        
-        //    NSTimeInterval age = -[newLocation.timestamp timeIntervalSinceNow];
-        //
-        //    if (age > 120) return;    // ignore old (cached) updates
-        
-        if (newLocation.horizontalAccuracy < 0) return;   // ignore invalid udpates
-        
-        //    // EDIT: need a valid oldLocation to be able to compute distance
-        //    if (self.oldLocation == nil || self.oldLocation.horizontalAccuracy < 0) {
-        //        self.oldLocation = newLocation;
-        //        return;
-        //    }
-        
-        //    NSLog(@"%f", newLocation.coordinate.longitude);
-        CLLocationDistance distance = [newLocation distanceFromLocation: self.oldLocation];
-//        int middlePoint = [[self.request valueForKeyPath:@"middlePoint"] intValue];
-//        
-//        int firstQuarterPoint = [[self.request valueForKeyPath:@"firstQuarterPoint"] intValue];
-//        
-//        int thirdQuarterPoint = [[self.request valueForKeyPath:@"thirdQuarterPoint"] intValue];
-//        
-//        NSLog(@"distance: %f", distance);
-//        NSLog(@"first quarter: %d", firstQuarterPoint);
-//        NSLog(@"middle quarter: %d", middlePoint);
-//        NSLog(@"third quarter: %d", thirdQuarterPoint);
-//        
-//        int first = [[self.request valueForKeyPath:@"first"]intValue];
-//        int second = [[self.request valueForKeyPath:@"second"]intValue];
-//        int third = [[self.request valueForKeyPath:@"third"]intValue];
-//        
-//        
-//        if ([self.enteredRegion isEqualToString:@"RegionA"] && !self.notified) {
-//            //if # is the same, Middle, First, Third order
-//            if (second <=first || second <= third) {
-//                if (distance >= middlePoint && distance < thirdQuarterPoint) {
-//                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Middle Point!" message:[NSString stringWithFormat:@"%f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
-//                    [alert show];
-//                    self.region = @"middle";
-//                    self.notified = YES;
-//                }
-//            }
-//            else if (first < second && first <= third) {
-//                if (distance>= firstQuarterPoint && distance < middlePoint) {
-//                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"first Quarter" message:[NSString stringWithFormat:@"%f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
-//                    [alert show];
-//                    self.region = @"first";
-//                    self.notified = YES;
-//                }
-//            }
-//            else if (third < second && third < first) {
-//                if (distance >= thirdQuarterPoint) {
-//                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"third Quarter" message:[NSString stringWithFormat:@"%f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
-//                    [alert show];
-//                    self.region = @"third";
-//                    self.notified = YES;
-//                }
-//            }
-//        } else if ([self.enteredRegion isEqualToString:@"RegionB"] && !self.notified){
-//            if (second <=first || second <= third) {
-//                if (distance >= middlePoint && distance < thirdQuarterPoint) {
-//                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Middle Point!" message:[NSString stringWithFormat:@"%f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
-//                    [alert show];
-//                    self.region = @"middle";
-//                    self.notified = YES;
-//                }
-//            }
-//            else if (third < second && third < first) {
-//                if (distance>= firstQuarterPoint && distance < middlePoint) {
-//                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"third Quarter" message:[NSString stringWithFormat:@"%f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
-//                    [alert show];
-//                    self.region = @"third";
-//                    self.notified = YES;
-//                }
-//            }
-//            else if (first < second && first < third) {
-//                if (distance >= thirdQuarterPoint) {
-//                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"first Quarter" message:[NSString stringWithFormat:@"%f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
-//                    [alert show];
-//                    self.region = @"first";
-//                    self.notified = YES;
-//                }
-//            }
-//        }
+    CLLocation* newLocation = [locations lastObject];
+    if (newLocation.horizontalAccuracy < 0) return;   // ignore invalid udpates
 
-        
-        PFQuery *requestQuery = [PFQuery queryWithClassName: @"Request"];
-        [requestQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-            if(!error) {
-                NSMutableArray *object = [[NSMutableArray alloc]init];
-                object = [objects lastObject];
-                
-                int first = [[object valueForKeyPath:@"first"]intValue];
-                int second = [[object valueForKeyPath:@"second"]intValue];
-                int third = [[object valueForKeyPath:@"third"]intValue];
-                int fourth = [[object valueForKeyPath:@"fourth"]intValue];
-                int fifth = [[object valueForKeyPath:@"fifth"]intValue];
-                
-                NSLog(@"%d, %d, %d, %d, %d",first, second, third, fourth, fifth);
-                
-                CLLocationCoordinate2D region1; //region 1
-                region1.latitude = 42.058430;
-                region1.longitude = -87.682089;
-                
-                CLLocationCoordinate2D region2; //region 2
-                region2.latitude = 42.058405;
-                region2.longitude =  -87.680936;
-                
-                CLLocationCoordinate2D region3; //region 3
-                region3.latitude = 42.058389;
-                region3.longitude =  -87.680139;
-                
-                CLLocationCoordinate2D region4; //region 4
-                region4.latitude = 42.058385;
-                region4.longitude =  -87.679187;
-                
-                CLLocationCoordinate2D region5; //region 5
-                region5.latitude = 42.058381;
-                region5.longitude =  -87.678396;
-                
-                //                        CLLocationCoordinate2D region6; //region tech
-                //                        region6.latitude = 42.058375;
-                //                        region6.longitude =  -87.677574;
-                
-                CLCircularRegion *regionOne = [[CLCircularRegion alloc] initWithCenter:region1 radius:50 identifier:@"Region1"];
-                //                        [self.locationManager startMonitoringForRegion: regionOne];
-                
-                CLCircularRegion *regionTwo = [[CLCircularRegion alloc] initWithCenter:region2 radius:50 identifier:@"Region2"];
-                //                        [self.locationManager startMonitoringForRegion: regionTwo];
-                
-                CLCircularRegion *regionThree = [[CLCircularRegion alloc] initWithCenter:region3 radius:50 identifier:@"Region3"];
-                //                        [self.locationManager startMonitoringForRegion: regionThree];
-                
-                CLCircularRegion *regionFour = [[CLCircularRegion alloc] initWithCenter:region4 radius:50 identifier:@"Region4"];
-                //                        [self.locationManager startMonitoringForRegion: regionFour];
-                
-                CLCircularRegion *regionFive = [[CLCircularRegion alloc] initWithCenter:region5 radius:50 identifier:@"Region5"];
-                //                        [self.locationManager startMonitoringForRegion: regionFive];
-                CLLocationCoordinate2D coordinate;
-                coordinate.latitude = newLocation.coordinate.latitude;
-                coordinate.longitude = newLocation.coordinate.longitude;
-                
-                if (self.enteredNoyes && !self.enteredTech) {
-                    if (!self.notified) {
-                        [self appUsageLogging: [NSString stringWithFormat:@"%d, %d, %d, %d, %d",first, second, third, fourth, fifth]];
+    NSTimeInterval age = -[newLocation.timestamp timeIntervalSinceNow];
+    if (age > 120) return;    // ignore old (cached) updates
+    
+    //    NSTimeInterval age = -[newLocation.timestamp timeIntervalSinceNow];
+    //
+    //    if (age > 120) return;    // ignore old (cached) updates
+    
+    //    // EDIT: need a valid oldLocation to be able to compute distance
+    //    if (self.oldLocation == nil || self.oldLocation.horizontalAccuracy < 0) {
+    //        self.oldLocation = newLocation;
+    //        return;
+    //    }
+    
+    CLLocationCoordinate2D coordinate;
+    coordinate.latitude = newLocation.coordinate.latitude;
+    coordinate.longitude = newLocation.coordinate.longitude;
+    
+    CLLocationCoordinate2D fordCoordinate; //region ford
+    fordCoordinate.latitude = 42.057002;
+    fordCoordinate.longitude =  -87.676985;
+    
+    CLLocation *loc = [[CLLocation alloc]initWithLatitude:fordCoordinate.latitude longitude:fordCoordinate.longitude];
 
-                        if (first<=second && first<=third && first<=fourth &&first<=fifth && !self.notified) {
-                            if (distance>=100) {
-                                [self testNotif];
+    CLLocationDistance distance = [newLocation distanceFromLocation:loc];
 
-//                                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"first" message: [NSString stringWithFormat:@"distance: %f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
-//                                [alert show];
-                                self.notified = YES;
-                                [self appUsageLogging:[NSString stringWithFormat:@"notification at %f, %f; Region first", newLocation.coordinate.latitude, newLocation.coordinate.longitude]];
-
-                            }
-                        } else if (second < first && second <= third && second <=fourth && second <= fifth) {
-                            if (distance>=180) {
-                                [self testNotif];
-
-//                                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"second" message: [NSString stringWithFormat:@"distance: %f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
-//                                [alert show];
-                                self.notified = YES;
-                                [self appUsageLogging:[NSString stringWithFormat:@"notification at %f, %f; Region second", newLocation.coordinate.latitude, newLocation.coordinate.longitude]];
-
-                            }
-                        } else if (third < first && third < second && third <= fourth && third <= fifth) {
-                            if (distance>=290) {
-                                [self testNotif];
-
-//                                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"third" message: [NSString stringWithFormat:@"distance: %f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
-//                                [alert show];
-                                self.notified = YES;
-                                [self appUsageLogging:[NSString stringWithFormat:@"notification at %f, %f; Region third", newLocation.coordinate.latitude, newLocation.coordinate.longitude]];
-
-                            }
-                        } else if (fourth < first && fourth < second && fourth < third && fourth <= fifth) {
-                            if (distance>=350){
-                                [self testNotif];
-
-//                                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"fourth" message: [NSString stringWithFormat:@"distance: %f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
-//                                [alert show];
-                                self.notified = YES;
-                                [self appUsageLogging:[NSString stringWithFormat:@"notification at %f, %f; Region fourth", newLocation.coordinate.latitude, newLocation.coordinate.longitude]];
-
-                            }
-
-                        } else if (fifth < fourth && fifth < first && fifth < second && fifth < third){
-                            if (distance>=400) {
-                                [self testNotif];
-
-//                                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"fifth" message: [NSString stringWithFormat:@"distance: %f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
-//                                [alert show];
-                                self.notified = YES;
-                                [self appUsageLogging:[NSString stringWithFormat:@"notification at %f, %f; Region fifth", newLocation.coordinate.latitude, newLocation.coordinate.longitude]];
-
-                            }
-                        }
-                    }
-                }
-                
-                if (self.enteredTech && !self.enteredNoyes) {
-                    if (!self.notified) {
-                        [self appUsageLogging: [NSString stringWithFormat:@"%d, %d, %d, %d, %d",first, second, third, fourth, fifth]];
-
-                        if (fifth<=second && fifth<=third && fifth<=fourth &&fifth<=first) {
-                            if (distance>=140) {
-                                [self testNotif];
-
-//                                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"fifth" message: [NSString stringWithFormat:@"distance: %f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
-//                                [alert show];
-                                self.notified = YES;
-                                [self appUsageLogging:[NSString stringWithFormat:@"notification at %f, %f; Region fifth", newLocation.coordinate.latitude, newLocation.coordinate.longitude]];
-
-                            }
-                        } else if (fourth < fifth && fourth <= third && fourth <=second && fourth <= first) {
-                            if (distance>=200) {
-                                [self testNotif];
-
-//                                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"DRR" message: [NSString stringWithFormat:@"distance: %f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
-//                                [alert show];
-                                self.notified = YES;
-                                [self appUsageLogging:[NSString stringWithFormat:@"notification at %f, %f; Region fourth", newLocation.coordinate.latitude, newLocation.coordinate.longitude]];
-
-                            }
-                        } else if (third < fifth && third < fourth && third <= second && third <= first) {
-                            if (distance>=270) {
-                                [self testNotif];
-
-//                                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"DRR" message: [NSString stringWithFormat:@"distance: %f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
-//                                [alert show];
-                                self.notified = YES;
-                                [self appUsageLogging:[NSString stringWithFormat:@"notification at %f, %f; Region third", newLocation.coordinate.latitude, newLocation.coordinate.longitude]];
-
-                            }
-
-                        } else if (second < fifth && second < fourth && second < third && second <= first) {
-                            if (distance>=350) {
-                                [self testNotif];
-
-//                                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"DRR" message: [NSString stringWithFormat:@"distance: %f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
-//                                [alert show];
-                                self.notified = YES;
-                                [self appUsageLogging:[NSString stringWithFormat:@"notification at %f, %f; Region second", newLocation.coordinate.latitude, newLocation.coordinate.longitude]];
-
-                            }
-                        } else if (first < fifth && first < fourth && fifth < third && fifth < second ){
-                            if (distance >=450) {
-                                
-                                [self testNotif];
-
-//                                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"DRR" message: [NSString stringWithFormat:@"distance: %f", distance] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
-//                                [alert show];
-                                self.notified = YES;
-                                [self appUsageLogging:[NSString stringWithFormat:@"notification at %f, %f; Region first", newLocation.coordinate.latitude, newLocation.coordinate.longitude]];
-
-                            }
-                        }
-                    }
-                }
+    [self locationLoggingLatitude:[NSNumber numberWithFloat:newLocation.coordinate.latitude] Longitude: [NSNumber numberWithFloat:newLocation.coordinate.longitude] Accuracy: [NSNumber numberWithFloat:newLocation.horizontalAccuracy]];
+    
+    if ([self.group isEqualToString:@"a"]) {
+        if (distance <=20.0) {
+            if(self.shouldNotify) {
+                NSLog(@"distance: %f", distance);
+                [self sendNotification];
+                [self appUsageLogging:[NSString stringWithFormat:@"%@ notification at %f, %f\rdistance is: %f", self.group, newLocation.coordinate.latitude, newLocation.coordinate.longitude, distance]];
+                self.shouldNotify = NO;
             }
-        }];
+        }
+    } else {
+        if (distance <=40.0) {
+            if(self.shouldNotify) {
+                NSLog(@"distance: %f", distance);
+                [self sendNotification];
+                [self appUsageLogging:[NSString stringWithFormat:@"%@ notification at %f, %f\rdistance is: %f", self.group, newLocation.coordinate.latitude, newLocation.coordinate.longitude, distance]];
+                self.shouldNotify = NO;
+            }
+        }
     }
 }
 
 - (void)locationManager:(CLLocationManager *)manager didEnterRegion:(CLRegion *)region
 {
-    [self testNotifEnter: region.identifier];
+    [self testEnterNotification:region.identifier];
+    if ([region.identifier isEqualToString:@"regionFord"]) {
+        [self.locationManager stopMonitoringSignificantLocationChanges];
+        [self.locationManager startUpdatingLocation];
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation;
+        self.locationManager.distanceFilter = 1;
+        NSLog(@"entered ROI");
+        self.enteredROI = YES;
+        [self appUsageLogging: [NSString stringWithFormat:@"entered region with desired accuracy of :%f", self.locationManager.desiredAccuracy]];
+    }
+    
     PFQuery *query = [MyUser query];
     [query getObjectInBackgroundWithId:[MyUser currentUser].objectId block:^(PFObject *object, NSError *error) {
         if (!error) {
-            //            int notifCount = [object[@"notifNum"] intValue];
-            //            NSLog(@"%d", notifCount);
-            //            NSNumber *value = [NSNumber numberWithInt:notifCount+1];
             if (!object[@"group"]) {
                 self.group = @"a";
                 object[@"group"] = self.group;
             }
             else
                 self.group = object[@"group"];
+            NSLog(@"%@",self.group);
+            NSDate *lastNotifiedDate = object[@"lastNotified"];
+            if (lastNotifiedDate == NULL) {
+                self.shouldNotify = YES;
+            } else {
+                NSLog(@"%@", lastNotifiedDate);
+                NSDate *currentDate = [NSDate date];
+                NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+                NSDateComponents *components = [calendar components:NSMonthCalendarUnit|NSDayCalendarUnit|NSHourCalendarUnit|NSMinuteCalendarUnit
+                                                           fromDate:lastNotifiedDate
+                                                             toDate:currentDate
+                                                            options:0];
+                NSLog(@"current date: %@", currentDate);
+                NSLog(@"Difference in date components: %ld/%ld/%ld", (long)components.minute, (long)components.hour, (long)components.day);
+                if (components.day > 1) {
+                    self.shouldNotify = YES;
+                    NSLog(@"more than a day, so notify");
+                } else if (components.day < 1 && components.hour >= 4 ) {
+                    NSLog(@"more than 4 hours, notify too");
+                    self.shouldNotify = YES;
+                } else {
+                    NSLog(@"do not notify");
+                    //TODO: uncomment this
+//                    self.shouldNotify = NO;
+                }
+            }
+            [self appUsageLogging:@"view did appear"];
         }
     }];
-    
-    self.enteredRegion = region.identifier;
-    NSLog(@"entered %@", region.identifier);
-    if ([region.identifier isEqualToString:@"RegionNoyes"] && !self.enteredTech) {
-        self.enteredNoyes = YES;
-//        self.enteredTech = NO;
-        //for old location
-        [PFGeoPoint geoPointForCurrentLocationInBackground:^(PFGeoPoint *geoPoint, NSError *error) {
-            if (!error) {
-                self.oldLocation = [[CLLocation alloc]initWithLatitude:geoPoint.latitude longitude:geoPoint.longitude];
-                NSLog(@"latitude is : %f",self.oldLocation.coordinate.latitude);
-                [self appUsageLogging:[NSString stringWithFormat:@"entered Noyes at %f, %f", geoPoint.latitude, geoPoint.longitude]];
-                //            self.lat = geoPoint.latitude;
-                //            self.lng = geoPoint.longitude;
-                //            [self getHeadingForDirectionFromCoordinate:oldLoc toCoordinate:plex];
-            }
-        }];
-    }
-    if ([region.identifier isEqualToString:@"RegionTech"] && !self.enteredNoyes) {
-        self.enteredTech = YES;
-//        self.enteredNoyes = NO;
-        //for old location
-        [PFGeoPoint geoPointForCurrentLocationInBackground:^(PFGeoPoint *geoPoint, NSError *error) {
-            if (!error) {
-                self.oldLocation = [[CLLocation alloc]initWithLatitude:geoPoint.latitude longitude:geoPoint.longitude];
-                NSLog(@"latitude is : %f",self.oldLocation.coordinate.latitude);
-                [self appUsageLogging:[NSString stringWithFormat:@"entered Tech at %f, %f", geoPoint.latitude, geoPoint.longitude]];
-
-                //            self.lat = geoPoint.latitude;
-                //            self.lng = geoPoint.longitude;
-                //            [self getHeadingForDirectionFromCoordinate:oldLoc toCoordinate:plex];
-            }
-        }];
-    }
-    
-
-    PFQuery *requestQuery = [PFQuery queryWithClassName: @"Request"];
-    [requestQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if(!error) {
-            NSMutableArray *object = [[NSMutableArray alloc]init];
-            object = [objects lastObject];
-
-            int first = [[object valueForKeyPath:@"first"]intValue];
-            int second = [[object valueForKeyPath:@"second"]intValue];
-            int third = [[object valueForKeyPath:@"third"]intValue];
-            int fourth = [[object valueForKeyPath:@"fourth"]intValue];
-            int fifth = [[object valueForKeyPath:@"fifth"]intValue];
-            
-            NSLog(@"%d, %d, %d, %d, %d",first, second, third, fourth, fifth);
-    
-            if ([self.group isEqualToString:@"a"]) {
-                if (!self.lastNotified) {
-                    if ([region.identifier isEqualToString:@"Region1"] || [region.identifier isEqualToString:@"Region2"] || [region.identifier isEqualToString:@"Region3"] || [region.identifier isEqualToString:@"Region4"] || [region.identifier isEqualToString:@"Region5"])
-                    {
-                        [self appUsageLogging: [NSString stringWithFormat:@"%d, %d, %d, %d, %d",first, second, third, fourth, fifth]];
-                        [self testNotif];
-//                        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"DRR" message: [NSString stringWithFormat:@"Entered Region: %@", region.identifier] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
-//                        [alert show];
-                        [PFGeoPoint geoPointForCurrentLocationInBackground:^(PFGeoPoint *geoPoint, NSError *error) {
-                            if (!error) {
-                                NSLog(@"latitude is : %f",self.oldLocation.coordinate.latitude);
-                                [self appUsageLogging:[NSString stringWithFormat:@"notification at %f, %f", geoPoint.latitude, geoPoint.longitude]];
-                                
-                                //            self.lat = geoPoint.latitude;
-                                //            self.lng = geoPoint.longitude;
-                                //            [self getHeadingForDirectionFromCoordinate:oldLoc toCoordinate:plex];
-                            }
-                        }];
-                        [self appUsageLogging:[NSString stringWithFormat:@"notification at %@", region.identifier]];
-                        self.lastNotified = YES;
-                    }
-                }
-
-            } else if ([self.group isEqualToString:@"b"]) {
-                if (self.enteredNoyes) {
-                    if (!self.lastNotified) {
-                        [self appUsageLogging: [NSString stringWithFormat:@"%d, %d, %d, %d, %d",first, second, third, fourth, fifth]];
-                        if (first<=second && first<=third && first<=fourth &&first<=fifth && [region.identifier isEqualToString:@"Region1"] && !self.lastNotified) {
-                            [self testNotif];
-                            
-//                            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"DRR" message: [NSString stringWithFormat:@"Entered Region: %@", region.identifier] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
-//                            [alert show];
-                            [PFGeoPoint geoPointForCurrentLocationInBackground:^(PFGeoPoint *geoPoint, NSError *error) {
-                                if (!error) {
-                                    NSLog(@"latitude is : %f",self.oldLocation.coordinate.latitude);
-                                    [self appUsageLogging:[NSString stringWithFormat:@"notification at %f, %f", geoPoint.latitude, geoPoint.longitude]];
-                                    
-                                    //            self.lat = geoPoint.latitude;
-                                    //            self.lng = geoPoint.longitude;
-                                    //            [self getHeadingForDirectionFromCoordinate:oldLoc toCoordinate:plex];
-                                }
-                            }];
-                            [self appUsageLogging:[NSString stringWithFormat:@"notification at%@", region.identifier]];
-
-                            self.lastNotified = YES;
-                        } else if (second < first && second <= third && second <=fourth && second <= fifth && [region.identifier isEqualToString:@"Region2"] && !self.lastNotified) {
-                            [self testNotif];
-                            [PFGeoPoint geoPointForCurrentLocationInBackground:^(PFGeoPoint *geoPoint, NSError *error) {
-                                if (!error) {
-                                    NSLog(@"latitude is : %f",self.oldLocation.coordinate.latitude);
-                                    [self appUsageLogging:[NSString stringWithFormat:@"notification at %f, %f", geoPoint.latitude, geoPoint.longitude]];
-                                    
-                                    //            self.lat = geoPoint.latitude;
-                                    //            self.lng = geoPoint.longitude;
-                                    //            [self getHeadingForDirectionFromCoordinate:oldLoc toCoordinate:plex];
-                                }
-                            }];
-//                            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"DRR" message: [NSString stringWithFormat:@"Entered Region: %@", region.identifier] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
-//                            [alert show];
-                            [self appUsageLogging:[NSString stringWithFormat:@"notification at%@", region.identifier]];
-
-                            self.lastNotified = YES;
-                        } else if (third < first && third < second && third <= fourth && third <= fifth && [region.identifier isEqualToString:@"Region3"] && !self.lastNotified) {
-                            [self testNotif];
-                            [PFGeoPoint geoPointForCurrentLocationInBackground:^(PFGeoPoint *geoPoint, NSError *error) {
-                                if (!error) {
-                                    NSLog(@"latitude is : %f",self.oldLocation.coordinate.latitude);
-                                    [self appUsageLogging:[NSString stringWithFormat:@"notification at %f, %f", geoPoint.latitude, geoPoint.longitude]];
-                                    
-                                    //            self.lat = geoPoint.latitude;
-                                    //            self.lng = geoPoint.longitude;
-                                    //            [self getHeadingForDirectionFromCoordinate:oldLoc toCoordinate:plex];
-                                }
-                            }];
-//                            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"DRR" message: [NSString stringWithFormat:@"Entered Region: %@", region.identifier] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
-//                            [alert show];
-                            [self appUsageLogging:[NSString stringWithFormat:@"notification at %@", region.identifier]];
-
-                            self.lastNotified = YES;
-                        } else if (fourth < first && fourth < second && fourth < third && fourth <= fifth && [region.identifier isEqualToString:@"Region4"] && !self.lastNotified) {
-                            [self testNotif];
-                            [PFGeoPoint geoPointForCurrentLocationInBackground:^(PFGeoPoint *geoPoint, NSError *error) {
-                                if (!error) {
-                                    NSLog(@"latitude is : %f",self.oldLocation.coordinate.latitude);
-                                    [self appUsageLogging:[NSString stringWithFormat:@"notification at %f, %f", geoPoint.latitude, geoPoint.longitude]];
-                                    
-                                    //            self.lat = geoPoint.latitude;
-                                    //            self.lng = geoPoint.longitude;
-                                    //            [self getHeadingForDirectionFromCoordinate:oldLoc toCoordinate:plex];
-                                }
-                            }];
-//                            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"DRR" message: [NSString stringWithFormat:@"Entered Region: %@", region.identifier] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
-//                            [alert show];
-                            [self appUsageLogging:[NSString stringWithFormat:@"notification at %@", region.identifier]];
-
-                            self.lastNotified = YES;
-                        } else if (fifth < fourth && fifth < first && fifth < second && fifth < third && [region.identifier isEqualToString:@"Region5"] && !self.lastNotified){
-                            [self testNotif];
-                            [PFGeoPoint geoPointForCurrentLocationInBackground:^(PFGeoPoint *geoPoint, NSError *error) {
-                                if (!error) {
-                                    NSLog(@"latitude is : %f",self.oldLocation.coordinate.latitude);
-                                    [self appUsageLogging:[NSString stringWithFormat:@"notification at %f, %f", geoPoint.latitude, geoPoint.longitude]];
-                                    
-                                    //            self.lat = geoPoint.latitude;
-                                    //            self.lng = geoPoint.longitude;
-                                    //            [self getHeadingForDirectionFromCoordinate:oldLoc toCoordinate:plex];
-                                }
-                            }];
-//                            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"DRR" message: [NSString stringWithFormat:@"Entered Region: %@", region.identifier] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
-//                            [alert show];
-                            [self appUsageLogging:[NSString stringWithFormat:@"notification at %@", region.identifier]];
-
-                            self.lastNotified = YES;
-                        }
-                    }
-                }
-                if (self.enteredTech) {
-                    if (!self.lastNotified) {
-                        if (fifth<=second && fifth<=third && fifth<=fourth &&fifth<=first && [region.identifier isEqualToString:@"Region5"] && !self.lastNotified) {
-                            [self testNotif];
-//                            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"DRR" message: [NSString stringWithFormat:@"Entered Region: %@", region.identifier] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
-//                            [alert show];
-                            [PFGeoPoint geoPointForCurrentLocationInBackground:^(PFGeoPoint *geoPoint, NSError *error) {
-                                if (!error) {
-                                    NSLog(@"latitude is : %f",self.oldLocation.coordinate.latitude);
-                                    [self appUsageLogging:[NSString stringWithFormat:@"notification at %f, %f", geoPoint.latitude, geoPoint.longitude]];
-                                    
-                                    //            self.lat = geoPoint.latitude;
-                                    //            self.lng = geoPoint.longitude;
-                                    //            [self getHeadingForDirectionFromCoordinate:oldLoc toCoordinate:plex];
-                                }
-                            }];
-                            self.lastNotified = YES;
-                            [self appUsageLogging:[NSString stringWithFormat:@"notification at %@", region.identifier]];
-                        } else if (fourth < fifth && fourth <= third && fourth <=second && fourth <= first && [region.identifier isEqualToString:@"Region4"] && !self.lastNotified) {
-                            [self testNotif];
-//                            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"DRR" message: [NSString stringWithFormat:@"Entered Region: %@", region.identifier] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
-//                            [alert show];
-                            [PFGeoPoint geoPointForCurrentLocationInBackground:^(PFGeoPoint *geoPoint, NSError *error) {
-                                if (!error) {
-                                    NSLog(@"latitude is : %f",self.oldLocation.coordinate.latitude);
-                                    [self appUsageLogging:[NSString stringWithFormat:@"notification at %f, %f", geoPoint.latitude, geoPoint.longitude]];
-                                    
-                                    //            self.lat = geoPoint.latitude;
-                                    //            self.lng = geoPoint.longitude;
-                                    //            [self getHeadingForDirectionFromCoordinate:oldLoc toCoordinate:plex];
-                                }
-                            }];
-                            [self appUsageLogging:[NSString stringWithFormat:@"notification at %@", region.identifier]];
-                            self.lastNotified = YES;
-                        } else if (third < fifth && third < fourth && third <= second && third <= first && [region.identifier isEqualToString:@"Region3"] && !self.lastNotified) {
-                            [self testNotif];
-//                            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"DRR" message: [NSString stringWithFormat:@"Entered Region: %@", region.identifier] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
-//                            [alert show];
-                            [PFGeoPoint geoPointForCurrentLocationInBackground:^(PFGeoPoint *geoPoint, NSError *error) {
-                                if (!error) {
-                                    NSLog(@"latitude is : %f",self.oldLocation.coordinate.latitude);
-                                    [self appUsageLogging:[NSString stringWithFormat:@"notification at %f, %f", geoPoint.latitude, geoPoint.longitude]];
-                                    
-                                    //            self.lat = geoPoint.latitude;
-                                    //            self.lng = geoPoint.longitude;
-                                    //            [self getHeadingForDirectionFromCoordinate:oldLoc toCoordinate:plex];
-                                }
-                            }];
-                            [self appUsageLogging:[NSString stringWithFormat:@"notification at %@", region.identifier]];
-                            self.lastNotified = YES;
-                        } else if (second < fifth && second < fourth && second < third && second <= first && [region.identifier isEqualToString:@"Region2"] && !self.lastNotified) {
-                            [self testNotif];
-                            [PFGeoPoint geoPointForCurrentLocationInBackground:^(PFGeoPoint *geoPoint, NSError *error) {
-                                if (!error) {
-                                    NSLog(@"latitude is : %f",self.oldLocation.coordinate.latitude);
-                                    [self appUsageLogging:[NSString stringWithFormat:@"notification at %f, %f", geoPoint.latitude, geoPoint.longitude]];
-                                    
-                                    //            self.lat = geoPoint.latitude;
-                                    //            self.lng = geoPoint.longitude;
-                                    //            [self getHeadingForDirectionFromCoordinate:oldLoc toCoordinate:plex];
-                                }
-                            }];
-//                            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"DRR" message: [NSString stringWithFormat:@"Entered Region: %@", region.identifier] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
-//                            [alert show];
-                            [self appUsageLogging:[NSString stringWithFormat:@"notification at %@", region.identifier]];
-                            self.lastNotified = YES;
-                        } else if (first < fifth && first < fourth && fifth < third && fifth < second && [region.identifier isEqualToString:@"Region1"] && !self.lastNotified){
-                            [self testNotif];
-                            [PFGeoPoint geoPointForCurrentLocationInBackground:^(PFGeoPoint *geoPoint, NSError *error) {
-                                if (!error) {
-                                    NSLog(@"latitude is : %f",self.oldLocation.coordinate.latitude);
-                                    [self appUsageLogging:[NSString stringWithFormat:@"notification at %f, %f", geoPoint.latitude, geoPoint.longitude]];
-                                    
-                                    //            self.lat = geoPoint.latitude;
-                                    //            self.lng = geoPoint.longitude;
-                                    //            [self getHeadingForDirectionFromCoordinate:oldLoc toCoordinate:plex];
-                                }
-                            }];
-//                            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"DRR" message: [NSString stringWithFormat:@"Entered Region: %@", region.identifier] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
-//                            [alert show];
-                            [self appUsageLogging:[NSString stringWithFormat:@"notification at %@", region.identifier]];
-                            self.lastNotified = YES;
-                        }
-                    }
-                }
-            }
-        }
-    }];
-
-//    PFQuery *query = [MyUser query];
-//    [query getObjectInBackgroundWithId:[MyUser currentUser].objectId block:^(PFObject *object, NSError *error) {
-//        if (!error) {
-////            int notifCount = [object[@"notifNum"] intValue];
-////            NSLog(@"%d", notifCount);
-////            NSNumber *value = [NSNumber numberWithInt:notifCount+1];
-//            NSDate *date = [NSDate date];
-//            object[@"lastNotified"] = date;
-//            [object saveInBackground];
-//        } else {
-//            NSLog(@"ERROR!");
-//        }
-//    }];
 }
 
 - (void)locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region
 {
-    [self testNotifExit: region.identifier];
-//    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"DRR" message: [NSString stringWithFormat:@"Exited Region: %@", region.identifier] delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
-//    [alert show];
-//    NSLog(@"exited %@", region.identifier);
-    if ([region.identifier isEqualToString:@"RegionCenter"]) {
-        self.lastNotified = NO;
-        self.notified = NO;
-        self.enteredNoyes = NO;
-        self.enteredTech = NO;
+    if ([region.identifier isEqualToString:@"regionFord"]) {
+        [self.locationManager stopUpdatingLocation];
+        [self.locationManager startMonitoringSignificantLocationChanges];
+        //FIXME: remove self.shouldNotify
+        self.shouldNotify = YES;
+        NSLog(@"exited ROI");
+        [self testExitNotification:region.identifier];
+        [self appUsageLogging: [NSString stringWithFormat:@"exited region with desired accuracy of :%f", self.locationManager.desiredAccuracy]];
     }
-    [PFGeoPoint geoPointForCurrentLocationInBackground:^(PFGeoPoint *geoPoint, NSError *error) {
-        if (!error) {
-            NSLog(@"latitude is : %f",self.oldLocation.coordinate.latitude);
-            [self appUsageLogging:[NSString stringWithFormat:@"Exited at %f, %f; %@", geoPoint.latitude, geoPoint.longitude, region.identifier]];
-            
-            //            self.lat = geoPoint.latitude;
-            //            self.lng = geoPoint.longitude;
-            //            [self getHeadingForDirectionFromCoordinate:oldLoc toCoordinate:plex];
-        }
-    }];
+}
+
+- (BOOL)locationManagerShouldDisplayHeadingCalibration:(CLLocationManager *)manager {
+    return NO;
+}
+
+- (void)locationLoggingLatitude:(NSNumber *)latitude Longitude:(NSNumber *)longitude Accuracy:(NSNumber *)accuracy {
+    PFObject *location = [PFObject objectWithClassName:@"Location"];
+    location[@"username"] = [MyUser currentUser].username;
+    location[@"latitude"] = [latitude stringValue];
+    location[@"longitude"] = [longitude stringValue];;
+    location[@"accuracy"] = [accuracy stringValue];
+    [location saveInBackground];
 }
 
 - (void)appUsageLogging: (NSString *)activity {
@@ -1499,39 +475,38 @@
 }
 
 
-- (void)testNotif
+- (void)sendNotification
 {
     UILocalNotification *localNotif = [[UILocalNotification alloc] init];
     //    NSDictionary *dictionary = [NSDictionary dictionaryWithObject:objId forKey:objId];
     //    localNotif.userInfo = dictionary;
-    localNotif.alertBody = [NSString stringWithFormat:@"Can you please look for a lost item?"];
-    localNotif.alertAction = @"See the lost item details";
+    localNotif.alertBody = [NSString stringWithFormat:@"Can you please look for %@ that I lost %@? --%@", [self.request valueForKeyPath:@"item"], [self.request valueForKeyPath:@"locationDetail"], [self.request valueForKeyPath:@"username"]];
+    localNotif.alertAction = @"Slide to see the lost item and location details";
     localNotif.soundName = UILocalNotificationDefaultSoundName;
     if (localNotif) {
         localNotif.applicationIconBadgeNumber = 1;
         [[UIApplication sharedApplication] presentLocalNotificationNow:localNotif];
+        
+        //TODO: after 3 minutes, change desiredAccuracy to Ten meters to prevent battery leak.
+//        [NSTimer scheduledTimerWithTimeInterval:180 target:self selector:@selector(changeDesiredAccuracy:) userInfo:nil repeats:NO];
+
+        PFQuery *query = [MyUser query];
+        [query getObjectInBackgroundWithId:[MyUser currentUser].objectId block:^(PFObject *object, NSError *error) {
+            if (!error) {
+                NSDate *date = [NSDate date];
+                object[@"lastNotified"] = date;
+                [object saveInBackground];
+            } else {
+                NSLog(@"ERROR!");
+            }
+        }];
     }
 }
 
-- (void)testNotifExit: (NSString *)name
-{
-    UILocalNotification *localNotif = [[UILocalNotification alloc] init];
-    //    NSDictionary *dictionary = [NSDictionary dictionaryWithObject:objId forKey:objId];
-    //    localNotif.userInfo = dictionary;
-    localNotif.alertBody = [NSString stringWithFormat:@"Exited: %@", name];
-    localNotif.alertAction = @"Testing notification based on regions";
-    localNotif.soundName = UILocalNotificationDefaultSoundName;
-    if (localNotif) {
-        localNotif.applicationIconBadgeNumber = 1;
-        [[UIApplication sharedApplication] presentLocalNotificationNow:localNotif];
-    }
-}
 
-- (void)testNotifEnter: (NSString *)name
+- (void)testEnterNotification: (NSString *)name
 {
     UILocalNotification *localNotif = [[UILocalNotification alloc] init];
-    //    NSDictionary *dictionary = [NSDictionary dictionaryWithObject:objId forKey:objId];
-    //    localNotif.userInfo = dictionary;
     localNotif.alertBody = [NSString stringWithFormat:@"Entered: %@", name];
     localNotif.alertAction = @"Testing notification based on regions";
     localNotif.soundName = UILocalNotificationDefaultSoundName;
@@ -1541,6 +516,47 @@
     }
 }
 
+- (void)testExitNotification: (NSString *)name
+{
+    UILocalNotification *localNotif = [[UILocalNotification alloc] init];
+    localNotif.alertBody = [NSString stringWithFormat:@"Exited: %@", name];
+    localNotif.alertAction = @"Testing notification based on regions";
+    localNotif.soundName = UILocalNotificationDefaultSoundName;
+    if (localNotif) {
+        localNotif.applicationIconBadgeNumber = 1;
+        [[UIApplication sharedApplication] presentLocalNotificationNow:localNotif];
+    }
+}
+
+- (void)changeDesiredAccuracy: (NSTimer *)timer {
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
+}
+
+//-(void)locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading {
+//    NSLog(@"heading: %f",newHeading.magneticHeading);
+//}
+
+//-(void)indoorLocationManager:(ESTIndoorLocationManager *)manager didUpdatePosition:(ESTOrientedPoint *)position withAccuracy:(ESTPositionAccuracy)positionAccuracy inLocation:(ESTLocation *)location {
+//    NSString *str = [NSString stringWithFormat:@"position: %f, %f", position.x, position.y];
+//    NSLog(@"position is: %@",str);
+////    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"CrowdFound" message:str delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
+////    [alert show];
+//}
+
+//-(void)indoorLocationManager:(ESTIndoorLocationManager *)manager didFailToUpdatePositionWithError:(NSError *)error
+//{
+////    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"CrowdFound" message:error.description delegate:nil cancelButtonTitle:@"OKAY" otherButtonTitles: nil];
+////    [alert show];
+//    if (error.code == ESTIndoorPositionOutsideLocationError)
+//    {
+//        NSLog(@"It seems you are not in this location.");
+//    }
+//    else if (error.code == ESTIndoorMagnetometerInitializationError)
+//    {
+//        NSLog(@"It seems your magnetometer is not working.");
+//    }
+//    NSLog(@"%@", error.localizedDescription);
+//}
 
 #pragma mark - Navigation
 

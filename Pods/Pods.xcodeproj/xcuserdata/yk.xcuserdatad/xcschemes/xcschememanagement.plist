@@ -9,6 +9,16 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Pods-EstimoteIndoorSDK.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-EstimoteSDK.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-Parse.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -22,17 +32,27 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>899A7C946BC7E71FE2C4A345</key>
+		<key>136A4857BC87034F3E630D06</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>A25E7910B4C37C05EC2F1CD2</key>
+		<key>55E14B5A24569DA6BBF39E51</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>F2BFF67E1146489938AB51AF</key>
+		<key>AEB4D642D643599334448185</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>D2DB4EDF3413D356106DB1F6</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F7A496503C25170128F00DB9</key>
 		<dict>
 			<key>primary</key>
 			<true/>

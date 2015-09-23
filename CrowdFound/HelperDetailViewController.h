@@ -18,4 +18,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *notFoundLabel;
 @property (weak, nonatomic) IBOutlet UILabel *blueOverlay;
 @property (weak, nonatomic) IBOutlet UIButton *foundLabel;
+@property (weak, nonatomic) IBOutlet UILabel *TimerLabel;
+
++ (CLLocationManager *)sharedLocationManager;
+
 @end

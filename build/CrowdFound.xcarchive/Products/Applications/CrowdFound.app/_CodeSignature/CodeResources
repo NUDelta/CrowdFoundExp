@@ -4,11 +4,55 @@
 <dict>
 	<key>files</key>
 	<dict>
+		<key>5a.mov</key>
+		<data>
+		oOSAt4N/zPWGTFepVputjhsLlHM=
+		</data>
+		<key>5a_first_frame@2x.png</key>
+		<data>
+		hdrCco8NUAiilGPoZMHiSZkVeXU=
+		</data>
+		<key>5b.mov</key>
+		<data>
+		xWFBBr3UEV956hz8N/zpa/96LKk=
+		</data>
+		<key>5b_first_frame@2x.png</key>
+		<data>
+		VbRyHNNH6PgJltCfr0jqag2ytbE=
+		</data>
+		<key>8a.mov</key>
+		<data>
+		WmbTb2ESQ0qDQO3cObZffEuji4M=
+		</data>
+		<key>8a_first_frame@2x.png</key>
+		<data>
+		NSOKWhG+EI1ijQeOH6uYSgpb980=
+		</data>
+		<key>8b.mov</key>
+		<data>
+		3ycEgRGXKs/LmCIm1EsOaYS6dMU=
+		</data>
+		<key>8b_first_frame@2x.png</key>
+		<data>
+		7FawKQeUW1B6JQC3AoyLN4YdNWY=
+		</data>
+		<key>8c.mov</key>
+		<data>
+		Wsaag0grKV2h8WQsG6T1jm44FD8=
+		</data>
+		<key>8c_first_frame@2x.png</key>
+		<data>
+		kc21qbyCXOfG3nBOHtcs+yrxDjY=
+		</data>
+		<key>Assets.car</key>
+		<data>
+		OqE5YCOs2QfzoWGDeJs1PJzOKbI=
+		</data>
 		<key>Base.lproj/LaunchScreen.nib</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			cgTMAz0/o5yNmhs8aCUw4jZtlzA=
+			guPNO9cvDTOIOXRuDg3A5KWxf98=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -17,7 +61,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			HZ0XV4QJe9VNQ27jeUNhH/ZYcXs=
+			hyF38aoePdGTRHFOy5JMOMJfL7o=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -26,7 +70,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			suwD51iVSLw6gI4kgP2hM0sHQJo=
+			2UfULRthA4zHdOPOXSuKHZ0w0tE=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -35,7 +79,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			6+rHUzDlfMyOOS7dPdQdfUiReRg=
+			IMKPug6q7WPHTHz1ycJT9a8So5c=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -44,7 +88,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			ucsbZiuFa3VjEpFP3RzU/UzIWpA=
+			Bpr+CXCvRQU5oeU0arDeW3lcZq0=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -53,7 +97,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			zaRxFW3YSm2gwer4pC3x2Ahu/tk=
+			8FVnqr1inaLYrQpYV5n1bnJONv8=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -62,7 +106,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			CvjembSfHNvW3F9yWZ7ESsi+lr4=
+			ZKdWyu4WL1Ad3ngM0pbtFbJjWYk=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -80,7 +124,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			8PJiucvlv0p6hrNBSvCIynAMgXs=
+			8AY/C4ptaW2YCswp3i35NS0gMWY=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -89,7 +133,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			aY4J8GH7gonbKl695kxC+m1zIlM=
+			CnXVbyluWLViHCsgxNV4kHn5P60=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -98,7 +142,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			2qd6JzqCTqplDEfvwLEqFdT8e5Y=
+			mj6SweXc2AbYvxvUHFMzgG25lOs=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -107,7 +151,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			TTIvkV1k5DHRcqj73z7ye7JKNaw=
+			YTY3uqY0DuWyOa60paBArGggWUs=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -116,7 +160,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			SE4+qQAPrGEO/SZZUPRUu0OLJXI=
+			NA0uTzUyLdy9dBv7EpK+WNwl0kA=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -125,7 +169,16 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			bfkTfhkt/V8TsoGOnVnEPoLaCmg=
+			qBwuGlUwewbjmhcL8NmHLz18eSE=
+			</data>
+			<key>optional</key>
+			<true/>
+		</dict>
+		<key>Base.lproj/Main.storyboardc/rkn-EV-q6I-view-omw-TJ-dX7.nib</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			pv/0SdgHjlkmyXwbOLiIY+PHPpg=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -134,7 +187,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			WK/j392XrqGtknTsmRFyLiXYA+w=
+			dhqO3cP+w0buZk7htdkJX9W1xYs=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -143,7 +196,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			y2n7hMQl9zeYcF231POWbLIC32A=
+			zxodI9xkI/JnVxCacjgLy6t1aBU=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -152,7 +205,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			T9tj94KeSxSdOBT2b3wnLRLCpzk=
+			DEKzxyACJ2BbirqKCKeV3GGGbZg=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -165,9 +218,117 @@
 		<data>
 		YzQXaH7WRdZJ2Pt0RxCaXVhqpYg=
 		</data>
+		<key>Images/5a_first_frame@2x.png</key>
+		<data>
+		hdrCco8NUAiilGPoZMHiSZkVeXU=
+		</data>
+		<key>Images/5b_first_frame@2x.png</key>
+		<data>
+		VbRyHNNH6PgJltCfr0jqag2ytbE=
+		</data>
+		<key>Images/8a_first_frame@2x.png</key>
+		<data>
+		NSOKWhG+EI1ijQeOH6uYSgpb980=
+		</data>
+		<key>Images/8b_first_frame@2x.png</key>
+		<data>
+		7FawKQeUW1B6JQC3AoyLN4YdNWY=
+		</data>
+		<key>Images/8c_first_frame@2x.png</key>
+		<data>
+		kc21qbyCXOfG3nBOHtcs+yrxDjY=
+		</data>
+		<key>Images/beaconBlueberrySmall.png</key>
+		<data>
+		9mjH+IJNR+8I75RCsr61mideti0=
+		</data>
+		<key>Images/beaconBlueberrySmall@2x.png</key>
+		<data>
+		d78ZNlhDbffDKsH+J1UWuZbPwNs=
+		</data>
+		<key>Images/beaconGreySmall@2x.png</key>
+		<data>
+		vDhE5sftuLB/GhyQ1Wwkjgtj7vA=
+		</data>
+		<key>Images/beaconIcySmall.png</key>
+		<data>
+		qJirhbEa0MjwgrT27UvwOX/gv8k=
+		</data>
+		<key>Images/beaconIcySmall@2x.png</key>
+		<data>
+		gDbdVe/i93hyJ3z5DRpHttoQvYg=
+		</data>
+		<key>Images/beaconMintSmall.png</key>
+		<data>
+		AYlOdQn5rTZfKMcInftoEbD6M54=
+		</data>
+		<key>Images/beaconMintSmall@2x.png</key>
+		<data>
+		1YxknEG8k+zr9Oj1EUpAzZfCOrc=
+		</data>
+		<key>Images/beacon_grey@2x.png</key>
+		<data>
+		gF1xabD3zyjPNZxfVe7SpRcLfJs=
+		</data>
+		<key>Images/beaconblueberry@2x.png</key>
+		<data>
+		xlvTRRI7HRxnIc5iswjIN6BdfV8=
+		</data>
+		<key>Images/beacongrey@2x.png</key>
+		<data>
+		04BQ25Yz3DTcOJ44/fdQmHd6O8s=
+		</data>
+		<key>Images/beaconicy@2x.png</key>
+		<data>
+		2GI/jYG4osU7X9LjFIU19+Oy4gQ=
+		</data>
+		<key>Images/beaconmint@2x.png</key>
+		<data>
+		SEQNu4+jaVb5dLC6OiPYayk24fs=
+		</data>
+		<key>Images/indoor_error@2x.png</key>
+		<data>
+		pig+G+1qjpIttezlohIMTlOaSmg=
+		</data>
+		<key>Images/instructions@2x.png</key>
+		<data>
+		bXHnK01sKBmIitl8MrXUzT2395E=
+		</data>
+		<key>Images/navigation_guy@2x.png</key>
+		<data>
+		Hod2s3T37HZ/2tze7uXjCfRL+60=
+		</data>
+		<key>Images/screen8_beacon_blue@2x.png</key>
+		<data>
+		wY9urrog6kfLIQkZ0rFm0FkfD2s=
+		</data>
+		<key>Images/screen8_beacon_gray@2x.png</key>
+		<data>
+		/zQ/honAo6m1SEX5gSYAkkpmIkI=
+		</data>
+		<key>Images/screen8_beacon_gray_trans@2x.png</key>
+		<data>
+		gWrHVtMtODo/kg0Wh4supEUnihM=
+		</data>
+		<key>Images/screen8_beacon_green@2x.png</key>
+		<data>
+		5ji5uUB9vqdd9s59+wywIkuJMX8=
+		</data>
+		<key>Images/screen8_beacon_purple@2x.png</key>
+		<data>
+		Zf9yFZcxuWdXOgKOtMS9/bOjR4Q=
+		</data>
+		<key>Images/tick@2x.png</key>
+		<data>
+		4tMtJ2KcKEejrgzp+ko/RuSi5Ng=
+		</data>
+		<key>Images/welcome@2x.png</key>
+		<data>
+		+SrvoRoqBzTKnm2QiZLjZrnooFM=
+		</data>
 		<key>Info.plist</key>
 		<data>
-		5Q5OvJwXkgRBXH0PK2Gu7TxTXX0=
+		/px10yZhCE6lmUD9tdXh7y1p59s=
 		</data>
 		<key>LaunchImage-700-568h@2x.png</key>
 		<data>
@@ -177,26 +338,170 @@
 		<data>
 		n57qDP4tZfLD1rCS43W0B4LQjzE=
 		</data>
+		<key>SixBeaconsView.nib</key>
+		<data>
+		US8Zlh7XveoRNKjtKwJSwJeG4Hk=
+		</data>
 		<key>archived-expanded-entitlements.xcent</key>
 		<data>
-		toOnF/zU80F1C99E0G1VV5aAJ+4=
+		GzlNcaTKcS6z4vl7u6df6plW0WU=
+		</data>
+		<key>beaconBlueberrySmall.png</key>
+		<data>
+		9mjH+IJNR+8I75RCsr61mideti0=
+		</data>
+		<key>beaconBlueberrySmall@2x.png</key>
+		<data>
+		d78ZNlhDbffDKsH+J1UWuZbPwNs=
+		</data>
+		<key>beaconGreySmall@2x.png</key>
+		<data>
+		vDhE5sftuLB/GhyQ1Wwkjgtj7vA=
+		</data>
+		<key>beaconIcySmall.png</key>
+		<data>
+		qJirhbEa0MjwgrT27UvwOX/gv8k=
+		</data>
+		<key>beaconIcySmall@2x.png</key>
+		<data>
+		gDbdVe/i93hyJ3z5DRpHttoQvYg=
+		</data>
+		<key>beaconMintSmall.png</key>
+		<data>
+		AYlOdQn5rTZfKMcInftoEbD6M54=
+		</data>
+		<key>beaconMintSmall@2x.png</key>
+		<data>
+		1YxknEG8k+zr9Oj1EUpAzZfCOrc=
+		</data>
+		<key>beacon_grey@2x.png</key>
+		<data>
+		gF1xabD3zyjPNZxfVe7SpRcLfJs=
+		</data>
+		<key>beaconblueberry@2x.png</key>
+		<data>
+		xlvTRRI7HRxnIc5iswjIN6BdfV8=
+		</data>
+		<key>beacongrey@2x.png</key>
+		<data>
+		04BQ25Yz3DTcOJ44/fdQmHd6O8s=
+		</data>
+		<key>beaconicy@2x.png</key>
+		<data>
+		2GI/jYG4osU7X9LjFIU19+Oy4gQ=
+		</data>
+		<key>beaconmint@2x.png</key>
+		<data>
+		SEQNu4+jaVb5dLC6OiPYayk24fs=
 		</data>
 		<key>embedded.mobileprovision</key>
 		<data>
-		1hmw9/KeAfnty1znomivTiYScwE=
+		0Se68WPvhxK+G7lR8jqRd9pTfIg=
 		</data>
 		<key>helper.png</key>
 		<data>
 		iFMpfrDVUoTMVyngKmTJeF3oeBQ=
 		</data>
+		<key>indoor_error@2x.png</key>
+		<data>
+		pig+G+1qjpIttezlohIMTlOaSmg=
+		</data>
+		<key>instructions@2x.png</key>
+		<data>
+		bXHnK01sKBmIitl8MrXUzT2395E=
+		</data>
+		<key>lost.png</key>
+		<data>
+		2AWpIjfHjOkgntOQRrSiBPDd+kk=
+		</data>
+		<key>navigation_guy@2x.png</key>
+		<data>
+		Hod2s3T37HZ/2tze7uXjCfRL+60=
+		</data>
+		<key>screen8_beacon_blue@2x.png</key>
+		<data>
+		wY9urrog6kfLIQkZ0rFm0FkfD2s=
+		</data>
+		<key>screen8_beacon_gray@2x.png</key>
+		<data>
+		/zQ/honAo6m1SEX5gSYAkkpmIkI=
+		</data>
+		<key>screen8_beacon_gray_trans@2x.png</key>
+		<data>
+		gWrHVtMtODo/kg0Wh4supEUnihM=
+		</data>
+		<key>screen8_beacon_green@2x.png</key>
+		<data>
+		5ji5uUB9vqdd9s59+wywIkuJMX8=
+		</data>
+		<key>screen8_beacon_purple@2x.png</key>
+		<data>
+		Zf9yFZcxuWdXOgKOtMS9/bOjR4Q=
+		</data>
+		<key>tick@2x.png</key>
+		<data>
+		4tMtJ2KcKEejrgzp+ko/RuSi5Ng=
+		</data>
+		<key>wall_bump.wav</key>
+		<data>
+		aUBL4WmGFCwxmYjDyGCOAq+RRRE=
+		</data>
+		<key>welcome@2x.png</key>
+		<data>
+		+SrvoRoqBzTKnm2QiZLjZrnooFM=
+		</data>
 	</dict>
 	<key>files2</key>
 	<dict>
+		<key>5a.mov</key>
+		<data>
+		oOSAt4N/zPWGTFepVputjhsLlHM=
+		</data>
+		<key>5a_first_frame@2x.png</key>
+		<data>
+		hdrCco8NUAiilGPoZMHiSZkVeXU=
+		</data>
+		<key>5b.mov</key>
+		<data>
+		xWFBBr3UEV956hz8N/zpa/96LKk=
+		</data>
+		<key>5b_first_frame@2x.png</key>
+		<data>
+		VbRyHNNH6PgJltCfr0jqag2ytbE=
+		</data>
+		<key>8a.mov</key>
+		<data>
+		WmbTb2ESQ0qDQO3cObZffEuji4M=
+		</data>
+		<key>8a_first_frame@2x.png</key>
+		<data>
+		NSOKWhG+EI1ijQeOH6uYSgpb980=
+		</data>
+		<key>8b.mov</key>
+		<data>
+		3ycEgRGXKs/LmCIm1EsOaYS6dMU=
+		</data>
+		<key>8b_first_frame@2x.png</key>
+		<data>
+		7FawKQeUW1B6JQC3AoyLN4YdNWY=
+		</data>
+		<key>8c.mov</key>
+		<data>
+		Wsaag0grKV2h8WQsG6T1jm44FD8=
+		</data>
+		<key>8c_first_frame@2x.png</key>
+		<data>
+		kc21qbyCXOfG3nBOHtcs+yrxDjY=
+		</data>
+		<key>Assets.car</key>
+		<data>
+		OqE5YCOs2QfzoWGDeJs1PJzOKbI=
+		</data>
 		<key>Base.lproj/LaunchScreen.nib</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			cgTMAz0/o5yNmhs8aCUw4jZtlzA=
+			guPNO9cvDTOIOXRuDg3A5KWxf98=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -205,7 +510,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			HZ0XV4QJe9VNQ27jeUNhH/ZYcXs=
+			hyF38aoePdGTRHFOy5JMOMJfL7o=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -214,7 +519,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			suwD51iVSLw6gI4kgP2hM0sHQJo=
+			2UfULRthA4zHdOPOXSuKHZ0w0tE=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -223,7 +528,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			6+rHUzDlfMyOOS7dPdQdfUiReRg=
+			IMKPug6q7WPHTHz1ycJT9a8So5c=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -232,7 +537,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			ucsbZiuFa3VjEpFP3RzU/UzIWpA=
+			Bpr+CXCvRQU5oeU0arDeW3lcZq0=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -241,7 +546,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			zaRxFW3YSm2gwer4pC3x2Ahu/tk=
+			8FVnqr1inaLYrQpYV5n1bnJONv8=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -250,7 +555,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			CvjembSfHNvW3F9yWZ7ESsi+lr4=
+			ZKdWyu4WL1Ad3ngM0pbtFbJjWYk=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -268,7 +573,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			8PJiucvlv0p6hrNBSvCIynAMgXs=
+			8AY/C4ptaW2YCswp3i35NS0gMWY=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -277,7 +582,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			aY4J8GH7gonbKl695kxC+m1zIlM=
+			CnXVbyluWLViHCsgxNV4kHn5P60=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -286,7 +591,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			2qd6JzqCTqplDEfvwLEqFdT8e5Y=
+			mj6SweXc2AbYvxvUHFMzgG25lOs=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -295,7 +600,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			TTIvkV1k5DHRcqj73z7ye7JKNaw=
+			YTY3uqY0DuWyOa60paBArGggWUs=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -304,7 +609,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			SE4+qQAPrGEO/SZZUPRUu0OLJXI=
+			NA0uTzUyLdy9dBv7EpK+WNwl0kA=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -313,7 +618,16 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			bfkTfhkt/V8TsoGOnVnEPoLaCmg=
+			qBwuGlUwewbjmhcL8NmHLz18eSE=
+			</data>
+			<key>optional</key>
+			<true/>
+		</dict>
+		<key>Base.lproj/Main.storyboardc/rkn-EV-q6I-view-omw-TJ-dX7.nib</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			pv/0SdgHjlkmyXwbOLiIY+PHPpg=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -322,7 +636,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			WK/j392XrqGtknTsmRFyLiXYA+w=
+			dhqO3cP+w0buZk7htdkJX9W1xYs=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -331,7 +645,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			y2n7hMQl9zeYcF231POWbLIC32A=
+			zxodI9xkI/JnVxCacjgLy6t1aBU=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -340,7 +654,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			T9tj94KeSxSdOBT2b3wnLRLCpzk=
+			DEKzxyACJ2BbirqKCKeV3GGGbZg=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -353,21 +667,229 @@
 		<data>
 		YzQXaH7WRdZJ2Pt0RxCaXVhqpYg=
 		</data>
+		<key>Images/5a_first_frame@2x.png</key>
+		<data>
+		hdrCco8NUAiilGPoZMHiSZkVeXU=
+		</data>
+		<key>Images/5b_first_frame@2x.png</key>
+		<data>
+		VbRyHNNH6PgJltCfr0jqag2ytbE=
+		</data>
+		<key>Images/8a_first_frame@2x.png</key>
+		<data>
+		NSOKWhG+EI1ijQeOH6uYSgpb980=
+		</data>
+		<key>Images/8b_first_frame@2x.png</key>
+		<data>
+		7FawKQeUW1B6JQC3AoyLN4YdNWY=
+		</data>
+		<key>Images/8c_first_frame@2x.png</key>
+		<data>
+		kc21qbyCXOfG3nBOHtcs+yrxDjY=
+		</data>
+		<key>Images/beaconBlueberrySmall.png</key>
+		<data>
+		9mjH+IJNR+8I75RCsr61mideti0=
+		</data>
+		<key>Images/beaconBlueberrySmall@2x.png</key>
+		<data>
+		d78ZNlhDbffDKsH+J1UWuZbPwNs=
+		</data>
+		<key>Images/beaconGreySmall@2x.png</key>
+		<data>
+		vDhE5sftuLB/GhyQ1Wwkjgtj7vA=
+		</data>
+		<key>Images/beaconIcySmall.png</key>
+		<data>
+		qJirhbEa0MjwgrT27UvwOX/gv8k=
+		</data>
+		<key>Images/beaconIcySmall@2x.png</key>
+		<data>
+		gDbdVe/i93hyJ3z5DRpHttoQvYg=
+		</data>
+		<key>Images/beaconMintSmall.png</key>
+		<data>
+		AYlOdQn5rTZfKMcInftoEbD6M54=
+		</data>
+		<key>Images/beaconMintSmall@2x.png</key>
+		<data>
+		1YxknEG8k+zr9Oj1EUpAzZfCOrc=
+		</data>
+		<key>Images/beacon_grey@2x.png</key>
+		<data>
+		gF1xabD3zyjPNZxfVe7SpRcLfJs=
+		</data>
+		<key>Images/beaconblueberry@2x.png</key>
+		<data>
+		xlvTRRI7HRxnIc5iswjIN6BdfV8=
+		</data>
+		<key>Images/beacongrey@2x.png</key>
+		<data>
+		04BQ25Yz3DTcOJ44/fdQmHd6O8s=
+		</data>
+		<key>Images/beaconicy@2x.png</key>
+		<data>
+		2GI/jYG4osU7X9LjFIU19+Oy4gQ=
+		</data>
+		<key>Images/beaconmint@2x.png</key>
+		<data>
+		SEQNu4+jaVb5dLC6OiPYayk24fs=
+		</data>
+		<key>Images/indoor_error@2x.png</key>
+		<data>
+		pig+G+1qjpIttezlohIMTlOaSmg=
+		</data>
+		<key>Images/instructions@2x.png</key>
+		<data>
+		bXHnK01sKBmIitl8MrXUzT2395E=
+		</data>
+		<key>Images/navigation_guy@2x.png</key>
+		<data>
+		Hod2s3T37HZ/2tze7uXjCfRL+60=
+		</data>
+		<key>Images/screen8_beacon_blue@2x.png</key>
+		<data>
+		wY9urrog6kfLIQkZ0rFm0FkfD2s=
+		</data>
+		<key>Images/screen8_beacon_gray@2x.png</key>
+		<data>
+		/zQ/honAo6m1SEX5gSYAkkpmIkI=
+		</data>
+		<key>Images/screen8_beacon_gray_trans@2x.png</key>
+		<data>
+		gWrHVtMtODo/kg0Wh4supEUnihM=
+		</data>
+		<key>Images/screen8_beacon_green@2x.png</key>
+		<data>
+		5ji5uUB9vqdd9s59+wywIkuJMX8=
+		</data>
+		<key>Images/screen8_beacon_purple@2x.png</key>
+		<data>
+		Zf9yFZcxuWdXOgKOtMS9/bOjR4Q=
+		</data>
+		<key>Images/tick@2x.png</key>
+		<data>
+		4tMtJ2KcKEejrgzp+ko/RuSi5Ng=
+		</data>
+		<key>Images/welcome@2x.png</key>
+		<data>
+		+SrvoRoqBzTKnm2QiZLjZrnooFM=
+		</data>
 		<key>LaunchImage-700-568h@2x.png</key>
 		<data>
 		jUzAVDZErJq8r4xRQMYF5Kc4BgE=
 		</data>
+		<key>SixBeaconsView.nib</key>
+		<data>
+		US8Zlh7XveoRNKjtKwJSwJeG4Hk=
+		</data>
 		<key>archived-expanded-entitlements.xcent</key>
 		<data>
-		toOnF/zU80F1C99E0G1VV5aAJ+4=
+		GzlNcaTKcS6z4vl7u6df6plW0WU=
+		</data>
+		<key>beaconBlueberrySmall.png</key>
+		<data>
+		9mjH+IJNR+8I75RCsr61mideti0=
+		</data>
+		<key>beaconBlueberrySmall@2x.png</key>
+		<data>
+		d78ZNlhDbffDKsH+J1UWuZbPwNs=
+		</data>
+		<key>beaconGreySmall@2x.png</key>
+		<data>
+		vDhE5sftuLB/GhyQ1Wwkjgtj7vA=
+		</data>
+		<key>beaconIcySmall.png</key>
+		<data>
+		qJirhbEa0MjwgrT27UvwOX/gv8k=
+		</data>
+		<key>beaconIcySmall@2x.png</key>
+		<data>
+		gDbdVe/i93hyJ3z5DRpHttoQvYg=
+		</data>
+		<key>beaconMintSmall.png</key>
+		<data>
+		AYlOdQn5rTZfKMcInftoEbD6M54=
+		</data>
+		<key>beaconMintSmall@2x.png</key>
+		<data>
+		1YxknEG8k+zr9Oj1EUpAzZfCOrc=
+		</data>
+		<key>beacon_grey@2x.png</key>
+		<data>
+		gF1xabD3zyjPNZxfVe7SpRcLfJs=
+		</data>
+		<key>beaconblueberry@2x.png</key>
+		<data>
+		xlvTRRI7HRxnIc5iswjIN6BdfV8=
+		</data>
+		<key>beacongrey@2x.png</key>
+		<data>
+		04BQ25Yz3DTcOJ44/fdQmHd6O8s=
+		</data>
+		<key>beaconicy@2x.png</key>
+		<data>
+		2GI/jYG4osU7X9LjFIU19+Oy4gQ=
+		</data>
+		<key>beaconmint@2x.png</key>
+		<data>
+		SEQNu4+jaVb5dLC6OiPYayk24fs=
 		</data>
 		<key>embedded.mobileprovision</key>
 		<data>
-		1hmw9/KeAfnty1znomivTiYScwE=
+		0Se68WPvhxK+G7lR8jqRd9pTfIg=
 		</data>
 		<key>helper.png</key>
 		<data>
 		iFMpfrDVUoTMVyngKmTJeF3oeBQ=
+		</data>
+		<key>indoor_error@2x.png</key>
+		<data>
+		pig+G+1qjpIttezlohIMTlOaSmg=
+		</data>
+		<key>instructions@2x.png</key>
+		<data>
+		bXHnK01sKBmIitl8MrXUzT2395E=
+		</data>
+		<key>lost.png</key>
+		<data>
+		2AWpIjfHjOkgntOQRrSiBPDd+kk=
+		</data>
+		<key>navigation_guy@2x.png</key>
+		<data>
+		Hod2s3T37HZ/2tze7uXjCfRL+60=
+		</data>
+		<key>screen8_beacon_blue@2x.png</key>
+		<data>
+		wY9urrog6kfLIQkZ0rFm0FkfD2s=
+		</data>
+		<key>screen8_beacon_gray@2x.png</key>
+		<data>
+		/zQ/honAo6m1SEX5gSYAkkpmIkI=
+		</data>
+		<key>screen8_beacon_gray_trans@2x.png</key>
+		<data>
+		gWrHVtMtODo/kg0Wh4supEUnihM=
+		</data>
+		<key>screen8_beacon_green@2x.png</key>
+		<data>
+		5ji5uUB9vqdd9s59+wywIkuJMX8=
+		</data>
+		<key>screen8_beacon_purple@2x.png</key>
+		<data>
+		Zf9yFZcxuWdXOgKOtMS9/bOjR4Q=
+		</data>
+		<key>tick@2x.png</key>
+		<data>
+		4tMtJ2KcKEejrgzp+ko/RuSi5Ng=
+		</data>
+		<key>wall_bump.wav</key>
+		<data>
+		aUBL4WmGFCwxmYjDyGCOAq+RRRE=
+		</data>
+		<key>welcome@2x.png</key>
+		<data>
+		+SrvoRoqBzTKnm2QiZLjZrnooFM=
 		</data>
 	</dict>
 	<key>rules</key>

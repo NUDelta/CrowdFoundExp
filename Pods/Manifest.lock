@@ -1,14 +1,20 @@
 PODS:
   - Bolts (1.1.4)
+  - EstimoteIndoorSDK (1.5.0):
+    - EstimoteSDK (~> 2.4.0)
+  - EstimoteSDK (2.4.0)
   - Parse (1.7.1):
     - Bolts (~> 1.1)
 
 DEPENDENCIES:
   - Bolts
+  - EstimoteIndoorSDK
   - Parse
 
 SPEC CHECKSUMS:
   Bolts: f8e2f94edbf9fec7bb8de5ecaaa3aa6b7de6f64e
+  EstimoteIndoorSDK: 8a7a2d2f6a2cfb7fb86f6384ffbbea5271425829
+  EstimoteSDK: d130c9d111b1c0522222afc97b43f245660cbd7c
   Parse: fa8ec29de6d82035635986c11946299fb1b38316
 
 COCOAPODS: 0.35.0

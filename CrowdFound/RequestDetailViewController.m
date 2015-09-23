@@ -42,7 +42,6 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 }
 
 
-
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     //take a photo
@@ -303,8 +302,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         }];
     }
 
-//    UINavigationController *navController = self.navigationController;
-//    [navController popViewControllerAnimated:NO];
+    UINavigationController *navController = self.navigationController;
+    [navController popViewControllerAnimated:NO];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
@@ -316,6 +315,16 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+//    UITabBar *tabBar = self.navigationController.tabBarController.tabBar;
+//    
+//    UITabBarItem *targetTabBarItem = [[tabBar items] objectAtIndex:0]; // whichever tab-item
+//    targetTabBarItem.title = @"I lost an item";
+//    UIImage *selectedIcon = [UIImage imageNamed:@"lost.png"];
+//    [targetTabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"lost.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"helper.png"]];
+//
+//    targetTabBarItem.image = selectedIcon;
+    
     self.descItemTextField.delegate = self;
     self.itemTextField.delegate = self;
     self.locationDetail.delegate = self;

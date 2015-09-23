@@ -10,6 +10,6 @@
 #import <Parse/PFObject+Subclass.h>
 
 @implementation MyUser
-@dynamic residenceHall;
+@dynamic group;
 @dynamic additional;
 @end

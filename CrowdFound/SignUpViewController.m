@@ -93,6 +93,7 @@
     newUser.email = self.emailField.text;
 //    [newUser setAdditional: self.phoneNumberField.text];
     newUser.password = self.passwordField.text;
+    newUser.group = @"a";
     [newUser signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (!error) {
             NSLog(@"Registration success!");

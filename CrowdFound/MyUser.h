@@ -9,6 +9,6 @@
 #import <Foundation/Foundation.h>
 #import <Parse/Parse.h>
 @interface MyUser : PFUser <PFSubclassing>
+@property (retain) NSString *group;
 @property (retain) NSString *additional;
-@property (retain) NSString *residenceHall;
 @end
