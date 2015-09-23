@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "F7A496503C25170128F00DB9"
-               BuildableName = "libPods-EstimoteIndoorSDK.a"
-               BlueprintName = "Pods-EstimoteIndoorSDK"
-               ReferencedContainer = "container:Pods/Pods.xcodeproj">
+               BlueprintIdentifier = "AEB4D642D643599334448185"
+               BuildableName = "libPods-EstimoteSDK.a"
+               BlueprintName = "Pods-EstimoteSDK"
+               ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -42,10 +42,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "F7A496503C25170128F00DB9"
-            BuildableName = "libPods-EstimoteIndoorSDK.a"
-            BlueprintName = "Pods-EstimoteIndoorSDK"
-            ReferencedContainer = "container:Pods/Pods.xcodeproj">
+            BlueprintIdentifier = "AEB4D642D643599334448185"
+            BuildableName = "libPods-EstimoteSDK.a"
+            BlueprintName = "Pods-EstimoteSDK"
+            ReferencedContainer = "container:Pods.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>

@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "55E14B5A24569DA6BBF39E51"
-               BuildableName = "libPods-Parse.a"
-               BlueprintName = "Pods-Parse"
-               ReferencedContainer = "container:Pods/Pods.xcodeproj">
+               BlueprintIdentifier = "D2DB4EDF3413D356106DB1F6"
+               BuildableName = "libPods-Bolts.a"
+               BlueprintName = "Pods-Bolts"
+               ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -42,10 +42,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "55E14B5A24569DA6BBF39E51"
-            BuildableName = "libPods-Parse.a"
-            BlueprintName = "Pods-Parse"
-            ReferencedContainer = "container:Pods/Pods.xcodeproj">
+            BlueprintIdentifier = "D2DB4EDF3413D356106DB1F6"
+            BuildableName = "libPods-Bolts.a"
+            BlueprintName = "Pods-Bolts"
+            ReferencedContainer = "container:Pods.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
