@@ -33,6 +33,9 @@ BOOL gotNotified;
     
     if([PFUser currentUser]) {
         self.window.rootViewController = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateInitialViewController];
+        
+        //Send the best location to server every 60 seconds
+        //You may adjust the time interval depends on the need of your app.
     } else {
         UIViewController* rootController = [[UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"SignInViewController"];
         UINavigationController* navigation = [[UINavigationController alloc] initWithRootViewController:rootController];
@@ -54,9 +57,7 @@ BOOL gotNotified;
     self.locationManager = [[LocationManager alloc]init];
     [self.locationManager startLocationTracking];
     
-    //Send the best location to server every 60 seconds
-    //You may adjust the time interval depends on the need of your app.
-    NSTimeInterval time = 60.0;
+    NSTimeInterval time = 1.0;
     self.locationUpdateTimer =
     [NSTimer scheduledTimerWithTimeInterval:time
                                      target:self

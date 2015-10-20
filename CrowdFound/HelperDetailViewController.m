@@ -135,12 +135,12 @@
     NSLog(@"clicked");
     
     //TODO: uncomment
-//    [self appUsageLogging: [NSString stringWithFormat:@"help looking for %@, request ID: %@", [self.request valueForKeyPath:@"item"], [self.request valueForKeyPath:@"objectId"]]];
+    [self appUsageLogging: [NSString stringWithFormat:@"help looking for %@, request ID: %@", [self.request valueForKeyPath:@"item"], [self.request valueForKeyPath:@"objectId"]]];
     self.TimerLabel.hidden = NO;
     [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(timerTick:) userInfo:nil repeats:YES];
     
     //FIXME: change time to 60 seconds
-    [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(showThanksAlertview:) userInfo:nil repeats:NO];
+    [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(showThanksAlertview:) userInfo:nil repeats:NO];
 }
 
 - (void)timerTick: (NSTimer *)timer {
@@ -206,44 +206,45 @@
             self.request = [objects lastObject];
             [self fillDetails];
         }
-    }];    PFQuery *query = [MyUser query];
-    [query getObjectInBackgroundWithId:[MyUser currentUser].objectId block:^(PFObject *object, NSError *error) {
-        if (!error) {
-            if (!object[@"group"]) {
-                self.group = @"a";
-                object[@"group"] = self.group;
-            }
-            else
-                self.group = object[@"group"];
-            NSLog(@"%@",self.group);
-            NSDate *lastNotifiedDate = object[@"lastNotified"];
-            NSLog(@"%@", lastNotifiedDate);
-            if (lastNotifiedDate==NULL) {
-                self.shouldNotify = YES;
-            } else {
-                NSDate *currentDate = [NSDate date];
-                NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
-                NSDateComponents *components = [calendar components:NSMonthCalendarUnit|NSDayCalendarUnit|NSHourCalendarUnit|NSMinuteCalendarUnit
-                                                           fromDate:lastNotifiedDate
-                                                             toDate:currentDate
-                                                            options:0];
-                NSLog(@"current date: %@", currentDate);
-                NSLog(@"Difference in date components: %li/%li/%li", (long)components.minute, (long)components.hour, (long)components.day);
-                if (components.day > 1) {
-                    self.shouldNotify = YES;
-                    NSLog(@"more than a day, so notify");
-                } else if (components.day < 1 && components.hour >= 4 ) {
-                    NSLog(@"more than 4 hours, notify too");
-                    self.shouldNotify = YES;
-                } else {
-                    NSLog(@"do not notify");
-                    //TODO: uncomment this
-                    //                    self.shouldNotify = NO;
-                }
-            }
-            [self appUsageLogging:@"entered foreground"];
-        }
     }];
+//    PFQuery *query = [MyUser query];
+//    [query getObjectInBackgroundWithId:[MyUser currentUser].objectId block:^(PFObject *object, NSError *error) {
+//        if (!error) {
+//            if (!object[@"group"]) {
+//                self.group = @"a";
+//                object[@"group"] = self.group;
+//            }
+//            else
+//                self.group = object[@"group"];
+//            NSLog(@"%@",self.group);
+//            NSDate *lastNotifiedDate = object[@"lastNotified"];
+//            NSLog(@"%@", lastNotifiedDate);
+//            if (lastNotifiedDate==NULL) {
+//                self.shouldNotify = YES;
+//            } else {
+//                NSDate *currentDate = [NSDate date];
+//                NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+//                NSDateComponents *components = [calendar components:NSMonthCalendarUnit|NSDayCalendarUnit|NSHourCalendarUnit|NSMinuteCalendarUnit
+//                                                           fromDate:lastNotifiedDate
+//                                                             toDate:currentDate
+//                                                            options:0];
+//                NSLog(@"current date: %@", currentDate);
+//                NSLog(@"Difference in date components: %li/%li/%li", (long)components.minute, (long)components.hour, (long)components.day);
+//                if (components.day >= 1) {
+//                    self.shouldNotify = YES;
+//                    NSLog(@"more than a day, so notify");
+//                } else if (components.day < 1 && components.hour >= 4 ) {
+//                    NSLog(@"more than 4 hours, notify too");
+//                    self.shouldNotify = YES;
+//                } else {
+//                    NSLog(@"do not notify");
+//                    //TODO: uncomment this
+//                    self.shouldNotify = NO;
+//                }
+//            }
+//            [self appUsageLogging:@"entered foreground"];
+//        }
+//    }];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -299,7 +300,6 @@
     self.locationManager.delegate =self;
     self.locationManager.distanceFilter = 1;
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation;
-    [self.locationManager startMonitoringSignificantLocationChanges];
     
     if([self.locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]){
         [self.locationManager requestAlwaysAuthorization];
@@ -308,7 +308,7 @@
         [self.locationManager requestWhenInUseAuthorization];
     }
     
-    [self.locationManager startMonitoringSignificantLocationChanges];
+    [self.locationManager startUpdatingLocation];
 //    [self.locationManager startUpdatingHeading];
     
     CLLocationCoordinate2D regionTech; //region tech
@@ -319,9 +319,46 @@
     fordCoordinate.latitude = 42.057002;
     fordCoordinate.longitude =  -87.676985;
     
-    self.regionFord = [[CLCircularRegion alloc] initWithCenter:fordCoordinate radius:10 identifier:@"regionFord"];
+    self.regionFord = [[CLCircularRegion alloc] initWithCenter:fordCoordinate radius:150 identifier:@"regionFord"];
     [self.locationManager startMonitoringForRegion: self.regionFord];
-    
+    PFQuery *query = [MyUser query];
+    [query getObjectInBackgroundWithId:[MyUser currentUser].objectId block:^(PFObject *object, NSError *error) {
+        if (!error) {
+            if (!object[@"group"]) {
+                self.group = @"a";
+                object[@"group"] = self.group;
+            }
+            else
+                self.group = object[@"group"];
+            NSLog(@"%@",self.group);
+            NSDate *lastNotifiedDate = object[@"lastNotified"];
+            if (lastNotifiedDate == NULL) {
+                self.shouldNotify = YES;
+            } else {
+                NSLog(@"%@", lastNotifiedDate);
+                NSDate *currentDate = [NSDate date];
+                NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+                NSDateComponents *components = [calendar components:NSMonthCalendarUnit|NSDayCalendarUnit|NSHourCalendarUnit|NSMinuteCalendarUnit
+                                                           fromDate:lastNotifiedDate
+                                                             toDate:currentDate
+                                                            options:0];
+                NSLog(@"current date: %@", currentDate);
+                NSLog(@"Difference in date components: %ld/%ld/%ld", (long)components.minute, (long)components.hour, (long)components.day);
+                if (components.day >= 1) {
+                    self.shouldNotify = YES;
+                    NSLog(@"more than a day, so notify");
+                } else if (components.day < 1 && components.hour >= 1 ) {
+                    NSLog(@"more than 4 hours, notify too");
+                    self.shouldNotify = YES;
+                } else {
+                    NSLog(@"do not notify");
+                    //TODO: uncomment this
+                    self.shouldNotify = NO;
+                }
+            }
+            [self appUsageLogging:@"view did appear"];
+        }
+    }];    
 }
 
 - (void)showThanksAlertview: (NSTimer *)timer{
@@ -337,10 +374,10 @@
 #pragma mark - Location
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     CLLocation* newLocation = [locations lastObject];
-    if (newLocation.horizontalAccuracy < 0) return;   // ignore invalid udpates
+    if (newLocation.horizontalAccuracy < 0 || newLocation.horizontalAccuracy >= 65.0) return;   // ignore invalid udpates
 
     NSTimeInterval age = -[newLocation.timestamp timeIntervalSinceNow];
-    if (age > 120) return;    // ignore old (cached) updates
+    if (age > 20) return;    // ignore old (cached) updates
     
     //    NSTimeInterval age = -[newLocation.timestamp timeIntervalSinceNow];
     //
@@ -364,7 +401,7 @@
 
     CLLocationDistance distance = [newLocation distanceFromLocation:loc];
 
-    [self locationLoggingLatitude:[NSNumber numberWithFloat:newLocation.coordinate.latitude] Longitude: [NSNumber numberWithFloat:newLocation.coordinate.longitude] Accuracy: [NSNumber numberWithFloat:newLocation.horizontalAccuracy]];
+//    [self locationLoggingLatitude:[NSNumber numberWithFloat:newLocation.coordinate.latitude] Longitude: [NSNumber numberWithFloat:newLocation.coordinate.longitude] Accuracy: [NSNumber numberWithFloat:newLocation.horizontalAccuracy]];
     
     if ([self.group isEqualToString:@"a"]) {
         if (distance <=20.0) {
@@ -384,14 +421,19 @@
                 self.shouldNotify = NO;
             }
         }
+//        else if (distance>40) {
+////            [self appUsageLogging:[NSString stringWithFormat:@"%@ notification at %f, %f\rdistance is: %f", self.group, newLocation.coordinate.latitude, newLocation.coordinate.longitude, distance]];
+//            NSLog(@"location logging");
+//            [self locationLoggingLatitude: [NSNumber numberWithFloat:newLocation.coordinate.latitude] Longitude: [NSNumber numberWithFloat:newLocation.coordinate.longitude] Accuracy: [NSNumber numberWithFloat:newLocation.horizontalAccuracy]];
+//        }
     }
 }
 
 - (void)locationManager:(CLLocationManager *)manager didEnterRegion:(CLRegion *)region
 {
-    [self testEnterNotification:region.identifier];
+//    [self testEnterNotification:region.identifier];
     if ([region.identifier isEqualToString:@"regionFord"]) {
-        [self.locationManager stopMonitoringSignificantLocationChanges];
+//        [self.locationManager stopMonitoringSignificantLocationChanges];
         [self.locationManager startUpdatingLocation];
         self.locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation;
         self.locationManager.distanceFilter = 1;
@@ -423,16 +465,16 @@
                                                             options:0];
                 NSLog(@"current date: %@", currentDate);
                 NSLog(@"Difference in date components: %ld/%ld/%ld", (long)components.minute, (long)components.hour, (long)components.day);
-                if (components.day > 1) {
+                if (components.day >= 1) {
                     self.shouldNotify = YES;
                     NSLog(@"more than a day, so notify");
-                } else if (components.day < 1 && components.hour >= 4 ) {
+                } else if (components.day < 1 && components.hour >= 1 ) {
                     NSLog(@"more than 4 hours, notify too");
                     self.shouldNotify = YES;
                 } else {
                     NSLog(@"do not notify");
                     //TODO: uncomment this
-//                    self.shouldNotify = NO;
+                    self.shouldNotify = NO;
                 }
             }
             [self appUsageLogging:@"view did appear"];
@@ -443,12 +485,14 @@
 - (void)locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region
 {
     if ([region.identifier isEqualToString:@"regionFord"]) {
-        [self.locationManager stopUpdatingLocation];
-        [self.locationManager startMonitoringSignificantLocationChanges];
+//        [self.locationManager stopUpdatingLocation];
+//        [self.locationManager startMonitoringSignificantLocationChanges];
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
+        self.locationManager.distanceFilter = 20;
         //FIXME: remove self.shouldNotify
         self.shouldNotify = YES;
         NSLog(@"exited ROI");
-        [self testExitNotification:region.identifier];
+//        [self testExitNotification:region.identifier];
         [self appUsageLogging: [NSString stringWithFormat:@"exited region with desired accuracy of :%f", self.locationManager.desiredAccuracy]];
     }
 }
@@ -459,10 +503,12 @@
 
 - (void)locationLoggingLatitude:(NSNumber *)latitude Longitude:(NSNumber *)longitude Accuracy:(NSNumber *)accuracy {
     PFObject *location = [PFObject objectWithClassName:@"Location"];
+    NSDate *currentDate = [NSDate date];
     location[@"username"] = [MyUser currentUser].username;
-    location[@"latitude"] = [latitude stringValue];
-    location[@"longitude"] = [longitude stringValue];;
-    location[@"accuracy"] = [accuracy stringValue];
+    location[@"latitude"] = [NSString stringWithFormat:@"%f", [latitude floatValue]];
+    location[@"longitude"] = [NSString stringWithFormat:@"%f", [longitude floatValue]];
+    location[@"accuracy"] = [NSString stringWithFormat:@"%f", [accuracy floatValue]];
+    location[@"userDate"] = currentDate;
     [location saveInBackground];
 }
 

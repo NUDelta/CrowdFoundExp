@@ -82,6 +82,7 @@ install_resource()
                     install_resource "EstimoteIndoorSDK/EstimoteIndoorLocationSDK/Resources/SixBeaconsView.xib"
                     install_resource "EstimoteIndoorSDK/EstimoteIndoorLocationSDK/Resources/wall_bump.wav"
                     install_resource "EstimoteIndoorSDK/EstimoteIndoorLocationSDK/Resources/Images"
+                    install_resource "Parse/Parse/Resources/en.lproj"
           
 rsync -avr --copy-links --no-relative --exclude '*/.svn/*' --files-from="$RESOURCES_TO_COPY" / "${CONFIGURATION_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"
 if [[ "${ACTION}" == "install" ]]; then
