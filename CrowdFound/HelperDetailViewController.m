@@ -353,7 +353,7 @@
                 } else {
                     NSLog(@"do not notify");
                     //TODO: uncomment this
-                    self.shouldNotify = NO;
+                    self.shouldNotify = YES;
                 }
             }
             [self appUsageLogging:@"view did appear"];
@@ -374,7 +374,7 @@
 #pragma mark - Location
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     CLLocation* newLocation = [locations lastObject];
-    if (newLocation.horizontalAccuracy < 0 || newLocation.horizontalAccuracy >= 65.0) return;   // ignore invalid udpates
+    if (newLocation.horizontalAccuracy < 0 || newLocation.horizontalAccuracy > 65.0) return;   // ignore invalid udpates
 
     NSTimeInterval age = -[newLocation.timestamp timeIntervalSinceNow];
     if (age > 20) return;    // ignore old (cached) updates
@@ -474,7 +474,7 @@
                 } else {
                     NSLog(@"do not notify");
                     //TODO: uncomment this
-                    self.shouldNotify = NO;
+                    self.shouldNotify = YES;
                 }
             }
             [self appUsageLogging:@"view did appear"];

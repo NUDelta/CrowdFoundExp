@@ -52,7 +52,6 @@ NSString *group;
     locationManager.delegate = self;
     if (self.enteredROI) {
         locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation;
-        locationManager.distanceFilter = 1;
     } else {
         locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
         locationManager.distanceFilter = 20;
@@ -81,7 +80,6 @@ NSString *group;
 
     if (self.enteredROI) {
         locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation;
-        locationManager.distanceFilter = kCLDistanceFilterNone;
     } else {
         locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
         locationManager.distanceFilter = 20;
@@ -146,7 +144,7 @@ NSString *group;
     
     
     //if the location data is more than 20 seconds or horizontal accuracy is greater than 20.0 meters.
-    if (locationAge > 20.0 || newLocation.horizontalAccuracy >= 20.0 || newLocation.horizontalAccuracy < 0)
+    if (locationAge > 20.0 || newLocation.horizontalAccuracy > 65.0 || newLocation.horizontalAccuracy < 0)
     {
         return;
     }
