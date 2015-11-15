@@ -140,7 +140,7 @@
     [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(timerTick:) userInfo:nil repeats:YES];
     
     //FIXME: change time to 60 seconds
-    [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(showThanksAlertview:) userInfo:nil repeats:NO];
+    [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(showThanksAlertview:) userInfo:nil repeats:NO];
 }
 
 - (void)timerTick: (NSTimer *)timer {
@@ -151,7 +151,7 @@
         self.TimerLabel.text = [NSString stringWithFormat:@"%02d:%02d", self.minutes, self.seconds];
     } else {
         [timer invalidate];
-        self.secondsLeftForSearch = 60;
+        self.secondsLeftForSearch = 30;
         self.TimerLabel.hidden = YES;
     }
 }
@@ -263,7 +263,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.secondsLeftForSearch = 60;
+    self.secondsLeftForSearch = 30;
     self.shouldNotify = YES;
     
     [ESTConfig setupAppID:@"CrowdFound" andAppToken:@"2c138ec1f40d00cbaebd2aaac6cf09a8"];
@@ -316,8 +316,8 @@
     regionTech.longitude =  -87.677950;
     
     CLLocationCoordinate2D fordCoordinate; //region ford
-    fordCoordinate.latitude = 42.057002;
-    fordCoordinate.longitude =  -87.676985;
+    fordCoordinate.latitude = 42.056750; //42.057002;
+    fordCoordinate.longitude = -87.676997; //-87.676985;
     
     self.regionFord = [[CLCircularRegion alloc] initWithCenter:fordCoordinate radius:150 identifier:@"regionFord"];
     [self.locationManager startMonitoringForRegion: self.regionFord];
@@ -347,13 +347,13 @@
                 if (components.day >= 1) {
                     self.shouldNotify = YES;
                     NSLog(@"more than a day, so notify");
-                } else if (components.day < 1 && components.hour >= 1 ) {
+                } else if (components.day < 1 && components.hour >= 3 ) {
                     NSLog(@"more than 4 hours, notify too");
                     self.shouldNotify = YES;
                 } else {
                     NSLog(@"do not notify");
                     //TODO: uncomment this
-                    self.shouldNotify = YES;
+                    self.shouldNotify = NO;
                 }
             }
             [self appUsageLogging:@"view did appear"];
@@ -374,6 +374,7 @@
 #pragma mark - Location
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     CLLocation* newLocation = [locations lastObject];
+
     if (newLocation.horizontalAccuracy < 0 || newLocation.horizontalAccuracy > 65.0) return;   // ignore invalid udpates
 
     NSTimeInterval age = -[newLocation.timestamp timeIntervalSinceNow];
@@ -394,8 +395,8 @@
     coordinate.longitude = newLocation.coordinate.longitude;
     
     CLLocationCoordinate2D fordCoordinate; //region ford
-    fordCoordinate.latitude = 42.057002;
-    fordCoordinate.longitude =  -87.676985;
+    fordCoordinate.latitude = 42.056750;
+    fordCoordinate.longitude =  -87.676997;
     
     CLLocation *loc = [[CLLocation alloc]initWithLatitude:fordCoordinate.latitude longitude:fordCoordinate.longitude];
 
@@ -468,13 +469,13 @@
                 if (components.day >= 1) {
                     self.shouldNotify = YES;
                     NSLog(@"more than a day, so notify");
-                } else if (components.day < 1 && components.hour >= 1 ) {
+                } else if (components.day < 1 && components.hour >= 3 ) {
                     NSLog(@"more than 4 hours, notify too");
                     self.shouldNotify = YES;
                 } else {
                     NSLog(@"do not notify");
                     //TODO: uncomment this
-                    self.shouldNotify = YES;
+                    self.shouldNotify = NO;
                 }
             }
             [self appUsageLogging:@"view did appear"];
@@ -488,7 +489,7 @@
 //        [self.locationManager stopUpdatingLocation];
 //        [self.locationManager startMonitoringSignificantLocationChanges];
         self.locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
-        self.locationManager.distanceFilter = 20;
+//        self.locationManager.distanceFilter = 80;
         //FIXME: remove self.shouldNotify
         self.shouldNotify = YES;
         NSLog(@"exited ROI");
@@ -504,6 +505,8 @@
 - (void)locationLoggingLatitude:(NSNumber *)latitude Longitude:(NSNumber *)longitude Accuracy:(NSNumber *)accuracy {
     PFObject *location = [PFObject objectWithClassName:@"Location"];
     NSDate *currentDate = [NSDate date];
+    if (latitude==NULL)
+        return;
     location[@"username"] = [MyUser currentUser].username;
     location[@"latitude"] = [NSString stringWithFormat:@"%f", [latitude floatValue]];
     location[@"longitude"] = [NSString stringWithFormat:@"%f", [longitude floatValue]];
@@ -513,10 +516,14 @@
 }
 
 - (void)appUsageLogging: (NSString *)activity {
+    if (activity == NULL) {
+        return;
+    }
     PFObject *usage = [PFObject objectWithClassName:@"UsageLog"];
     usage[@"username"] = [MyUser currentUser].username;
     usage[@"userid"] = [MyUser currentUser].objectId;
     usage[@"activity"] = activity;
+    usage[@"clientDate"] = [NSDate date];
     [usage saveInBackground];
 }
 

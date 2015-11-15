@@ -10,7 +10,16 @@
 #import <CoreLocation/CoreLocation.h>
 #import "LocationShareModel.h"
 
-@interface LocationManager : NSObject <CLLocationManagerDelegate>
+#import "ESTIndoorLocationManager.h"
+#import "ESTConfig.h"
+#import "ESTLocation.h"
+#import "ESTLocationBuilder.h"
+#import "ESTBeacon.h"
+#import "ESTBeaconManager.h"
+#import "ESTIndoorLocationView.h"
+#import "ESTPositionView.h"
+
+@interface LocationManager : NSObject <CLLocationManagerDelegate, ESTIndoorLocationManagerDelegate, ESTBeaconManagerDelegate>
 
 @property (nonatomic) CLLocationCoordinate2D myLastLocation;
 @property (nonatomic) CLLocationAccuracy myLastLocationAccuracy;
@@ -21,6 +30,13 @@
 @property (nonatomic) CLLocationAccuracy myLocationAccuracy;
 @property (nonatomic) BOOL enteredROI;
 @property (nonatomic) CLCircularRegion *regionFord;
+
+
+@property (nonatomic, strong) ESTIndoorLocationManager *indoorLocationManager;
+@property (nonatomic, strong) ESTLocation *indoorLocation;
+@property (nonatomic, strong) ESTLocationBuilder *locationBuilder;
+
+@property (nonatomic, strong) ESTBeaconManager *beaconManager;
 
 + (CLLocationManager *)sharedLocationManager;
 
