@@ -25,6 +25,8 @@
 @property (assign) double latitudeB;
 @property (assign) double longitudeB;
 
+#define degreesToRadians(x) (M_PI * x / 180.0)
+#define radiansToDegrees(x) (x * 180.0 / M_PI)
 
 @end
 
@@ -40,6 +42,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:@"Choose image" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Take a photo",@"Select a photo", nil];
     [actionSheet showInView:self.view];
 }
+
 
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -246,6 +249,75 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     
 }
 
+- (float)getHeadingForDirectionFromCoordinate:(CLLocationCoordinate2D)fromLoc toCoordinate:(CLLocationCoordinate2D)toLoc
+{
+    float fLat = degreesToRadians(fromLoc.latitude);
+    float fLng = degreesToRadians(fromLoc.longitude);
+    float tLat = degreesToRadians(toLoc.latitude);
+    float tLng = degreesToRadians(toLoc.longitude);
+    
+    float degree = radiansToDegrees(atan2(sin(tLng-fLng)*cos(tLat), cos(fLat)*sin(tLat)-sin(fLat)*cos(tLat)*cos(tLng-fLng)));
+    
+    if (degree >= 0) {
+        return degree;
+    } else {
+        return 360+degree;
+    }
+}
+
+- (void)getCoordinateFromCoordiante:(CLLocationCoordinate2D)fromLoc withDistance:(float)distance withBearing:(float)bearing
+{
+    for (float i = 40; i<=distance; i+=50) {
+        double distanceRadians = i/1000 / 6371.0;
+        //6,371 = Earth's radius in km
+        
+        double bearingRadians = degreesToRadians(bearing);
+        double fromLatRadians = degreesToRadians(fromLoc.latitude);
+        double fromLonRadians = degreesToRadians(fromLoc.longitude);
+        
+        double toLatRadians = asin( sin(fromLatRadians) * cos(distanceRadians)
+                                   + cos(fromLatRadians) * sin(distanceRadians) * cos(bearingRadians) );
+        
+        double toLonRadians = fromLonRadians + atan2(sin(bearingRadians)
+                                                     * sin(distanceRadians) * cos(fromLatRadians), cos(distanceRadians)
+                                                     - sin(fromLatRadians) * sin(toLatRadians));
+        
+        // adjust toLonRadians to be in the range -180 to +180...
+        toLonRadians = fmod((toLonRadians + 3*M_PI), (2*M_PI)) - M_PI;
+        
+        CLLocationCoordinate2D result;
+        result.latitude = radiansToDegrees(toLatRadians);
+        result.longitude = radiansToDegrees(toLonRadians);
+        NSLog(@"new coordinate: %f, %f",result.latitude, result.longitude);
+
+        PFObject *lostItem = [PFObject objectWithClassName:@"Request"];
+        
+        lostItem[@"lat"] =  [[NSString alloc] initWithFormat:@"%f", result.latitude];
+        lostItem[@"lng"] = [[NSString alloc] initWithFormat:@"%f", result.longitude];
+        lostItem[@"item"] = self.itemTextField.text;
+        lostItem[@"detail"] = self.descItemTextField.text;
+        lostItem[@"locationDetail"] = self.locationDetail.text;
+        lostItem[@"locDetail"] = self.lostItemLocation.text;
+        lostItem[@"username"] = [MyUser currentUser].username;
+        lostItem[@"email"] = [MyUser currentUser].email;
+        lostItem[@"helper"] = @"";
+        lostItem[@"helperId"] = @"";
+        NSArray *array = [[NSArray alloc]init];
+        lostItem[@"helpers"] = array;
+        [lostItem saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            if(succeeded) {
+                [self.tabBarController setSelectedIndex:0];
+                self.locationDetail.text = @"";
+                self.itemTextField.text = @"";
+                //        self.locationDetail.text = @"";
+                self.lostItemLocation.text = @"";
+                self.descItemTextField.text = @"";
+                self.imageView.image = nil;
+            }
+        }];
+    }
+}
+
 
 - (void)saveRequest
 {
@@ -269,10 +341,20 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         lostItem[@"lat2"] =  [[NSString alloc] initWithFormat:@"%f", self.latitudeB];
         lostItem[@"lng2"] = [[NSString alloc] initWithFormat:@"%f", self.longitudeB];
         
+        CLLocationCoordinate2D toLocation = CLLocationCoordinate2DMake(self.latitudeB, self.longitudeB);
+        
         CLLocation *locA = [[CLLocation alloc]initWithLatitude:annotation.coordinate.latitude longitude:annotation.coordinate.longitude];
         CLLocation *locB = [[CLLocation alloc]initWithLatitude:self.latitudeB longitude:self.longitudeB];
         
         CLLocationDistance distance = [locA distanceFromLocation: locB];
+        
+        float bearing = [self getHeadingForDirectionFromCoordinate:annotation.coordinate toCoordinate:toLocation];
+        
+        
+        NSLog(@"destination coord: %f, %f", self.latitudeB, self.longitudeB);
+        NSLog(@"%f",bearing);
+
+        [self getCoordinateFromCoordiante:annotation.coordinate withDistance:floor(distance) withBearing:bearing];
         
         int total = floor(distance);
         int half = total/2;
@@ -289,17 +371,18 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         lostItem[@"totalDistance"] = [NSString stringWithFormat:@"%f", distance];
         NSArray *array = [[NSArray alloc]init];
         lostItem[@"helpers"] = array;
-        [lostItem saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-            if(succeeded) {
-                [self.tabBarController setSelectedIndex:0];
-                self.locationDetail.text = @"";
-                self.itemTextField.text = @"";
-                //        self.locationDetail.text = @"";
-                self.lostItemLocation.text = @"";
-                self.descItemTextField.text = @"";
-                self.imageView.image = nil;
-            }
-        }];
+        lostItem[@"helpCount"] = 0;
+//        [lostItem saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+//            if(succeeded) {
+//                [self.tabBarController setSelectedIndex:0];
+//                self.locationDetail.text = @"";
+//                self.itemTextField.text = @"";
+//                //        self.locationDetail.text = @"";
+//                self.lostItemLocation.text = @"";
+//                self.descItemTextField.text = @"";
+//                self.imageView.image = nil;
+//            }
+//        }];
     }
 
     UINavigationController *navController = self.navigationController;

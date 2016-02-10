@@ -135,6 +135,26 @@
     NSLog(@"clicked");
     
     //TODO: uncomment
+    NSNumber *helpnum = [self.request valueForKeyPath:@"helpCount"];
+    int help_int = [helpnum intValue];
+    help_int += 1;
+    
+    PFQuery *requestQuery = [PFQuery queryWithClassName:@"Request"];
+    [requestQuery whereKey:@"objectId" equalTo:[self.request valueForKeyPath:@"objectId"]];
+
+    [requestQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if(!error) {
+            PFObject *obj = [objects firstObject];
+            NSNumber *help_count = [NSNumber numberWithInt:help_int];
+            obj[@"helpCount"] = help_count;
+            [obj saveInBackground];
+        }
+    }];
+//        @"rUd9H0TBDr" block:^(PFObject * _Nullable object, NSError * _Nullable error) {
+//        NSNumber *help_count = [NSNumber numberWithInt:help_int];
+//        object[@"helperCount"] = help_count;
+//        [object saveInBackground];
+    
     [self appUsageLogging: [NSString stringWithFormat:@"help looking for %@, request ID: %@", [self.request valueForKeyPath:@"item"], [self.request valueForKeyPath:@"objectId"]]];
     self.TimerLabel.hidden = NO;
     [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(timerTick:) userInfo:nil repeats:YES];
@@ -251,9 +271,10 @@
     NSLog(@"view did appear");
 //    [mySession setHdvc:self];
     PFQuery *requestQuery = [PFQuery queryWithClassName: @"Request"];
+    [requestQuery orderByAscending:@"helpCount"];
     [requestQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if(!error) {
-            self.request = [objects lastObject];
+            self.request = [objects firstObject];
             [self fillDetails];
         }
     }];
