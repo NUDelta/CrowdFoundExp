@@ -56,6 +56,9 @@
 
 @property BOOL notified;
 
+@property BOOL sentToServer;
+
+
 @end
 
 @implementation HelperDetailViewController
@@ -281,8 +284,49 @@
 //    [self.indoorManager startIndoorLocation:self.location];
 }
 
+- (void)getData {
+    NSString *url = [NSString stringWithFormat:@"https://crowdfound.herokuapp.com/request/1/"];
+    NSURLRequest * urlRequest = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
+    NSURLResponse * response = nil;
+    NSError * error = nil;
+    NSData * data = [NSURLConnection sendSynchronousRequest:urlRequest
+                                          returningResponse:&response
+                                                      error:&error];
+    
+    if (error == nil)
+    {
+        NSString *dataString =[[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+        NSDictionary* json = [NSJSONSerialization JSONObjectWithData:data
+                                                             options:NSJSONReadingMutableLeaves
+                                                               error:&error];
+        NSLog(@"JSON object: %@",[json valueForKey:@"help_number"]);
+    }
+}
+
+- (void)postData: (CLLocationCoordinate2D)location {
+    NSURL *url = [NSURL URLWithString:@"https://crowdfound.herokuapp.com/help/"];
+    NSMutableURLRequest * urlRequest = [NSMutableURLRequest requestWithURL:url];
+    
+//    NSLog(@"locations: %@",location);
+    NSString *footprint = [NSString stringWithFormat:@"{lat: %f, lon: %f}",location.latitude, location.longitude];
+
+    NSString * params = [NSString stringWithFormat:@"request_id=%d&helper=%@&footprint=%@", 3, [MyUser currentUser].username, footprint];
+    
+    NSURLSessionConfiguration *defaultConfigObject = [NSURLSessionConfiguration defaultSessionConfiguration];
+    NSURLSession *defaultSession = [NSURLSession sessionWithConfiguration: defaultConfigObject delegate:self delegateQueue: nil];
+    
+    [urlRequest setHTTPMethod:@"POST"];
+    [urlRequest setHTTPBody:[params dataUsingEncoding:NSUTF8StringEncoding]];
+    
+    NSURLSessionDataTask * dataTask = [defaultSession dataTaskWithRequest:urlRequest completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        NSLog(error.description);
+    }];
+    [dataTask resume];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self getData];
     
     self.secondsLeftForSearch = 30;
     self.shouldNotify = YES;
@@ -418,6 +462,11 @@
     CLLocationCoordinate2D fordCoordinate; //region ford
     fordCoordinate.latitude = 42.056750;
     fordCoordinate.longitude =  -87.676997;
+    
+    if (!self.sentToServer) {
+        self.sentToServer = true;
+        [self postData: coordinate];
+    }
     
     CLLocation *loc = [[CLLocation alloc]initWithLatitude:fordCoordinate.latitude longitude:fordCoordinate.longitude];
 
