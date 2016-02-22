@@ -339,8 +339,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
         }];
         [dataTask resume];
     }
-    UINavigationController *navController = self.navigationController;
-    [navController popViewControllerAnimated:NO];
+    
+    [self.tabBarController setSelectedIndex:0];
 }
 
 - (void)saveRequest
