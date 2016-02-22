@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "340F283107CE18C115476A215DAF3779018CC43D",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "340F283107CE18C115476A215DAF3779018CC43D" : 0,
+    "6F2DEAB601A737E896623763E294904C3E97A7A9" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "355EE3FB-D888-428E-88EF-FDBB0CC8BAA4",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "340F283107CE18C115476A215DAF3779018CC43D" : "CrowdFoundExp",
+    "6F2DEAB601A737E896623763E294904C3E97A7A9" : ""
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "CrowdFound",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "CrowdFound.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/NUDelta\/CrowdFoundExp.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "340F283107CE18C115476A215DAF3779018CC43D"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/git.heroku.com\/gentle-escarpment-77006.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "6F2DEAB601A737E896623763E294904C3E97A7A9"
+    }
+  ]
+}

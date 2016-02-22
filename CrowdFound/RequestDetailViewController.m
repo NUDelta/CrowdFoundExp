@@ -160,7 +160,8 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
     [self.descItemTextField resignFirstResponder];
 }
 - (IBAction)submit:(UIButton *)sender {
-    [self saveRequest];
+//    [self saveRequest];
+    [self saveToServer];
 }
 - (IBAction)indexChanged:(id)sender {
     switch (self.segmentedControl.selectedSegmentIndex)
@@ -267,7 +268,7 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 
 - (void)getCoordinateFromCoordiante:(CLLocationCoordinate2D)fromLoc withDistance:(float)distance withBearing:(float)bearing
 {
-    for (float i = 40; i<=distance; i+=50) {
+    for (float i = 40; i<=distance; i+=40) {
         double distanceRadians = i/1000 / 6371.0;
         //6,371 = Earth's radius in km
         
@@ -319,8 +320,32 @@ static const CGFloat LANDSCAPE_KEYBOARD_HEIGHT = 162;
 }
 
 
+- (void)saveToServer
+{
+    NSURL *url = [NSURL URLWithString:@"https://crowdfound.herokuapp.com/crowdfound/"];
+    NSMutableURLRequest * urlRequest = [NSMutableURLRequest requestWithURL:url];
+
+    for (id <MKAnnotation> annotation in self.annotations) {
+        NSString * params = [NSString stringWithFormat:@"item=%@&latitude=%@&longitude=%@&requester=%@&location_detail=%@&help_number=%d",self.itemTextField.text, [[NSString alloc] initWithFormat:@"%f", annotation.coordinate.latitude], [[NSString alloc] initWithFormat:@"%f", annotation.coordinate.longitude],[MyUser currentUser].username, self.locationDetail.text, 0];
+
+        NSURLSessionConfiguration *defaultConfigObject = [NSURLSessionConfiguration defaultSessionConfiguration];
+        NSURLSession *defaultSession = [NSURLSession sessionWithConfiguration: defaultConfigObject delegate:self delegateQueue: nil];
+        
+        [urlRequest setHTTPMethod:@"POST"];
+        [urlRequest setHTTPBody:[params dataUsingEncoding:NSUTF8StringEncoding]];
+        
+        NSURLSessionDataTask * dataTask = [defaultSession dataTaskWithRequest:urlRequest completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+            NSLog(error.description);
+        }];
+        [dataTask resume];
+    }
+    UINavigationController *navController = self.navigationController;
+    [navController popViewControllerAnimated:NO];
+}
+
 - (void)saveRequest
 {
+//    [self saveToServer];
     for (id <MKAnnotation> annotation in self.annotations) {
         if([annotation isKindOfClass:[MKUserLocation class]]) continue;
         NSLog(@"%f", annotation.coordinate.latitude);
